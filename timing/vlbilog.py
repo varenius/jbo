@@ -6,10 +6,10 @@ import sys
 from datetime import datetime, timedelta
 
 def printUsage():
-    print("USAGE: makegps.py LOGDIR UPLOAD YYYY MM ")
+    print("USAGE: vlbilog.py LOGDIR UPLOAD YYYY MM ")
     print("       e.g. vlbilog.py /home/oper/timing/logs/ YES 2018 04")
     print("       will write the logfile g04_2018.jb and upload to evn@vlbeer.ira.inaf.it:gps/mar18/gps.jb")
-    print("       e.g. vlbilog.py /home/oper/timing/logs/ NO will create file but will not upload 2018 04")
+    print("       e.g. vlbilog.py /home/oper/timing/logs/ NO 2018 04 will create file but will not upload")
     print("       NOTE: YYYY and MM are optional and default value is the month of yesterday. I.e. running the script")
     print("       April 1st will process data for March the same year. Manual dates override.")
 
@@ -18,12 +18,8 @@ if len(sys.argv)<3:
     sys.exit()
 # Will look for logfiles in the logdir specified last
 logdir = sys.argv[1]
-# Ensure logdir exists
-os.system("mkdir -p "+logdir)
 # Store the files made by this script in the outdir
 outdir = "/home/oper/timing/tovlbeer/"
-# Ensure outir exists
-os.system("mkdir -p "+outdir)
 if sys.argv[2]=="YES":
     upload = True
 else:
