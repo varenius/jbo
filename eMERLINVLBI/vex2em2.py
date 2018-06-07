@@ -218,20 +218,16 @@ def makeFTP(vex, tels, doubleSB = False):
 
     of.write("s = sched.scheduler(time.time, time.sleep)\n")
     of.write("\n")
-    ftpstemp = "'runtime = {0} ; scan_set={1}_{0}_{2}:{3}:{4} ; disk2file={1}_{0}_{2}.vdif ;'" # 0;tel, 1:exp, 2:scanid (no0001) 3:starttime, 4:start+2
     for scan in vex.scans:
         for port,tel in enumerate(tels):
             stel = twoletter(tel).lower()
             if 'ftp' in scan.keys():
-                # Wait 5 seconds for record to finish, then run disk2file
-                ftpstring = ftpstemp.format(stel+'0',vex.exp.lower(),scan['id'].lower(),vlbitimeplusdt(scan['start'],int(scan['ftp'][0])),vlbitimeplusdt(scan['start'],int(scan['ftp'][1])))
-                of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + " + 5, 15, flexbuffcmd,("+ftpstring+",),)\n")
                 # Allow 30 sec for record and disk2file to finish.
-                of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + " + 30, 15, autoftp,('{1}_{0}_{2}.vdif',),)\n".format(stel+'0',vex.exp.lower(),scan['id'].lower()))
                 if doubleSB:
-                    ftpstring2 = ftpstemp.format(stel+'1',vex.exp.lower(),scan['id'].lower(),vlbitimeplusdt(scan['start'],int(scan['ftp'][0])),vlbitimeplusdt(scan['start'],int(scan['ftp'][1])))
-                    of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + " + 5, 15, flexbuffcmd,("+ftpstring2+",),)\n")
+                    of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + " + 30, 15, autoftp,('{1}_{0}_{2}.vdif',),)\n".format(stel+'0',vex.exp.lower(),scan['id'].lower()))
                     of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + " +30, 15, autoftp,('{1}_{0}_{2}.vdif',),)\n".format(stel+'1',vex.exp.lower(),scan['id'].lower()))
+                else:
+                    of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + " + 30, 15, autoftp,('{1}_{0}_{2}.vdif',),)\n".format(stel,vex.exp.lower(),scan['id'].lower()))
     of.write("for j in s.queue:\n")
     of.write("    print(j)\n")
     of.write("s.run()\n")
@@ -270,18 +266,37 @@ def makeFBUF(vex, tels, doubleSB = False):
     of.write("s.enterabs(vlbitime2unix('"+starttime + "'), 1, vdifAgcSet,())\n")
     startstemp = "'runtime = {0} ; net_protocol = pudp : 32M : 256M : 8 ; mtu = 9000 ; net_port = 1300{3}  ; mode = VDIF_8000-512-1-2 ; record = on : {1}_{0}_{2}.vdif;'" # 0;tel, 1:exp, 2:scanid (no0001) 3:port-number 0,1,2...in the order telescopes are added, so in order of tel list
     stopstemp = "'runtime = {0} ; record = off ;'" # 0;tel
+    ftpstemp = "'runtime = {0} ; scan_set={1}_{0}_{2}:{3}:{4} ; disk2file={1}_{0}_{2}.vdif ;'" # 0;tel, 1:exp, 2:scanid (no0001) 3:starttime, 4:start+2
     for scan in vex.scans:
         for port,tel in enumerate(tels):
             stel = twoletter(tel).lower()
-            startstring = startstemp.format(stel+'0',vex.exp.lower(),scan['id'].lower(),str(port))
-            stopstring = stopstemp.format(stel+'0')
+            if doubleSB:
+                # Use 0 (and 1 in other doubleSB clause below) at end of tel in filename
+                startstring = startstemp.format(stel+'0',vex.exp.lower(),scan['id'].lower(),str(port))
+                stopstring = stopstemp.format(stel+'0')
+            else:
+                startstring = startstemp.format(stel,vex.exp.lower(),scan['id'].lower(),str(port))
+                stopstring = stopstemp.format(stel)
             of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "'), 15, flexbuffcmd,("+startstring+",),)\n")
             of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + ", 15, flexbuffcmd,("+stopstring+",),)\n")
+            if 'ftp' in scan.keys():
+                if doubleSB:
+                    # Use 0 (and 1 in other doubleSB clause below) at end of tel in filename
+                    ftpstring = ftpstemp.format(stel+'0',vex.exp.lower(),scan['id'].lower(),vlbitimeplusdt(scan['start'],int(scan['ftp'][0])),vlbitimeplusdt(scan['start'],int(scan['ftp'][1])))
+                else:
+                    # no trailing 0
+                    ftpstring = ftpstemp.format(stel,vex.exp.lower(),scan['id'].lower(),vlbitimeplusdt(scan['start'],int(scan['ftp'][0])),vlbitimeplusdt(scan['start'],int(scan['ftp'][1])))
+                # Wait 5 seconds for record to finish, then run disk2file
+                of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + " + 5, 15, flexbuffcmd,("+ftpstring+",),)\n")
             if doubleSB:
                 startstring = startstemp.format(stel+'1',vex.exp.lower(),scan['id'].lower(),str(port+4))
                 stopstring = stopstemp.format(stel+'1')
                 of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "'), 15, flexbuffcmd,("+startstring+",),)\n")
                 of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + ", 15, flexbuffcmd,("+stopstring+",),)\n")
+                if 'ftp' in scan.keys():
+                    ftpstring2 = ftpstemp.format(stel+'1',vex.exp.lower(),scan['id'].lower(),vlbitimeplusdt(scan['start'],int(scan['ftp'][0])),vlbitimeplusdt(scan['start'],int(scan['ftp'][1])))
+                    of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + " + 5, 15, flexbuffcmd,("+ftpstring2+",),)\n")
+
     of.write("for j in s.queue:\n")
     of.write("    print(j)\n")
     of.write("s.run()\n")
@@ -296,8 +311,8 @@ def main(args):
     tels = ['Darnhall', 'Pickmere', 'Knockin', 'Cambridge']
     makeConfig(vex,tels)
     makeOJD(vex)
-    makeFBUF(vex,tels, doubleSB=True)
-    makeFTP(vex,tels, doubleSB=True)
+    makeFBUF(vex,tels, doubleSB=False)
+    makeFTP(vex,tels, doubleSB=False)
 
 if __name__ == "__main__":
     main(sys.argv)
