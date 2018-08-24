@@ -1,0 +1,13 @@
+The folder "logs" is updated once every day by rsync from the "maserlog"
+computer in the VLBI room, via the 192 network. This uses RSA keys to 
+transfer the files without need for password. A cronjob on maserlog runs
+the rsync command.
+The logs contain the maser drift values approximately every 2 seconds,
+as they are read via GPIB from the Agilent counters in the VLBI room.
+Once every day, a cronjob on this computer then runs "vlbilog.py" to
+create a daily-average file for all days including the last one. The
+daily average summary file is then uploaded to the "vlbeer" server
+in Bologna, for use by the EVN correlator.
+This setup means that either goedel or tycho can be taken offline at any
+time, the setup is redundant in that sense. Logs will still be uploaded.
+But at least one of goedel/tycho needs to be online.
