@@ -19,7 +19,7 @@ if len(sys.argv)<3:
 # Will look for logfiles in the logdir specified last
 logdir = sys.argv[1]
 # Store the files made by this script in the outdir
-outdir = "/home/oper/timing/tovlbeer/"
+outdir = "/home/oper/maserlog/tovlbeer/"
 if sys.argv[2]=="YES":
     upload = True
 else:
@@ -64,6 +64,7 @@ for day in range(1,ndays+1):
     # Load high-resolution log file for this day
     try:
         hrf = logdir + "/" + str(year)+str(month).rjust(2,"0")+str(day).rjust(2,"0") + ".log"
+        #print("Reading file " + hrf)
         hrfdata = open(hrf)
         #Logfile lines are formated (# marks comment lines) as
         #2018-04-09 00:00:00.763474 -6.258e-07
@@ -76,6 +77,8 @@ for day in range(1,ndays+1):
                 #print(ls)
                 times.append(ls[0] + " " + ls[1])
                 vals.append(float(ls[2]))
+                #if abs(vals[-1])>1e-6:
+                #    print(line)
         # Calculate MJD times from these timestamps
         mjds = atime(times, format='iso', scale='utc').mjd
         # Calculate average MJD, average value, and standard deviation
