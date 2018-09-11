@@ -14,8 +14,9 @@ logdir = "./logs"
 # GPIB address of GPIB unit used to read data
 gpibaddr = '20'
 # USB port used, check "dmesg" when connecting USB-to-GPIB 
-# unit to discover which e.g. /dev/ttyUSB0
-USB = "/dev/ttyUSB0"
+# unit to discover which e.g. /dev/ttyUSB0 and then udev rules
+# to assign that particular unit to a permanent /dev/name symlink
+USB = "/dev/USBGPIB1"
 # END OF CONFIG
 
 # Ensure logdir exists
