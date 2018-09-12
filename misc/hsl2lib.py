@@ -266,6 +266,8 @@ def parse_telstatus(b,h):
     telstatus['offsets_azel'] = readoff(b, h) # Read az/el offsets
     telstatus['source'] = readsource(b, h) # Source data, name etc.
     telstatus['exp'] = readexp(b, h) # Exp data, exp ID
+    telstatus['receiverstatus'], lastrecbyte = parse_receivers(b,h) # receiver statuses
+    # Next table should begin at lastrecbyte+1
     return telstatus
 
 def parse_receivers(b,h):
@@ -316,7 +318,6 @@ def parse_noise_diode_status(b,h):
         ifoff += 10
         st = stb + ifoff
 
-    #receiverstatus, lastrecbyte = parse_receivers(b,h) # receiver statuses
     # TODO: Noisediode parsing fails for some telescopes,
     #       may be due to incomplete reciver info so wrong byte counter
     #noisediode = parse_noise_diode_status(b,h,lastrecbyte+1)
@@ -404,5 +405,5 @@ if __name__ == "__main__":
                     #print_teldata(teldatum)
                     if "Mark" in teldatum['telname']:
                     #if "Pick" in teldatum['telname']:
-                        print teldatum
+                        print(teldatum)
     msock.close()
