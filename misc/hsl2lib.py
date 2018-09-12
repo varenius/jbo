@@ -1,6 +1,5 @@
 #!/usr/bin/python
 #-*- coding: utf-8 -*-
-
 import socket
 import struct
 import binascii
@@ -40,7 +39,6 @@ def h2s(h, i):
     """ Slice 4 bytes out of hexadecimal string, starting
         at position i, and return as string. """
     return h[8*i:8*(i+1)]
-
 
 def readpos(b, h, i):
     """ Reads a position segment of data as defined in Table 4.52.
