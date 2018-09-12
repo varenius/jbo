@@ -1,7 +1,7 @@
 #!/usr/bin/python
 #-*- coding: utf-8 -*-
 
-from socket import *
+import socket
 import struct
 import binascii
 import array
@@ -341,43 +341,68 @@ def print_teldata(td):
         toprint = td['telname'], td['telnumber'], 'NOSTATUS'
     print(toprint)
 
-def connect_socket():
-    # Set multicast port and group for HSL2 messages from OTCX
-    multicast_port  = 7022
-    multicast_group = "239.0.0.254"
-    interface_ip    = "192.168.101.10" # Listen on 192 interface
+def joinMcast(mcast_addr,port,if_ip):
+    """
+    Returns a live multicast socket
+    mcast_addr is a dotted string format of the multicast group
+    port is an integer of the UDP port you want to receive
+    if_ip is a dotted string format of the interface you will use
+    """
     
-    # Connect to OTCX
-    s = socket(AF_INET, SOCK_DGRAM )
-    s.bind(("", multicast_port ))
-    mreq = inet_aton(multicast_group) + inet_aton(interface_ip)
-    s.setsockopt(IPPROTO_IP, IP_ADD_MEMBERSHIP, str(mreq))
-    return s
+    print("""Will attempt to listen to multicast assuming, this computer has a
+            network interface with the 192-network IP """ + iface_ip + """. If no
+            data, change iface_ip variable to right IP for this computer.""")
 
-# If DEBUG, allow exceptions to stop code. If False, catch exceptions and only print ERROR: line.
-DEBUG = False
-sock = connect_socket()
-while True:
-    # Create empty dictionary to store telescope status data
-    teldata = {}
-    # Read data as raw binary message
-    binary = sock.recv(4096)
-    # If data starts with known "magic number" eMRL (but backwards due to
-    # little/big endian byteflip)...
-    if binary[0:4]=="LRMe":
-        # then parse the binary into a dictionary of telescope information for
-        # this telescope 
-        if DEBUG:
-            teldatum = parse_binary(binary)
-        else:
-            try: 
+    #create a UDP socket
+    mcastsock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+
+    #allow other sockets to bind this port too
+    mcastsock.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
+
+    #explicitly join the multicast group on the interface specified
+    mcastsock.setsockopt(socket.SOL_IP,socket.IP_ADD_MEMBERSHIP,
+                socket.inet_aton(mcast_addr)+socket.inet_aton(if_ip))
+
+    #finally bind the socket to start getting data into your socket
+    mcastsock.bind((mcast_addr,port))
+
+    return mcastsock
+
+if __name__ == "__main__":
+    print("Running hsl2lib standalone, will parse binary stream...")
+    # If DEBUG, allow exceptions to stop code. If False, catch exceptions and only print ERROR: line.
+    DEBUG = False
+    
+    # Configuration
+    mcast_port  = 7022
+    mcast_group = "239.0.0.254"
+    iface_ip    = "192.168.101.10" # Assume this computer has this 192-address
+    
+    # Connect to socket
+    msock = joinMcast(mcast_group, mcast_port, iface_ip)
+    
+    while True:
+        # Create empty dictionary to store telescope status data
+        teldata = {}
+        # Read data as raw binary message
+        binary = msock.recv(4096)
+        # If data starts with known "magic number" eMRL (but backwards due to
+        # little/big endian byteflip)...
+        if binary[0:4]=="LRMe":
+            # then parse the binary into a dictionary of telescope information for
+            # this telescope 
+            if DEBUG:
                 teldatum = parse_binary(binary)
-            except:
-                teldatum = None
-                print("ERROR: Failed to read HSL2 binary ", binary)
-            if teldatum:
-                teldata[teldatum['telname']] = teldatum
-                #print_teldata(teldatum)
-                if "Mark" in teldatum['telname']:
-                    print teldatum
-s.close()
+            else:
+                try: 
+                    teldatum = parse_binary(binary)
+                except:
+                    teldatum = None
+                    print("ERROR: Failed to read HSL2 binary ", binary)
+                if teldatum:
+                    teldata[teldatum['telname']] = teldatum
+                    #print_teldata(teldatum)
+                    if "Mark" in teldatum['telname']:
+                    #if "Pick" in teldatum['telname']:
+                        print teldatum
+    msock.close()
