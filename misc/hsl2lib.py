@@ -17,30 +17,30 @@ except ImportError:
     automatic conversion of timestamps to ISO format.  Modified Julian Date
     (MJD) and MJD in seconds (mjds) will still be available in dictionaries.""")
 
+def b2d(b, i):
+    """ Slice 8 bytes out of binary sequence, starting
+        at position i, and return as double. """
+    return struct.unpack('d', b[4*i:4*(i+2)])[0]
+
 def b2c(b, i):
     """ Slice 4*8=32 bytes out of binary sequence corresponding
         to a char, starting  at position i, and return as string. """
-    return b[4*i:4*(i+8)]
-
-def b2s(b, i):
-    """ Slice 4 bytes out of binary sequence, starting
-        at position i, and return as string. """
-    return b[4*i:4*(i+1)]
+    ans = b[4*i:4*(i+8)]
+    # If python 3 (and not python 2), then decode string explicitly from bytestring
+    if (sys.version_info > (3, 0)):
+        ans = ans.decode()
+    return ans
 
 def h2i(h, i):
     """ Slice 4 bytes out of hexadecimal string, starting
         at position i, and return as integer. """
-    return int(h[8*i:8*(i+1)])
+    return int(h2s(h,i))
 
 def h2s(h, i):
     """ Slice 4 bytes out of hexadecimal string, starting
         at position i, and return as string. """
     return h[8*i:8*(i+1)]
 
-def b2d(b, i):
-    """ Slice 8 bytes out of binary sequence, starting
-        at position i, and return as double. """
-    return struct.unpack('d', b[4*i:4*(i+2)])[0]
 
 def readpos(b, h, i):
     """ Reads a position segment of data as defined in Table 4.52.
@@ -168,7 +168,7 @@ def parse_binary(b):
     # To parse the binary data, we use both the raw binary and also a 
     # byte-swapped (big/little) endian revsion for simpler extraction and
     # comparison of hexadecimal strings. 
-    h = bin_swap_hex(b)
+    h = bin_swap_hex(b).decode()
     # The raw binary is used to extract
     # e.g. double precision numbers and long char strings which are not
     # byte-flipped the way the rest of the data are.
@@ -266,7 +266,7 @@ def parse_telstatus(b,h):
     telstatus['offsets_azel'] = readoff(b, h) # Read az/el offsets
     telstatus['source'] = readsource(b, h) # Source data, name etc.
     telstatus['exp'] = readexp(b, h) # Exp data, exp ID
-    telstatus['receiverstatus'], lastrecbyte = parse_receivers(b,h) # receiver statuses
+    #telstatus['receiverstatus'], lastrecbyte = parse_receivers(b,h) # receiver statuses
     # Next table should begin at lastrecbyte+1
     return telstatus
 
@@ -372,7 +372,7 @@ def joinMcast(mcast_addr,port,if_ip):
 if __name__ == "__main__":
     print("Running hsl2lib standalone, will parse binary stream...")
     # If DEBUG, allow exceptions to stop code. If False, catch exceptions and only print ERROR: line.
-    DEBUG = False
+    DEBUG = True
     
     # Configuration
     mcast_port  = 7022
@@ -385,11 +385,16 @@ if __name__ == "__main__":
     while True:
         # Create empty dictionary to store telescope status data
         teldata = {}
-        # Read data as raw binary message
+        # Read data
         binary = msock.recv(4096)
+        # If in python3, then this is a bytestring and we convert to string
+        if (sys.version_info > (3, 0)):
+            magicno = binary[0:4].decode()
+        else:
+            magicno = binary[0:4]
         # If data starts with known "magic number" eMRL (but backwards due to
         # little/big endian byteflip)...
-        if binary[0:4]=="LRMe":
+        if magicno=="LRMe":
             # then parse the binary into a dictionary of telescope information for
             # this telescope 
             if DEBUG:
@@ -400,10 +405,10 @@ if __name__ == "__main__":
                 except:
                     teldatum = None
                     print("ERROR: Failed to read HSL2 binary ", binary)
-                if teldatum:
-                    teldata[teldatum['telname']] = teldatum
-                    #print_teldata(teldatum)
-                    if "Mark" in teldatum['telname']:
-                    #if "Pick" in teldatum['telname']:
-                        print(teldatum)
+            if teldatum:
+                teldata[teldatum['telname']] = teldatum
+                #print_teldata(teldatum)
+                if "Mark" in teldatum['telname']:
+                #if "Pick" in teldatum['telname']:
+                    print(teldatum)
     msock.close()
