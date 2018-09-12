@@ -349,7 +349,7 @@ def joinMcast(mcast_addr,port,if_ip):
     """
     
     print("""Will attempt to listen to multicast assuming, this computer has a
-            network interface with the 192-network IP """ + iface_ip + """. If no
+            network interface with the 192-network IP """ + if_ip + """. If no
             data, change iface_ip variable to right IP for this computer.""")
 
     #create a UDP socket
