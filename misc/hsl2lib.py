@@ -333,9 +333,15 @@ def parse_noise_diode_status(b,h):
         #metrain = struct.unpack('d', rawmsg[4*(mb+12):4*(mb+14)])[0]
         #metdrytemp = struct.unpack('d', rawmsg[4*(mb+14):4*(mb+16)])[0]
 
+from astropy import units as u
+from astropy.coordinates import Angle
+def rad2dhms(rad):
+    angles = Angle(rad, unit=u.rad).to_string(unit=u.degree)
+    return " ".join(angles)
+
 def print_teldata(td):
     if td['status']:
-        toprint = td['status']['time_isot'], td['telname'], td['telnumber'], td['status']['actual_azel'][0:2], td['status']['demanded_azel'][0:2]
+        toprint = td['status']['time_isot'], td['telname'], td['telnumber'], rad2dhms(td['status']['actual_azel'][0:2]), rad2dhms(td['status']['demanded_azel'][0:2])
     else:
         toprint = td['telname'], td['telnumber'], 'NOSTATUS'
     print(toprint)
@@ -405,8 +411,8 @@ if __name__ == "__main__":
                     print("ERROR: Failed to read HSL2 binary ", binary)
             if teldatum:
                 teldata[teldatum['telname']] = teldatum
-                #print_teldata(teldatum)
-                if "Mark" in teldatum['telname']:
+                #if "Mark" in teldatum['telname']:
+                if "Defford" in teldatum['telname']:
                 #if "Pick" in teldatum['telname']:
-                    print(teldatum)
+                    print_teldata(teldatum)
     msock.close()
