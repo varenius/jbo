@@ -21,6 +21,15 @@ def b2d(b, i):
         at position i, and return as double. """
     return struct.unpack('d', b[4*i:4*(i+2)])[0]
 
+def b2s(b, i):
+    """ Slice 4 bytes out of binary sequence corresponding
+        to a char, starting  at position i, and return as string. """
+    ans = b[4*i:4*(i+1)]
+    # If python 3 (and not python 2), then decode string explicitly from bytestring
+    if (sys.version_info > (3, 0)):
+        ans = ans.decode()
+    return ans
+
 def b2c(b, i):
     """ Slice 4*8=32 bytes out of binary sequence corresponding
         to a char, starting  at position i, and return as string. """
@@ -81,7 +90,10 @@ def readexp(b, h):
          
 def readLO(b,h,i):
     lo = {}
-    lo["loidnum"] = h2i(h,i)
+    # Some telescopes have weird data in the loidnum field, e.g. 
+    # "0000035d", "0000035c", "0000035a", "0000035b". So, store loidnum
+    # as a string rather than e.g. integer.
+    lo["loidnum"] = h2s(h,i)
     lo["loidname"] = b2c(b,i+1).replace("\x00","")
     lo["loidfreq"] = b2d(b,i+9)
     return lo
@@ -93,18 +105,20 @@ def readrec(b, h, i):
     # receiver info 40 bytes
     #  so offset index to next receiver is = 62+numlo*18 + 1
     rec = {}
-    rec["idnum"] = h2i(h,i)
+    rec["idnum"] = h2s(h,i) # Use h2s and not h2i since weird values sometimes
     rec["idname"] = b2c(b,i+1).replace("\x00","")
     rec["carpos"] = h2i(h,i+9)
     rec["carang"] = b2d(b,i+10)
-    rec["numincar"] = h2i(h,i+12)
+    rec["numincar"] = h2s(h,i+12) # Use h2s and not h2i since weird values sometimes
     rec["freqidnum"] = h2s(h,i+13)
     rec["freqidname"] = b2c(b,i+14).replace("\x00","")
     rec["numlo"] = h2i(h,i+22)
     for k in range(rec["numlo"]):
         # read each LO
         offset = k*18 # each LO table is 18 bytes
-        rec["lo"+str(k)] = readLO(b,h,i+23+offset)
+        bs = i+23+offset
+        lo = readLO(b,h,bs)
+        rec["lo"+str(k)] = lo
     return rec
 
 def readIFnoise(b,h,i):
@@ -123,17 +137,56 @@ def readIFnoise(b,h,i):
     ifnoise["iflevel"] = h2i(h,i+10)
     return ifnoise
 
+def readEDFA(b,h,i):
+    """Parse data according to tables 4.66"""
+    edfa = {}
+    edfa["dest"] = h2s(h,i)
+    edfa["number"] = h2s(h,i+1)
+    edfa["mjds"] = b2d(b,i+2)
+    edfa["numstagestats"] = h2s(h,i+1)
+    #edfa["status"] = BitArray(hex=h2s(h, i+2)).bin # See table 4.63
+    nextbyte = i + 8
+    return edfa, nextbyte
+
+def readtickbox(b,h,i):
+    """Parse data according to tables 4.64, 4.65 """
+    tickbox = {}
+    tickbox["mjds"] = b2d(b,i)
+    tickbox["status"] = BitArray(hex=h2s(h, i+2)).bin # See table 4.63
+    tickbox["delay"] = b2d(b,i+3)
+    tickbox["avg_delay"] = b2d(b,i+5)
+    nextbyte = i + 7
+    return tickbox, nextbyte
+
+def readDINTstatus(b,h,i):
+    """Parse data according to tables 4.61, 4.62, 4.53 """
+    dint = {}
+    dint["mjds"] = b2d(b,i)
+    dint["adc8"] = {}
+    dint["adc8"]["mjds"] = b2d(b,i+2)
+    dint['adc8']["status"] = BitArray(hex=h2s(h, i+4)).bin # See table 4.63
+    dint["adc8"]["tick_phase"] = b2d(b,i+5)
+    dint["adc8"]["delay"] = b2d(b,i+7)
+    dint["adc3"] = {}
+    dint["adc3"]["mjds"] = b2d(b,i+9)
+    dint['adc3']["status"] = BitArray(hex=h2s(h, i+11)).bin # See table 4.63
+    dint["adc3"]["tick_phase"] = b2d(b,i+12)
+    dint["adc3"]["delay"] = b2d(b,i+13)
+    nextbyte = i+16
+    return dint, nextbyte
+
 def readnoisestatus(b,h,i):
-    # Each entry is 10 bytes
+    """Parse data according to table 4.60 """
     noise = {}
-    noise["timestamp"] = b2d(b,i)
-    noise["enabled"] = h2i(h,i+2)
+    noise["mjds"] = b2d(b,i)
+    noise["enabled"] = h2s(h,i+2)
     noise["period"] = b2d(b,i+3)
     noise["duty"] = b2d(b,i+5)
     noise["phase"] = b2d(b,i+7)
     noise["autocal"] = h2i(h,i+9)
     noise["totpow"] = h2i(h,i+10)
-    return noise
+    nextbyte = i + 11
+    return noise, nextbyte
 
 def bin_swap_hex(binary):
     """ Input: binary sequence, assuming 4-byte items.
@@ -155,9 +208,10 @@ def parse_status_message(b,h):
     stm['telnumber'] = h2i(h, 16) # Telescope ID number as integer
     stm['telname'] = b2c(b, 17).replace("\x00","") # Telescope ID name
     stm['msgflags'] = h2s(h, 25)[-4:] # Message and parking flags
+    #print(stm)
     # Check if the "No real data", Table 4.51, flag is set. If so, skip status
     if not stm['msgflags'][-1]=='2':
-        stm['status'] = parse_telstatus(b,h) # telescope status Table 4.52
+        stm['status'] = parse_telstatus(stm, b,h) # telescope status Table 4.52
     else:
         stm['status'] = None
     return stm
@@ -233,7 +287,8 @@ def coordcode_to_name(coordhex):
     csys = names[coordhex.lower()]
     return csys
 
-def parse_telstatus(b,h):
+def parse_telstatus(stm, b,h):
+    # stm present for debug things, e.g. filter on telescopes
     telstatus = {}
     telstatus['time_mjds'] = b2d(b, 26)# Time stamp [MJD in seconds]
     # For convenience, also convert directly to MJD
@@ -264,18 +319,37 @@ def parse_telstatus(b,h):
     telstatus['offsets_azel'] = readoff(b, h) # Read az/el offsets
     telstatus['source'] = readsource(b, h) # Source data, name etc.
     telstatus['exp'] = readexp(b, h) # Exp data, exp ID
-    #telstatus['receiverstatus'], lastrecbyte = parse_receivers(b,h) # receiver statuses
-    # Next table should begin at lastrecbyte+1
+    telstatus['receiverstatus'], nextbyte = parse_receivers(b,h) # receiver statuses
+    # Next table should begin at nextbyte
+    tn = stm['telname']
+    #print tn, stm
+    # 42 foot has trouble with noisediode status for some reason
+    if not ("42" in tn):
+        telstatus['noisediode_status'], nextbyte = readnoisestatus(b, h, nextbyte)
+        telstatus['DINT_status'], nextbyte = readDINTstatus(b, h, nextbyte)
+        telstatus['tickbox_status'], nextbyte = readtickbox(b, h, nextbyte)
+        telstatus['EDFA_status'], nextbyte = readEDFA(b,h,nextbyte)
+        print(tn, stm, telstatus['EDFA_status'], nextbyte)
+        #if "Mark"in tn: 
+            #For Mk2, this works
+            #print(parse_metdata(b,h,693), nextbyte)
+            #print(tn, stm, telstatus['noisediode_status'], telstatus['DINT_status'], telstatus['tickbox_status'], nextbyte)
+            #print(tn, stm, telstatus['EDFA_status'], nextbyte)
+            #print(h[nextbyte*8:])
+            #print(parse_metdata(b,h,nextbyte + (711-593)))
+            #print(parse_metdata(b,h,693), nextbyte)
+
     return telstatus
 
 def parse_receivers(b,h):
     recstat = {}
     # receiver statuses header
+    recstat['mjds'] = b2d(b, 123)
     recstat['numrec'] = h2i(h, 125)
     recstat['numactiverec'] = h2i(h, 126)
     recstat['active_recs'] = {}
     recstat['active_recs']['carouselpos'] = h2i(h, 127)
-    recstat['active_recs']['carouselang'] = h2i(h, 128)
+    recstat['active_recs']['carouselang'] = b2d(b, 128)
     recstat['active_recs']['recnumloc'] = h2i(h, 130)
    
     # Read receiver statuses for this telescope message
@@ -283,68 +357,54 @@ def parse_receivers(b,h):
     # Recoffset acumulates the length of all the receiver info for this telescope
     recoffset = 0
     currentrec = ""
-    for recn in range(numrec):
-        rec = readrec(b,h,131+offset)
+    for recn in range(recstat['numrec']):
+        #print('recoffset', recoffset)
+        rec = readrec(b,h,131+recoffset)
         recstat['recstatuses'].append(rec)
         # Each receiver entry is 63 bytes of static info plus 18 bytes per LO entry
-        offset += 63 + rec["numlo"] * 18
-        if rec["carpos"]==acrec["carpos"]:
-            currentrec = rec["idname"]
+        recoffset += 63 + rec['numlo'] * 18
+        if rec['carpos']==recstat['active_recs']['carouselpos']:
+            currentrec = rec['idname']
     recstat['currentrec'] = currentrec
    
     # There are two Receiver IF and Noise Diode Data entries for each
     # currently active receiver (one for each receiver channel). Table
     # 4.59 shows the format for a single entry.
     # start reading at byte after receiver info
-    stb= 131 + offset
+    stb= 131 + recoffset
     ifoff = 0
     recstat['ifnoiseentries'] = []
-    for recn in range(numrec*2):
+    for recn in range(recstat['numactiverec']*2):
         recstat['ifnoiseentries'].append(readIFnoise(b, h, stb))
-        ifoff += 10
-    # The length of the receier section varies, so return also the lastbyte
+        ifoff += 11
+    # The length of the receier section varies, so return also the next byte index
     # to enable further parsing of the following sections
-    lastbyte = stb+ioff
-    return recstat, lastbyte
+    nextbyte = stb+ifoff 
+    return recstat, nextbyte
 
-def parse_noise_diode_status(b,h):
-    """Parse data according to table 4.60
-    """
-    if ("" in telname):# or ("Mark" in telname):
-        #print repr(h)
-        #noisestatus = readnoisestatus(b, h, stb + ifoff)
-        ifoff += 10
-        st = stb + ifoff
-
-    # TODO: Noisediode parsing fails for some telescopes,
-    #       may be due to incomplete reciver info so wrong byte counter
-    #noisediode = parse_noise_diode_status(b,h,lastrecbyte+1)
-    # PARSE ALL REMAINING DATA UNTIL MET-data
-        # Table 4.4.21.11 Met Status starts att byte 711 for Mk2...
-        # But apparently only for Mk2. Need to figure out how to 
-        # understand which is the right way to find this for other tels
-        #mb = 711
-        #metmjds = struct.unpack('d', rawmsg[4*(mb):4*(mb+2)])[0] # MJD in seconds
-        #metwind = struct.unpack('d', rawmsg[4*(mb+2):4*(mb+4)])[0]
-        #metwindmean = struct.unpack('d', rawmsg[4*(mb+4):4*(mb+6)])[0]
-        #metwindpeak = struct.unpack('d', rawmsg[4*(mb+6):4*(mb+8)])[0]
-        #metwinddir = struct.unpack('d', rawmsg[4*(mb+8):4*(mb+10)])[0]
-        #metwindmeandir = struct.unpack('d', rawmsg[4*(mb+10):4*(mb+12)])[0]
-        #metrain = struct.unpack('d', rawmsg[4*(mb+12):4*(mb+14)])[0]
-        #metdrytemp = struct.unpack('d', rawmsg[4*(mb+14):4*(mb+16)])[0]
-
-from astropy import units as u
-from astropy.coordinates import Angle
-def rad2dhms(rad):
-    angles = Angle(rad, unit=u.rad).to_string(unit=u.degree)
-    return " ".join(angles)
-
-def print_teldata(td):
-    if td['status']:
-        toprint = td['status']['time_isot'], td['telname'], td['telnumber'], rad2dhms(td['status']['actual_azel'][0:2]), rad2dhms(td['status']['demanded_azel'][0:2])
-    else:
-        toprint = td['telname'], td['telnumber'], 'NOSTATUS'
-    print(toprint)
+def parse_metdata(b,h, i):
+    # Table 4.4.21.11 Met Status starts att byte 711 for Mk2...
+    # But apparently only for Mk2. Need to figure out how to 
+    # understand which is the right way to find this for other tels
+    #mb = 711
+    met = {}
+    met["mjds"] = b2d(b,i)
+    met["wind"] = b2d(b,i+2)
+    met["meanwind"] = b2d(b,i+4)
+    met["peakwind"] = b2d(b,i+6)
+    met["winddir"] = b2d(b,i+8)
+    met["meanwinddir"] = b2d(b,i+10)
+    met["rain"] = b2d(b,i+12)
+    met["drytemp"] = b2d(b,i+14)
+    return met
+    #metmjds = struct.unpack('d', rawmsg[4*(mb):4*(mb+2)])[0] # MJD in seconds
+    #metwind = struct.unpack('d', rawmsg[4*(mb+2):4*(mb+4)])[0]
+    #metwindmean = struct.unpack('d', rawmsg[4*(mb+4):4*(mb+6)])[0]
+    #metwindpeak = struct.unpack('d', rawmsg[4*(mb+6):4*(mb+8)])[0]
+    #metwinddir = struct.unpack('d', rawmsg[4*(mb+8):4*(mb+10)])[0]
+    #metwindmeandir = struct.unpack('d', rawmsg[4*(mb+10):4*(mb+12)])[0]
+    #metrain = struct.unpack('d', rawmsg[4*(mb+12):4*(mb+14)])[0]
+    #metdrytemp = struct.unpack('d', rawmsg[4*(mb+14):4*(mb+16)])[0]
 
 def joinMcast(mcast_addr,port,if_ip):
     """
@@ -372,6 +432,21 @@ def joinMcast(mcast_addr,port,if_ip):
     mcastsock.bind((mcast_addr,port))
 
     return mcastsock
+
+from astropy import units as u
+from astropy.coordinates import Angle
+def rad2dhms(rad):
+    angles = Angle(rad, unit=u.rad).to_string(unit=u.degree)
+    return " ".join(angles)
+
+def print_teldata(td):
+    if td['status']:
+        #toprint = td['status']['time_isot'], td['telname'], td['telnumber'], rad2dhms(td['status']['actual_azel'][0:2]), rad2dhms(td['status']['demanded_azel'][0:2])
+        toprint = td['status']['time_isot'], td['binary_message_length'], td['telname'], td
+    else:
+        toprint = td['telname'], td['telnumber'], 'NOSTATUS'
+    print(toprint)
+
 
 if __name__ == "__main__":
     print("Running hsl2lib standalone, will parse binary stream...")
@@ -408,11 +483,12 @@ if __name__ == "__main__":
                     teldatum = parse_binary(binary)
                 except:
                     teldatum = None
-                    print("ERROR: Failed to read HSL2 binary ", binary)
+                    print("ERROR: Failed to read HSL2 binary ")#, binary)
             if teldatum:
                 teldata[teldatum['telname']] = teldatum
-                #if "Mark" in teldatum['telname']:
-                if "Defford" in teldatum['telname']:
+                if "Mark" in teldatum['telname']:
+                #if "" in teldatum['telname']:
                 #if "Pick" in teldatum['telname']:
-                    print_teldata(teldatum)
+                    #print_teldata(teldatum)
+                    pass 
     msock.close()
