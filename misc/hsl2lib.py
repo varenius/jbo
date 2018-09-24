@@ -1,5 +1,8 @@
 #!/usr/bin/python
 #-*- coding: utf-8 -*-
+# NOTE: Many fields have MJDs, modified julian date in seconds. 
+#       A value of -207360043201.0 in this field means 0 i.e. not set, since
+#       -207360043201.0/(3600*24) = -2400000.5
 import socket
 import struct
 import binascii
@@ -21,10 +24,15 @@ def b2d(b, i):
         at position i, and return as double. """
     return struct.unpack('d', b[4*i:4*(i+2)])[0]
 
-def b2s(b, i):
+def b2i(b, i):
     """ Slice 4 bytes out of binary sequence corresponding
+        to a char, starting  at position i, and return as integer. """
+    return struct.unpack('<i', b[4*i:4*(i+1)])[0]
+
+def b2c128(b, i):
+    """ Slice 4*32=128 bytes out of binary sequence corresponding
         to a char, starting  at position i, and return as string. """
-    ans = b[4*i:4*(i+1)]
+    ans = b[4*i:4*(i+32)]
     # If python 3 (and not python 2), then decode string explicitly from bytestring
     if (sys.version_info > (3, 0)):
         ans = ans.decode()
@@ -137,16 +145,89 @@ def readIFnoise(b,h,i):
     ifnoise["iflevel"] = h2i(h,i+10)
     return ifnoise
 
-def readEDFA(b,h,i):
+def parse_EDFA_status_block(b,h,i):
     """Parse data according to tables 4.66"""
-    edfa = {}
-    edfa["dest"] = h2s(h,i)
-    edfa["number"] = h2s(h,i+1)
-    edfa["mjds"] = b2d(b,i+2)
-    edfa["numstagestats"] = h2s(h,i+1)
-    #edfa["status"] = BitArray(hex=h2s(h, i+2)).bin # See table 4.63
-    nextbyte = i + 8
-    return edfa, nextbyte
+    status = {}
+    status["dest"] = h2s(h,i)
+    status["number"] = h2s(h,i+1)
+    status["mjds"] = b2d(b,i+2)
+    status["numstagestatuses"] = h2i(h,i+4)
+    status['stagestatuses']= []
+    offset = 5
+    #print("EDFASTATUS", status)
+    #print(b2c(b,i+offset+2))
+    for k in range(int(status['numstagestatuses'])):
+        # Read EDFA status parameters for this stage from table 4.67
+        status['stagestatuses'].append(read_467_EDFA_status(b,h,i+offset))
+        offset += 25
+    status["numpumpstatuses"] = h2i(h,i+4+offset)
+    status['pumpstatuses']= []
+    for k in range(int(status['numpumpstatuses'])):
+        # Read pump status parameters for this stage from table 4.70
+        status['pumpstatuses'].append(read_470_pump_status(b,h,i+offset))
+        offset += 5
+    # Read controller status, table 4.71
+    status['controllersstatus'] = read_EDFA_controller_status(b,h,i+offset)
+    offset +=49 # 49 bytes in controller status, table 4.71
+    status['safetystatus'] = read_EDFA_safety_status(b,h,i+offset)
+    offset +=9 # 9 bytes in safety status, table 4.74
+    status['VOAsetting'] = b2d(b,i+offset)
+    status['casetemp'] = b2d(b,i+offset+2)
+    status['coiltemp'] = b2d(b,i+offset+4)
+    status['heatertemp'] = b2d(b,i+offset+6)
+    status['errors'], nextbyte = parse_errors(b,h,i+offset+8)
+    return status, nextbyte
+
+def read_EDFA_safety_status(b,h,i):
+    # Table 4.74
+    status = {}
+    status['safetystatus'] = h2s(h,i)
+    status['maximumsignal'] = b2d(b,i+1)
+    status['minimumsignal'] = b2d(b,i+3)
+    status['switchingtime'] = b2d(b,i+5)
+    status['gain'] = b2d(b,i+7)
+    return status
+
+def read_EDFA_controller_status(b,h,i):
+    # Table 4.71
+    status = {}
+    status['laserpower'] = h2s(h,i)
+    status['PSUcurrent'] = b2d(b,i+1)
+    status['PSUvoltage'] = b2d(b,i+3)
+    status['PSUmode'] = h2s(h,i+5)
+    status['PSUreason'] = b2c128(b,i+6).replace("\x00","") # read 32x4 bytes string
+    status['firmwaremajorversion'] = h2s(h,i+38)
+    status['firmwareminorversion'] = h2s(h,i+39)
+    status['unitnumber'] = h2s(h,i+40)
+    status['PSUvoltagelowerlim'] = b2d(b,i+41)
+    status['PSUvoltageupperlim'] = b2d(b,i+43)
+    status['PSUcurrentlowerlim'] = b2d(b,i+45)
+    status['PSUcurrentupperlim'] = b2d(b,i+47)
+    return status
+
+def read_470_pump_status(b,h,i):
+    # Table 4.70
+    status = {}
+    status['pumpnumber'] = h2s(h,i)
+    status['pumptemp'] = b2d(b,i+1)
+    status['pumpcurrent'] = b2d(b,i+3)
+    return status
+
+def read_467_EDFA_status(b,h,i):
+    # Table 4.67
+    status = {}
+    status['stageidnumber'] = h2s(h,i)
+    status['stageidname'] = b2c(b,i+1)
+    status['powerin'] = b2d(b,i+9)
+    status['totpowerout'] = b2d(b,i+11)
+    status['sigpowerout'] = b2d(b,i+13)
+    status['gain'] = b2d(b,i+15)
+    status['targetpower'] = b2d(b,i+17)
+    status['VOA'] = b2d(b,i+19)
+    status['mode'] = h2s(h,i+21)
+    status['options'] = h2s(h,i+22)
+    status['power/gain'] = b2d(b,i+23)
+    return status
 
 def readtickbox(b,h,i):
     """Parse data according to tables 4.64, 4.65 """
@@ -196,6 +277,7 @@ def bin_swap_hex(binary):
     nb = int(len(binary)*0.25)
     # swap byte order
     msg = struct.pack('<'+str(nb)+'i', *struct.unpack('>'+str(nb)+'i', binary))
+
     # convert msg to hexadecimal version for convenience
     hexmsg = binascii.hexlify(msg)
     return hexmsg
@@ -289,6 +371,7 @@ def coordcode_to_name(coordhex):
 
 def parse_telstatus(stm, b,h):
     # stm present for debug things, e.g. filter on telescopes
+    tn = stm['telname']
     telstatus = {}
     telstatus['time_mjds'] = b2d(b, 26)# Time stamp [MJD in seconds]
     # For convenience, also convert directly to MJD
@@ -321,48 +404,166 @@ def parse_telstatus(stm, b,h):
     telstatus['exp'] = readexp(b, h) # Exp data, exp ID
     telstatus['receiverstatus'], nextbyte = parse_receivers(b,h) # receiver statuses
     # Next table should begin at nextbyte
-    tn = stm['telname']
-    #print tn, stm
-    # 42 foot has trouble with noisediode status for some reason
-    if not ("42" in tn):
-        telstatus['noisediode_status'], nextbyte = readnoisestatus(b, h, nextbyte)
-        telstatus['DINT_status'], nextbyte = readDINTstatus(b, h, nextbyte)
-        telstatus['tickbox_status'], nextbyte = readtickbox(b, h, nextbyte)
-        telstatus['EDFA_status'], nextbyte = readEDFA(b,h,nextbyte)
-        print(tn, stm, telstatus['EDFA_status'], nextbyte)
-        #if "Mark"in tn: 
-            #For Mk2, this works
-            #print(parse_metdata(b,h,693), nextbyte)
-            #print(tn, stm, telstatus['noisediode_status'], telstatus['DINT_status'], telstatus['tickbox_status'], nextbyte)
-            #print(tn, stm, telstatus['EDFA_status'], nextbyte)
-            #print(h[nextbyte*8:])
-            #print(parse_metdata(b,h,nextbyte + (711-593)))
-            #print(parse_metdata(b,h,693), nextbyte)
-
+    telstatus['noisediode_status'], nextbyte = readnoisestatus(b, h, nextbyte)
+    telstatus['DINT_status'], nextbyte = readDINTstatus(b, h, nextbyte)
+    telstatus['tickbox_status'], nextbyte = readtickbox(b, h, nextbyte)
+    telstatus['EDFA_status'], nextbyte = parse_EDFA_status_block(b,h,nextbyte)
+    # TODO: Find why this is needed
+    nextbyte +=1
+    pherstat, nextbyte = parse_pheripal_status(b,h,nextbyte)
+    pstat, nextbyte = parse_phase_status(b,h,nextbyte)
+    #print("p", pstat, nextbyte)
+    lstat, nextbyte = parse_Lbandlink_status(b,h,nextbyte)
+    #print("l", lstat, nextbyte)
+    optstat, nextbyte = parse_optical_status(b,h,nextbyte)
+    #print('o', optstat, nextbyte)
+    metdata, nextbyte = parse_metdata(b,h,nextbyte)
+    #print('m', metdata, nextbyte)
+    sitestat, nextbyte = parse_sitestatus(b,h,nextbyte)
+    #print('s',sitestat, nextbyte)
+    #print("beforeerror",h[8*nextbyte:])
+    #print("beforeerror",b[4*nextbyte:])
+    errors, nextbyte = parse_errors(b,h,nextbyte)
+    #print('e',errors, nextbyte)
+    #print(tn, metdata['drytemp'], metdata['mjds'])
     return telstatus
 
-def parse_receivers(b,h):
+def parse_pheripal_status(b,h,i):
+    # Table 4.76
+    status = {}
+    status['mjds']= b2d(b,i)
+    nextbyte = i+2
+    return status, nextbyte
+
+def parse_phase_status(b,h,i):
+    # Table 4.77
+    status = {}
+    status['mjds']= b2d(b,i)
+    status['LOsynthphase']= b2d(b,i+2)
+    status['LOsynthamp']= b2d(b,i+4)
+    status['cable_phase']= b2d(b,i+6)
+    nextbyte = i+8
+    return status, nextbyte
+
+def parse_Lbandlink_status(b,h,i):
+    # Table 4.78
+    status = {}
+    status['mjds']= b2d(b,i)
+    status['smoothed_phase']= b2d(b,i+2)
+    status['phase_slope']= b2d(b,i+4)
+    status['phase_error']= b2d(b,i+6)
+    status['phase_RMS_error']= b2d(b,i+8)
+    status['phase']= b2d(b,i+10)
+    status['link_state_count']= h2s(h, i+12)
+    status['status'] = BitArray(hex=h2s(h, i+13)).bin # See Table 4.79
+    # For some reason there an extra byte here, not described in table 4.78
+    status['EXTRABYTE']= h2s(h, i+14)
+    nextbyte = i+15
+    return status, nextbyte
+
+def parse_optical_status(b,h,i):
+    # Table 4.80
+    status = {}
+    status['mjds']= b2d(b,i)
+    status['numofEDFAstatuses']= b2i(b, i+2)
+    status['EDFAstatuses'] = []
+    offset = 3
+    for k in range(int(status['numofEDFAstatuses'])):
+        es = read_opt_EDFA_status(b,h,i+offset)
+        status['EDFAstatuses'].append(es)
+        offset += 13
+    nextbyte = i+offset
+    return status, nextbyte
+
+def read_opt_EDFA_status(b,h,i):
+    # Table 4.81
+    status = {}
+    status['repeateridnumber'] = h2s(h,i)
+    status['repeateridname'] = b2c(b,i+1).replace("\x00","")
+    status['EDFAdestination'] = h2s(h,i+9)
+    status['EDFAnumber'] = h2s(h,i+10)
+    status['EDFAinputstatus'] = h2s(h,i+11)
+    status['EDFAoutputstatus'] = h2s(h,i+12)
+    return status
+
+def parse_sitestatus(b,h,i):
+    sitestatus = {}
+    sitestatus['mjds']= b2d(b,i)
+    sitestatus['status']= BitArray(hex=h2s(h, i+2)).bin # unsigned long, 4 bytes i.e. 32 bits
+    nextbyte = i+3
+    return sitestatus, nextbyte
+def parse_sitestatus(b,h,i):
+    sitestatus = {}
+    sitestatus['mjds']= b2d(b,i)
+    sitestatus['status']= BitArray(hex=h2s(h, i+2)).bin # unsigned long, 4 bytes i.e. 32 bits
+    nextbyte = i+3
+    return sitestatus, nextbyte
+def parse_sitestatus(b,h,i):
+    sitestatus = {}
+    sitestatus['mjds']= b2d(b,i)
+    sitestatus['status']= BitArray(hex=h2s(h, i+2)).bin # unsigned long, 4 bytes i.e. 32 bits
+    nextbyte = i+3
+    return sitestatus, nextbyte
+
+def parse_sitestatus(b,h,i):
+    sitestatus = {}
+    sitestatus['mjds']= b2d(b,i)
+    sitestatus['status']= BitArray(hex=h2s(h, i+2)).bin # unsigned long, 4 bytes i.e. 32 bits
+    nextbyte = i+3
+    return sitestatus, nextbyte
+
+def parse_errors(b,h,i):
+    # 
+    errors = {}
+    errors['numerrors']= h2i(h,i)
+    offset = 1
+    errors['errorlist']=[]
+    for k in range(errors['numerrors']):
+        #print("PROCESSING ERROR:", h[8*(i+offset): 8*(i+offset+4)])
+        error = {}
+        error['code'] = h2s(h,i+offset)
+        error['priority'] = h2s(h,i+offset+1)
+        error['audible'] = h2s(h,i+offset+2)
+        error['parameter'] = h2s(h,i+offset+3)
+        errors['errorlist'].append(error)
+        # Assume the parameter is always zero-value unsigned long...
+        # From hsl2 document, 4.4.21.13:
+        # The Parameter is a parameter associated with the error or warning. If
+        # the error has no parameter it consists of a zero-value unsigned long.
+        # Otherwise it is either an unsigned long, a double, or for string
+        # parameters it is an unsigned long containing the transmitted length of
+        # the string followed by the string itself. The string is always
+        # transmitted as an even number of characters padded with a zero byte if
+        # necessary.
+        offset =+4
+    nextbyte = i+offset
+    #print('LAST', h[nextbyte*8:])
+    #print('LAST', b[nextbyte*4:])
+    return errors, nextbyte
+
+def parse_receivers(b,h, i=123):
     recstat = {}
     # receiver statuses header
-    recstat['mjds'] = b2d(b, 123)
-    recstat['numrec'] = h2i(h, 125)
-    recstat['numactiverec'] = h2i(h, 126)
+    recstat['mjds'] = b2d(b, i)
+    recstat['numrec'] = h2i(h, i+2)
+    recstat['numactiverec'] = h2i(h, i+3)
     recstat['active_recs'] = {}
-    recstat['active_recs']['carouselpos'] = h2i(h, 127)
-    recstat['active_recs']['carouselang'] = b2d(b, 128)
-    recstat['active_recs']['recnumloc'] = h2i(h, 130)
-   
+    offset = 4
+    for k in range(recstat['numactiverec']):
+        recstat['active_recs']['carouselpos'] = h2i(h, i+offset)
+        recstat['active_recs']['carouselang'] = b2d(b, i+offset+1)
+        recstat['active_recs']['recnumloc'] = h2i(h, i+offset+3)
+        offset +=4
+
     # Read receiver statuses for this telescope message
     recstat['recstatuses'] = []
     # Recoffset acumulates the length of all the receiver info for this telescope
-    recoffset = 0
     currentrec = ""
     for recn in range(recstat['numrec']):
-        #print('recoffset', recoffset)
-        rec = readrec(b,h,131+recoffset)
+        rec = readrec(b,h,i+offset)
         recstat['recstatuses'].append(rec)
         # Each receiver entry is 63 bytes of static info plus 18 bytes per LO entry
-        recoffset += 63 + rec['numlo'] * 18
+        offset += 63 + rec['numlo'] * 18
         if rec['carpos']==recstat['active_recs']['carouselpos']:
             currentrec = rec['idname']
     recstat['currentrec'] = currentrec
@@ -371,7 +572,7 @@ def parse_receivers(b,h):
     # currently active receiver (one for each receiver channel). Table
     # 4.59 shows the format for a single entry.
     # start reading at byte after receiver info
-    stb= 131 + recoffset
+    stb= i + offset
     ifoff = 0
     recstat['ifnoiseentries'] = []
     for recn in range(recstat['numactiverec']*2):
@@ -383,10 +584,8 @@ def parse_receivers(b,h):
     return recstat, nextbyte
 
 def parse_metdata(b,h, i):
-    # Table 4.4.21.11 Met Status starts att byte 711 for Mk2...
-    # But apparently only for Mk2. Need to figure out how to 
-    # understand which is the right way to find this for other tels
-    #mb = 711
+    # Table 4.4.21.11 Met Status
+    # Note, updates usually every 5 seconds, so mjds only changes every 5 sec
     met = {}
     met["mjds"] = b2d(b,i)
     met["wind"] = b2d(b,i+2)
@@ -396,15 +595,15 @@ def parse_metdata(b,h, i):
     met["meanwinddir"] = b2d(b,i+10)
     met["rain"] = b2d(b,i+12)
     met["drytemp"] = b2d(b,i+14)
-    return met
-    #metmjds = struct.unpack('d', rawmsg[4*(mb):4*(mb+2)])[0] # MJD in seconds
-    #metwind = struct.unpack('d', rawmsg[4*(mb+2):4*(mb+4)])[0]
-    #metwindmean = struct.unpack('d', rawmsg[4*(mb+4):4*(mb+6)])[0]
-    #metwindpeak = struct.unpack('d', rawmsg[4*(mb+6):4*(mb+8)])[0]
-    #metwinddir = struct.unpack('d', rawmsg[4*(mb+8):4*(mb+10)])[0]
-    #metwindmeandir = struct.unpack('d', rawmsg[4*(mb+10):4*(mb+12)])[0]
-    #metrain = struct.unpack('d', rawmsg[4*(mb+12):4*(mb+14)])[0]
-    #metdrytemp = struct.unpack('d', rawmsg[4*(mb+14):4*(mb+16)])[0]
+    met["drytempRMS"] = b2d(b,i+16)
+    met["pressure"] = b2d(b,i+18)
+    met["pressureRMS"] = b2d(b,i+20)
+    met["relhum"] = b2d(b,i+22)
+    met["relhumRMS"] = b2d(b,i+24)
+    met["watercoldens"] = b2d(b,i+26)
+    met["electroncoldens"] = b2d(b,i+28)
+    nextbyte = i + 30
+    return met, nextbyte
 
 def joinMcast(mcast_addr,port,if_ip):
     """
@@ -451,7 +650,7 @@ def print_teldata(td):
 if __name__ == "__main__":
     print("Running hsl2lib standalone, will parse binary stream...")
     # If DEBUG, allow exceptions to stop code. If False, catch exceptions and only print ERROR: line.
-    DEBUG = True
+    DEBUG = False
     
     # Configuration
     mcast_port  = 7022
@@ -481,14 +680,16 @@ if __name__ == "__main__":
             else:
                 try: 
                     teldatum = parse_binary(binary)
-                except:
+                except Exception as e:
                     teldatum = None
-                    print("ERROR: Failed to read HSL2 binary ")#, binary)
+                    print("ERROR: Failed to read HSL2 binary ", binary)
+                    print("       Exception:", e)
             if teldatum:
                 teldata[teldatum['telname']] = teldatum
-                if "Mark" in teldatum['telname']:
+                #if "Mark" in teldatum['telname']:
                 #if "" in teldatum['telname']:
                 #if "Pick" in teldatum['telname']:
-                    #print_teldata(teldatum)
+                if "Lo" in teldatum['telname']:
+                    print_teldata(teldatum)
                     pass 
     msock.close()
