@@ -556,9 +556,10 @@ def parse_receivers(b,h, i=123):
         recstat['active_recs']['recnumloc'] = h2i(h, i+offset+3)
         offset +=4
 
-    # Read receiver statuses for this telescope message
+    # read receiver statuses table
     recstat['recstatuses'] = []
-    # Recoffset acumulates the length of all the receiver info for this telescope
+    # store the current equipped receiver in currentrec variable for easy
+    # access later
     currentrec = ""
     for recn in range(recstat['numrec']):
         rec = readrec(b,h,i+offset)
