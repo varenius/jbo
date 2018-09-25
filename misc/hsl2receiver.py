@@ -1,9 +1,14 @@
 #!/usr/bin/python
 #-*- coding: utf-8 -*-
-import select, socket, sys, Queue
 import sys, os
 import json
 import numpy as np
+import select, socket
+# If python 3 (and not python 2), then import queue lowercase, else uppercase
+if (sys.version_info > (3, 0)):
+    import queue
+else:
+    import Queue as queue
 # Add script directory to include path
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 from hsl2lib import *
@@ -40,7 +45,7 @@ while inputs:
             connection, client_address = s.accept()
             connection.setblocking(0)
             inputs.append(connection)
-            message_queues[connection] = Queue.Queue()
+            message_queues[connection] = queue.Queue()
         elif s is msock:
             # Read data
             binary = s.recv(4096)
@@ -69,8 +74,11 @@ while inputs:
         else:
             try:
                 request = s.recv(1024)
+                # If python 3 (and not python 2), then decode
+                if (sys.version_info > (3, 0)):
+                    request = request.decode()
             except:
-                print("ERROR communicating with client.")
+                print("ERROR reading from client.")
             if request:
                 message_queues[s].put(request)
                 if s not in outputs:
@@ -86,16 +94,20 @@ while inputs:
         try:
             try:
                 next_msg = message_queues[s].get_nowait()
-            except Queue.Empty:
+            except queue.Empty:
                 outputs.remove(s)
             else:
                 if next_msg == "TELDATA?":
                     telstring = json.dumps(teldata)
-                    s.send(telstring)
+                    reply = telstring
                 else:
-                    s.send("IGNORED")
+                    reply = "IGNORED"
+                # If python 3 (and not python 2), then encode
+                if (sys.version_info > (3, 0)):
+                    reply = reply.encode()
+                s.send(reply)
         except:
-            print("ERROR communicating with client.")
+            print("ERROR writing to client.")
 
     for s in exceptional:
         inputs.remove(s)

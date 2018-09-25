@@ -30,11 +30,18 @@ except socket.error as serr:
         print("ERROR: Cannot connect to HSL2 server, is it not running?")
         sys.exit(1)
 
-# Connection established, check if server responds properly
+# Define string to send to get data
+msg = 'TELDATA?'
+# If in python3, use bytestring
+if (sys.version_info > (3, 0)):
+    msg = msg.encode()
+
 while True:
-    s.sendall('TELDATA?')
+    s.sendall(msg)
     data = s.recv(65536)
-    print(len(data))
+    # If in python3, decode from bytestring
+    if (sys.version_info > (3, 0)):
+        data = data.decode()
     teldata = json.loads(data)
     print_teldata(teldata['Mark 2'])
     time.sleep(1)
