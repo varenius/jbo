@@ -3,6 +3,7 @@
 import sys, os
 import json
 import numpy as np
+import datetime
 import select, socket
 # If python 3 (and not python 2), then import queue lowercase, else uppercase
 if (sys.version_info > (3, 0)):
@@ -59,19 +60,18 @@ while inputs:
             if magicno=="LRMe":
                 # ... then parse the binary into a dictionary of telescope
                 # information for this telescope 
-                if DEBUG:
+                try: 
                     teldatum = parse_binary(binary)
-                else:
-                    try: 
-                        teldatum = parse_binary(binary)
-                    except Exception as e:
-                        teldatum = None
-                        print("ERROR: Failed to read HSL2 binary ", binary)
-                        print("       Exception:", e)
-                if teldatum:
-                    print("SUCCESS: Received", teldatum['binary_message_length'], "bytes of HSL2 data for", teldatum['telname'])
-                    teldata[teldatum['telname']] = teldatum
+                    if teldatum:
+                        teldata[teldatum['telname']] = teldatum
+                        utcnow = datetime.datetime.utcnow().isoformat()
+                        print("{0} UTC: Received {1} bytes of HSL2 data for {2}".format(utcnow, teldatum['binary_message_length'], teldatum['telname']))
+                except Exception as e:
+                    print("ERROR: Failed to read HSL2 binary ", binary)
+                    print("       Exception:", e)
+                    print("       Assuming nothing to worry about, and continuing...")
         else:
+            # Read client request...
             try:
                 request = s.recv(1024)
                 # If python 3 (and not python 2), then decode
@@ -94,11 +94,11 @@ while inputs:
         try:
             try:
                 next_msg = message_queues[s].get_nowait()
-            except queue.Empty:
-                outputs.remove(s)
-            else:
-                if next_msg == "TELDATA?":
+                if next_msg == "ALL":
                     telstring = json.dumps(teldata)
+                    reply = telstring
+                elif next_msg in teldata.keys():
+                    telstring = json.dumps(teldata[next_msg])
                     reply = telstring
                 else:
                     reply = "IGNORED"
@@ -106,6 +106,8 @@ while inputs:
                 if (sys.version_info > (3, 0)):
                     reply = reply.encode()
                 s.send(reply)
+            except queue.Empty:
+                outputs.remove(s)
         except:
             print("ERROR writing to client.")
 
