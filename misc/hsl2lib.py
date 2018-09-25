@@ -616,7 +616,8 @@ def joinMcast(mcast_addr,port,if_ip):
     
     print("""Will attempt to listen to multicast assuming, this computer has a
             network interface with the 192-network IP """ + if_ip + """. If no
-            data, change iface_ip variable to right IP for this computer.""")
+            data, change iface_ip variable to right IP for this computer AND
+            make sure port 7022 is open (e.g. ufw allow 7022).""")
 
     #create a UDP socket
     mcastsock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
@@ -659,7 +660,7 @@ if __name__ == "__main__":
     # Configuration
     mcast_port  = 7022
     mcast_group = "239.0.0.254"
-    iface_ip    = "192.168.101.10" # Assume this computer has this 192-address
+    iface_ip    = "192.168.101.99" # Assume this computer has this 192-address
     
     # Connect to socket
     msock = joinMcast(mcast_group, mcast_port, iface_ip)
