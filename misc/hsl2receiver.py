@@ -8,17 +8,6 @@ import numpy as np
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 from hsl2lib import *
 
-def print_teldata(td):
-    if td['status']:
-        arec = td['status']['receiverstatus']['currentrec']
-        act = np.array(td['status']['actual_azel'][0:2])*180/np.pi
-        dem = np.array(td['status']['demanded_azel'][0:2])*180/np.pi
-        toprint = td['status']['time_isot'], "Binary length", td['binary_message_length'], td['telname'], td['status']['control'], "Az ", act[0], " dem ", dem[0], " El ", act[1], " dem ", dem[1],"Receiver: ", arec
-    else:
-        toprint = td['telname'], td['telnumber'], 'NOSTATUS'
-    print(toprint)
-
-
 # Inspired by https://steelkiwi.com/blog/working-tcp-sockets/
 print("Starting HSL2 receiver socket server, listening to multicast data and client requests...")
 # If DEBUG, allow exceptions to stop code. If False, catch exceptions and
