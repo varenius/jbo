@@ -10,6 +10,7 @@ import array
 import sys
 import numpy as np
 from bitstring import BitArray
+
 try:
     from astropy.time import Time as at
     astropy=True
@@ -632,16 +633,18 @@ def joinMcast(mcast_addr,port,if_ip):
 
     return mcastsock
 
-from astropy import units as u
-from astropy.coordinates import Angle
-def rad2dhms(rad):
-    angles = Angle(rad, unit=u.rad).to_string(unit=u.degree)
-    return " ".join(angles)
+#from astropy import units as u
+#from astropy.coordinates import Angle
+#def rad2dhms(rad):
+#    angles = Angle(rad, unit=u.rad).to_string(unit=u.degree)
+#    return " ".join(angles)
 
 def print_teldata(td):
     if td['status']:
-        #toprint = td['status']['time_isot'], td['telname'], td['telnumber'], rad2dhms(td['status']['actual_azel'][0:2]), rad2dhms(td['status']['demanded_azel'][0:2])
-        toprint = td['status']['time_isot'], td['binary_message_length'], td['telname'], td
+        arec = td['status']['receiverstatus']['currentrec']
+        act = np.array(td['status']['actual_azel'][0:2])*180/np.pi
+        dem = np.array(td['status']['demanded_azel'][0:2])*180/np.pi
+        toprint = td['status']['time_isot'], "Binary length", td['binary_message_length'], td['telname'], td['status']['control'], "Az ", act[0], " dem ", dem[0], " El ", act[1], " dem ", dem[1],"Receiver: ", arec
     else:
         toprint = td['telname'], td['telnumber'], 'NOSTATUS'
     print(toprint)
@@ -649,7 +652,8 @@ def print_teldata(td):
 
 if __name__ == "__main__":
     print("Running hsl2lib standalone, will parse binary stream...")
-    # If DEBUG, allow exceptions to stop code. If False, catch exceptions and only print ERROR: line.
+    # If DEBUG, allow exceptions to stop code. If False, catch exceptions and
+    # only print ERROR: line.
     DEBUG = False
     
     # Configuration
@@ -660,9 +664,9 @@ if __name__ == "__main__":
     # Connect to socket
     msock = joinMcast(mcast_group, mcast_port, iface_ip)
     
+    # Create empty dictionary to store telescope status data
+    teldata = {}
     while True:
-        # Create empty dictionary to store telescope status data
-        teldata = {}
         # Read data
         binary = msock.recv(4096)
         # If in python3, then this is a bytestring and we convert to string
@@ -673,8 +677,8 @@ if __name__ == "__main__":
         # If data starts with known "magic number" eMRL (but backwards due to
         # little/big endian byteflip)...
         if magicno=="LRMe":
-            # then parse the binary into a dictionary of telescope information for
-            # this telescope 
+            # ... then parse the binary into a dictionary of telescope
+            # information for this telescope 
             if DEBUG:
                 teldatum = parse_binary(binary)
             else:
@@ -685,11 +689,8 @@ if __name__ == "__main__":
                     print("ERROR: Failed to read HSL2 binary ", binary)
                     print("       Exception:", e)
             if teldatum:
+                print("Received", teldatum['binary_message_length'], "bytes of HSL2 data for", teldatum['telname'])
                 teldata[teldatum['telname']] = teldatum
-                #if "Mark" in teldatum['telname']:
-                #if "" in teldatum['telname']:
-                #if "Pick" in teldatum['telname']:
-                if "Lo" in teldatum['telname']:
-                    print_teldata(teldatum)
-                    pass 
+                #if "Cam" in teldatum['telname']:
+                #    print_teldata(teldatum)
     msock.close()
