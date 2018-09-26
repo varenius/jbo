@@ -51,7 +51,8 @@ $tnames = array('42ft', '7metre', 'Lovell', 'Mark 2', 'Pickmere', 'Darnhall', 'K
 
 function get_jobname($obj, $t) {
   if (!empty($obj->$t->status->jobname)) {
-    return $obj->$t->status->jobname;
+    $val = $obj->$t->status->jobname;
+    return str_replace('_',' ',$val);
   }
   else {
     return '';
@@ -143,7 +144,7 @@ function get_timestamp($obj, $t) {
       <th>Cryo temperature</th><?php foreach ($tnames as $tn) {echo '<td>' . get_cryotemp($obj, $tn) . '</td>'; }?>
     </tr>
     <tr>
-      <th>HSL2 Timestamp</th><?php foreach ($tnames as $tn) {echo '<td>' . get_timestamp($obj, $tn) . '</td>'; }?>
+      <th>HSL2 UTC timestamp</th><?php foreach ($tnames as $tn) {echo '<td>' . get_timestamp($obj, $tn) . '</td>'; }?>
     </tr>
   </tbody>
 </table>
