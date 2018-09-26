@@ -37,7 +37,7 @@ inputs = [server]
 outputs = []
 message_queues = {}
 
-with open('/Users/eskil/Desktop/WORK/JBO/VLBI/testpage/jbolive/src/assets/data.json') as f:
+with open('./data.json') as f:
     teldata = json.load(f)
 
 print(teldata.keys())
