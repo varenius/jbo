@@ -1,0 +1,2253 @@
+{
+    "42ft": {
+        "binary_message_length": 1228, 
+        "msgflags": "0000", 
+        "status": {
+            "DINT_status": {
+                "adc3": {
+                    "delay": 0.0, 
+                    "mjds": -207360043201.0, 
+                    "status": "00000000000000000000000000000000", 
+                    "tick_phase": 0.0
+                }, 
+                "adc8": {
+                    "delay": 0.0, 
+                    "mjds": -207360043201.0, 
+                    "status": "00000000000000000000000000000000", 
+                    "tick_phase": 0.0
+                }, 
+                "mjds": -207360043201.0
+            }, 
+            "EDFA_status": {
+                "VOAsetting": 0.0, 
+                "casetemp": 0.0, 
+                "coiltemp": 0.0, 
+                "controllersstatus": {
+                    "PSUcurrent": 0.0, 
+                    "PSUcurrentlowerlim": 0.0, 
+                    "PSUcurrentupperlim": 0.0, 
+                    "PSUmode": "00000000", 
+                    "PSUreason": "", 
+                    "PSUvoltage": 0.0, 
+                    "PSUvoltagelowerlim": 0.0, 
+                    "PSUvoltageupperlim": 0.0, 
+                    "firmwaremajorversion": "00000000", 
+                    "firmwareminorversion": "00000000", 
+                    "laserpower": "00000000", 
+                    "unitnumber": "00000000"
+                }, 
+                "dest": "00000000", 
+                "errors": {
+                    "errorlist": [], 
+                    "numerrors": 0
+                }, 
+                "heatertemp": 0.0, 
+                "mjds": -207360043201.0, 
+                "number": "ffffffff", 
+                "numpumpstatuses": 0, 
+                "numstagestatuses": 0, 
+                "pumpstatuses": [], 
+                "safetystatus": {
+                    "gain": 0.0, 
+                    "maximumsignal": 0.0, 
+                    "minimumsignal": 0.0, 
+                    "safetystatus": "00000000", 
+                    "switchingtime": 0.0
+                }, 
+                "stagestatuses": []
+            }, 
+            "actual_azel": [
+                1.854676406846875, 
+                0.008220152171785476, 
+                "Az/El", 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                -207360043201.0
+            ], 
+            "allocation": "deallocate", 
+            "azmotor": true, 
+            "control": "Manual", 
+            "demanded_azel": [
+                3.1130311049378623, 
+                0.14534558667692649, 
+                "Az/El", 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                -207360043201.0
+            ], 
+            "demanded_lonlat": [
+                2.019423, 
+                -0.495305, 
+                "J2000", 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                5044672856.195381
+            ], 
+            "elmotor": true, 
+            "exp": [
+                "ffffffff", 
+                ""
+            ], 
+            "jobname": "", 
+            "jobnum": "ffffffff", 
+            "noisediode_status": {
+                "autocal": 0, 
+                "duty": -1.0, 
+                "enabled": "00000000", 
+                "mjds": -207360043201.0, 
+                "period": -1.0, 
+                "phase": -1.0, 
+                "totpow": 0
+            }, 
+            "offsets_azel": [
+                0.0, 
+                0.0, 
+                "00000001", 
+                0.0, 
+                0.0, 
+                "00000001"
+            ], 
+            "receiverstatus": {
+                "active_recs": {}, 
+                "currentrec": "", 
+                "currentreccryotemp": "", 
+                "ifnoiseentries": [], 
+                "mjds": -207360043201.0, 
+                "numactiverec": 0, 
+                "numrec": 0, 
+                "recstatuses": []
+            }, 
+            "source": [
+                "ffffffff", 
+                "", 
+                ""
+            ], 
+            "statusflags1": "00000000000000000000100000000000", 
+            "statusflags2": "00000001", 
+            "statusflags3": "00000000", 
+            "tickbox_status": {
+                "avg_delay": 0.0, 
+                "delay": 0.0, 
+                "mjds": -207360043201.0, 
+                "status": "00000000000000000000000000000000"
+            }, 
+            "time_isot": "2018-09-26T10:00:56.195", 
+            "time_mjd": 58387.41731707617, 
+            "time_mjds": 5044672856.195381
+        }, 
+        "telname": "42ft", 
+        "telnumber": 2
+    }, 
+    "7metre": {
+        "binary_message_length": 1736, 
+        "msgflags": "0000", 
+        "status": {
+            "DINT_status": {
+                "adc3": {
+                    "delay": 0.0, 
+                    "mjds": -207360043201.0, 
+                    "status": "00000000000000000000000000000000", 
+                    "tick_phase": 0.0
+                }, 
+                "adc8": {
+                    "delay": 0.0, 
+                    "mjds": -207360043201.0, 
+                    "status": "00000000000000000000000000000000", 
+                    "tick_phase": 0.0
+                }, 
+                "mjds": -207360043201.0
+            }, 
+            "EDFA_status": {
+                "VOAsetting": 0.0, 
+                "casetemp": 0.0, 
+                "coiltemp": 0.0, 
+                "controllersstatus": {
+                    "PSUcurrent": 0.0, 
+                    "PSUcurrentlowerlim": 0.0, 
+                    "PSUcurrentupperlim": 0.0, 
+                    "PSUmode": "00000000", 
+                    "PSUreason": "", 
+                    "PSUvoltage": 0.0, 
+                    "PSUvoltagelowerlim": 0.0, 
+                    "PSUvoltageupperlim": 0.0, 
+                    "firmwaremajorversion": "00000000", 
+                    "firmwareminorversion": "00000000", 
+                    "laserpower": "00000000", 
+                    "unitnumber": "00000000"
+                }, 
+                "dest": "00000000", 
+                "errors": {
+                    "errorlist": [], 
+                    "numerrors": 0
+                }, 
+                "heatertemp": 0.0, 
+                "mjds": -207360043201.0, 
+                "number": "ffffffff", 
+                "numpumpstatuses": 0, 
+                "numstagestatuses": 0, 
+                "pumpstatuses": [], 
+                "safetystatus": {
+                    "gain": 0.0, 
+                    "maximumsignal": 0.0, 
+                    "minimumsignal": 0.0, 
+                    "safetystatus": "00000000", 
+                    "switchingtime": 0.0
+                }, 
+                "stagestatuses": []
+            }, 
+            "actual_azel": [
+                0.0034674472418001934, 
+                0.5065295504292479, 
+                "Az/El", 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                -207360043201.0
+            ], 
+            "allocation": "control", 
+            "azmotor": true, 
+            "control": "Observing_room", 
+            "demanded_azel": [
+                5.989718447081917, 
+                0.5065295504292479, 
+                "Az/El", 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                -207360043201.0
+            ], 
+            "demanded_lonlat": [
+                2.094395, 
+                0.0, 
+                "Galactic", 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                5044672856.194107
+            ], 
+            "elmotor": true, 
+            "exp": [
+                "00000001", 
+                "LAB21809260950"
+            ], 
+            "jobname": "LAB21809260950", 
+            "jobnum": "00000001", 
+            "noisediode_status": {
+                "autocal": 0, 
+                "duty": -1.0, 
+                "enabled": "00000000", 
+                "mjds": -207360043201.0, 
+                "period": -1.0, 
+                "phase": -1.0, 
+                "totpow": 0
+            }, 
+            "offsets_azel": [
+                0.0, 
+                0.0, 
+                "00000001", 
+                0.0, 
+                0.0, 
+                "00000001"
+            ], 
+            "receiverstatus": {
+                "active_recs": {
+                    "carouselang": -1.0, 
+                    "carouselpos": 0, 
+                    "recnumloc": 0
+                }, 
+                "currentrec": "L-Band 7m", 
+                "currentreccryotemp": 0.0, 
+                "ifnoiseentries": [
+                    {
+                        "auto": 0, 
+                        "dectzero": 0, 
+                        "iflevel": 0, 
+                        "meanpower": 0, 
+                        "normnoisediode": 0, 
+                        "nsamp": 0, 
+                        "offpow": 0, 
+                        "onpow": 0, 
+                        "rms": 0, 
+                        "timeconst": 0, 
+                        "timeconstmean": 0
+                    }, 
+                    {
+                        "auto": 0, 
+                        "dectzero": 0, 
+                        "iflevel": 0, 
+                        "meanpower": 0, 
+                        "normnoisediode": 0, 
+                        "nsamp": 0, 
+                        "offpow": 0, 
+                        "onpow": 0, 
+                        "rms": 0, 
+                        "timeconst": 0, 
+                        "timeconstmean": 0
+                    }
+                ], 
+                "mjds": 5044672851.780492, 
+                "numactiverec": 1, 
+                "numrec": 1, 
+                "recstatuses": [
+                    {
+                        "LOs": [
+                            {
+                                "loidfreq": 785032900.0, 
+                                "loidname": "Marconi 2022", 
+                                "loidnum": 0
+                            }, 
+                            {
+                                "loidfreq": 120000000.0, 
+                                "loidname": "", 
+                                "loidnum": 1
+                            }
+                        ], 
+                        "azbeamsquint": 0.0, 
+                        "basebandfrequency": 0.0, 
+                        "carang": -1.0, 
+                        "carpos": 0, 
+                        "compressorreturnpressure": 0.0, 
+                        "compressorsupplypressure": 0.0, 
+                        "cryopressure": 0.0, 
+                        "cryotemp": 0.0, 
+                        "elbeamsquint": 0.0, 
+                        "freqidname": "1.42 GHz @ 0 GHz", 
+                        "freqidnum": "00000000", 
+                        "frequency": 1450065800.0, 
+                        "heliumbottlepressure": 0.0, 
+                        "idname": "L-Band 7m", 
+                        "idnum": 4, 
+                        "numincar": 0, 
+                        "numlo": 2
+                    }
+                ]
+            }, 
+            "source": [
+                "00000001", 
+                "LAB21809260950_WAITING", 
+                ""
+            ], 
+            "statusflags1": "00000000000000000000001000000110", 
+            "statusflags2": "00000001", 
+            "statusflags3": "00000000", 
+            "tickbox_status": {
+                "avg_delay": 0.0, 
+                "delay": 0.0, 
+                "mjds": -207360043201.0, 
+                "status": "00000000000000000000000000000000"
+            }, 
+            "time_isot": "2018-09-26T10:00:56.194", 
+            "time_mjd": 58387.41731706142, 
+            "time_mjds": 5044672856.194107
+        }, 
+        "telname": "7metre", 
+        "telnumber": 9
+    }, 
+    "Cambridge": {
+        "binary_message_length": 3600, 
+        "msgflags": "0000", 
+        "status": {
+            "DINT_status": {
+                "adc3": {
+                    "delay": 0.0, 
+                    "mjds": -207360043201.0, 
+                    "status": "00000000000000000000000000000000", 
+                    "tick_phase": 0.0
+                }, 
+                "adc8": {
+                    "delay": 0.0, 
+                    "mjds": -207360043201.0, 
+                    "status": "00000000000000000000000000000000", 
+                    "tick_phase": 0.0
+                }, 
+                "mjds": -207360043201.0
+            }, 
+            "EDFA_status": {
+                "VOAsetting": 0.0, 
+                "casetemp": 0.0, 
+                "coiltemp": 0.0, 
+                "controllersstatus": {
+                    "PSUcurrent": 0.0, 
+                    "PSUcurrentlowerlim": 0.0, 
+                    "PSUcurrentupperlim": 0.0, 
+                    "PSUmode": "00000000", 
+                    "PSUreason": "", 
+                    "PSUvoltage": 0.0, 
+                    "PSUvoltagelowerlim": 0.0, 
+                    "PSUvoltageupperlim": 0.0, 
+                    "firmwaremajorversion": "00000000", 
+                    "firmwareminorversion": "00000000", 
+                    "laserpower": "00000000", 
+                    "unitnumber": "00000000"
+                }, 
+                "dest": "00000000", 
+                "errors": {
+                    "errorlist": [], 
+                    "numerrors": 0
+                }, 
+                "heatertemp": 0.0, 
+                "mjds": -207360043201.0, 
+                "number": "ffffffff", 
+                "numpumpstatuses": 0, 
+                "numstagestatuses": 0, 
+                "pumpstatuses": [], 
+                "safetystatus": {
+                    "gain": 0.0, 
+                    "maximumsignal": 0.0, 
+                    "minimumsignal": 0.0, 
+                    "safetystatus": "00000000", 
+                    "switchingtime": 0.0
+                }, 
+                "stagestatuses": []
+            }, 
+            "actual_azel": [
+                0.24889825315998712, 
+                0.5335045195580819, 
+                "Az/El", 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                -207360043201.0
+            ], 
+            "allocation": "control", 
+            "azmotor": true, 
+            "control": "eMerlin", 
+            "demanded_azel": [
+                0.24889825315998712, 
+                0.5335045195580819, 
+                "Az/El", 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                -207360043201.0
+            ], 
+            "demanded_lonlat": [
+                5.30546422296123, 
+                1.15042747387421, 
+                "J2000", 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                5044672854.942799
+            ], 
+            "elmotor": true, 
+            "exp": [
+                "00000001", 
+                "pointing"
+            ], 
+            "jobname": "pointing_20180925", 
+            "jobnum": "00286004", 
+            "noisediode_status": {
+                "autocal": 0, 
+                "duty": -1.0, 
+                "enabled": "00000000", 
+                "mjds": -207360043201.0, 
+                "period": -1.0, 
+                "phase": -1.0, 
+                "totpow": 0
+            }, 
+            "offsets_azel": [
+                8.726646064915896e-05, 
+                0.0003490658425966358, 
+                "00000001", 
+                0.0, 
+                0.0, 
+                "00000001"
+            ], 
+            "receiverstatus": {
+                "active_recs": {
+                    "carouselang": 2.4068089319737345, 
+                    "carouselpos": 5, 
+                    "recnumloc": 0
+                }, 
+                "currentrec": "C-Band", 
+                "currentreccryotemp": 1.0, 
+                "ifnoiseentries": [
+                    {
+                        "auto": 0, 
+                        "dectzero": 0, 
+                        "iflevel": 0, 
+                        "meanpower": 0, 
+                        "normnoisediode": 0, 
+                        "nsamp": 0, 
+                        "offpow": 0, 
+                        "onpow": 0, 
+                        "rms": 0, 
+                        "timeconst": 0, 
+                        "timeconstmean": 0
+                    }, 
+                    {
+                        "auto": 0, 
+                        "dectzero": 0, 
+                        "iflevel": 0, 
+                        "meanpower": 0, 
+                        "normnoisediode": 0, 
+                        "nsamp": 0, 
+                        "offpow": 0, 
+                        "onpow": 0, 
+                        "rms": 0, 
+                        "timeconst": 0, 
+                        "timeconstmean": 0
+                    }
+                ], 
+                "mjds": 5044672855.983376, 
+                "numactiverec": 1, 
+                "numrec": 3, 
+                "recstatuses": [
+                    {
+                        "LOs": [
+                            {
+                                "loidfreq": 390627812.5, 
+                                "loidname": "Agilent", 
+                                "loidnum": 861
+                            }, 
+                            {
+                                "loidfreq": 443800000.0, 
+                                "loidname": "MERLIN synthesiser A", 
+                                "loidnum": 860
+                            }, 
+                            {
+                                "loidfreq": 128000000.0, 
+                                "loidname": "FIXED", 
+                                "loidnum": 858
+                            }, 
+                            {
+                                "loidfreq": 1024000000.0, 
+                                "loidname": "UNDS1GHZ", 
+                                "loidnum": 859
+                            }
+                        ], 
+                        "azbeamsquint": 0.0, 
+                        "basebandfrequency": 256000000.0, 
+                        "carang": -1.0, 
+                        "carpos": 3, 
+                        "compressorreturnpressure": 0.0, 
+                        "compressorsupplypressure": 0.0, 
+                        "cryopressure": 0.0, 
+                        "cryotemp": 0.0, 
+                        "elbeamsquint": 0.0, 
+                        "freqidname": "RM015freq", 
+                        "freqidnum": "00000001", 
+                        "frequency": 1626490000.0, 
+                        "heliumbottlepressure": 0.0, 
+                        "idname": "L-Band", 
+                        "idnum": 1, 
+                        "numincar": 0, 
+                        "numlo": 4
+                    }, 
+                    {
+                        "LOs": [
+                            {
+                                "loidfreq": 499900597.0, 
+                                "loidname": "Agilent", 
+                                "loidnum": 6
+                            }, 
+                            {
+                                "loidfreq": 445400000.0, 
+                                "loidname": "MERLIN synthesiser A", 
+                                "loidnum": 7
+                            }, 
+                            {
+                                "loidfreq": 128000000.0, 
+                                "loidname": "FIXED", 
+                                "loidnum": 8
+                            }, 
+                            {
+                                "loidfreq": 1024000000.0, 
+                                "loidname": "UNDS1GHZ", 
+                                "loidnum": 5
+                            }
+                        ], 
+                        "azbeamsquint": 0.0, 
+                        "basebandfrequency": 256000000.0, 
+                        "carang": -1.0, 
+                        "carpos": 5, 
+                        "compressorreturnpressure": 22.4769087654, 
+                        "compressorsupplypressure": 5.515805832, 
+                        "cryopressure": 0.0, 
+                        "cryotemp": 1.0, 
+                        "elbeamsquint": 0.0, 
+                        "freqidname": "C-Band_5GHz", 
+                        "freqidnum": "00000001", 
+                        "frequency": 5072000000.0, 
+                        "heliumbottlepressure": 123.0, 
+                        "idname": "C-Band", 
+                        "idnum": 2, 
+                        "numincar": 0, 
+                        "numlo": 4
+                    }, 
+                    {
+                        "LOs": [
+                            {
+                                "loidfreq": 17520000000.0, 
+                                "loidname": "FIXEDK", 
+                                "loidnum": 86
+                            }, 
+                            {
+                                "loidfreq": 452500597.0, 
+                                "loidname": "Agilent", 
+                                "loidnum": 85
+                            }, 
+                            {
+                                "loidfreq": 408500000.0, 
+                                "loidname": "MERLIN synthesiser A", 
+                                "loidnum": 82
+                            }, 
+                            {
+                                "loidfreq": 128000000.0, 
+                                "loidname": "FIXED", 
+                                "loidnum": 84
+                            }, 
+                            {
+                                "loidfreq": 1024000000.0, 
+                                "loidname": "UNDS1GHZ", 
+                                "loidnum": 83
+                            }
+                        ], 
+                        "azbeamsquint": 0.0, 
+                        "basebandfrequency": 256000000.0, 
+                        "carang": -1.0, 
+                        "carpos": 2, 
+                        "compressorreturnpressure": 0.0, 
+                        "compressorsupplypressure": 0.0, 
+                        "cryopressure": 0.0, 
+                        "cryotemp": 0.0, 
+                        "elbeamsquint": 0.0, 
+                        "freqidname": "K-Band_22GHz", 
+                        "freqidnum": "00000001", 
+                        "frequency": 22256000000.0, 
+                        "heliumbottlepressure": 0.0, 
+                        "idname": "K-Band", 
+                        "idnum": 3, 
+                        "numincar": 0, 
+                        "numlo": 5
+                    }
+                ]
+            }, 
+            "source": [
+                "000143aa", 
+                "2015+6554", 
+                "J2015+6554"
+            ], 
+            "statusflags1": "00000000000000000000001000000110", 
+            "statusflags2": "00000001", 
+            "statusflags3": "00000000", 
+            "tickbox_status": {
+                "avg_delay": 0.0, 
+                "delay": 0.0, 
+                "mjds": -207360043201.0, 
+                "status": "00000000000000000000000000000000"
+            }, 
+            "time_isot": "2018-09-26T10:00:54.943", 
+            "time_mjd": 58387.41730257869, 
+            "time_mjds": 5044672854.942799
+        }, 
+        "telname": "Cambridge", 
+        "telnumber": 8
+    }, 
+    "Darnhall": {
+        "binary_message_length": 3096, 
+        "msgflags": "0000", 
+        "status": {
+            "DINT_status": {
+                "adc3": {
+                    "delay": 0.0, 
+                    "mjds": -207360043201.0, 
+                    "status": "00000000000000000000000000000000", 
+                    "tick_phase": 0.0
+                }, 
+                "adc8": {
+                    "delay": 0.0, 
+                    "mjds": -207360043201.0, 
+                    "status": "00000000000000000000000000000000", 
+                    "tick_phase": 0.0
+                }, 
+                "mjds": -207360043201.0
+            }, 
+            "EDFA_status": {
+                "VOAsetting": 0.0, 
+                "casetemp": 0.0, 
+                "coiltemp": 0.0, 
+                "controllersstatus": {
+                    "PSUcurrent": 0.0, 
+                    "PSUcurrentlowerlim": 0.0, 
+                    "PSUcurrentupperlim": 0.0, 
+                    "PSUmode": "00000000", 
+                    "PSUreason": "", 
+                    "PSUvoltage": 0.0, 
+                    "PSUvoltagelowerlim": 0.0, 
+                    "PSUvoltageupperlim": 0.0, 
+                    "firmwaremajorversion": "00000000", 
+                    "firmwareminorversion": "00000000", 
+                    "laserpower": "00000000", 
+                    "unitnumber": "00000000"
+                }, 
+                "dest": "00000000", 
+                "errors": {
+                    "errorlist": [], 
+                    "numerrors": 0
+                }, 
+                "heatertemp": 0.0, 
+                "mjds": -207360043201.0, 
+                "number": "ffffffff", 
+                "numpumpstatuses": 0, 
+                "numstagestatuses": 0, 
+                "pumpstatuses": [], 
+                "safetystatus": {
+                    "gain": 0.0, 
+                    "maximumsignal": 0.0, 
+                    "minimumsignal": 0.0, 
+                    "safetystatus": "00000000", 
+                    "switchingtime": 0.0
+                }, 
+                "stagestatuses": []
+            }, 
+            "actual_azel": [
+                0.23372418291770386, 
+                0.5455078090494194, 
+                "Az/El", 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                -207360043201.0
+            ], 
+            "allocation": "control", 
+            "azmotor": true, 
+            "control": "eMerlin", 
+            "demanded_azel": [
+                0.23375173458262283, 
+                0.5454956268222589, 
+                "Az/El", 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                -207360043201.0
+            ], 
+            "demanded_lonlat": [
+                5.30546422296123, 
+                1.15042747387421, 
+                "J2000", 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                5044672856.154372
+            ], 
+            "elmotor": true, 
+            "exp": [
+                "00000001", 
+                "pointing"
+            ], 
+            "jobname": "pointing_20180925", 
+            "jobnum": "00286004", 
+            "noisediode_status": {
+                "autocal": 0, 
+                "duty": -1.0, 
+                "enabled": "00000000", 
+                "mjds": -207360043201.0, 
+                "period": -1.0, 
+                "phase": -1.0, 
+                "totpow": 0
+            }, 
+            "offsets_azel": [
+                0.0020332921533193094, 
+                0.0020332921533193094, 
+                "00000001", 
+                0.0, 
+                0.0, 
+                "00000001"
+            ], 
+            "receiverstatus": {
+                "active_recs": {
+                    "carouselang": 0.7672467231977399, 
+                    "carouselpos": 1, 
+                    "recnumloc": 0
+                }, 
+                "currentrec": "C-Band", 
+                "currentreccryotemp": 20.5, 
+                "ifnoiseentries": [
+                    {
+                        "auto": 0, 
+                        "dectzero": 0, 
+                        "iflevel": 0, 
+                        "meanpower": 0, 
+                        "normnoisediode": 0, 
+                        "nsamp": 0, 
+                        "offpow": 0, 
+                        "onpow": 0, 
+                        "rms": 0, 
+                        "timeconst": 0, 
+                        "timeconstmean": 0
+                    }, 
+                    {
+                        "auto": 0, 
+                        "dectzero": 0, 
+                        "iflevel": 0, 
+                        "meanpower": 0, 
+                        "normnoisediode": 0, 
+                        "nsamp": 0, 
+                        "offpow": 0, 
+                        "onpow": 0, 
+                        "rms": 0, 
+                        "timeconst": 0, 
+                        "timeconstmean": 0
+                    }
+                ], 
+                "mjds": 5044672856.803621, 
+                "numactiverec": 1, 
+                "numrec": 3, 
+                "recstatuses": [
+                    {
+                        "LOs": [
+                            {
+                                "loidfreq": 390600000.0, 
+                                "loidname": "Agilent", 
+                                "loidnum": 3
+                            }, 
+                            {
+                                "loidfreq": 447400000.0, 
+                                "loidname": "MERLIN synthesiser A", 
+                                "loidnum": 4
+                            }, 
+                            {
+                                "loidfreq": 128000000.0, 
+                                "loidname": "FIXED", 
+                                "loidnum": 2
+                            }, 
+                            {
+                                "loidfreq": 1024000000.0, 
+                                "loidname": "UNDS1GHZ", 
+                                "loidnum": 1
+                            }
+                        ], 
+                        "azbeamsquint": 0.0, 
+                        "basebandfrequency": 256000000.0, 
+                        "carang": -1.0, 
+                        "carpos": 3, 
+                        "compressorreturnpressure": 0.0, 
+                        "compressorsupplypressure": 0.0, 
+                        "cryopressure": 0.0, 
+                        "cryotemp": 0.0, 
+                        "elbeamsquint": 0.0, 
+                        "freqidname": "L-Band_Std", 
+                        "freqidnum": "00000001", 
+                        "frequency": 1510400000.0, 
+                        "heliumbottlepressure": 0.0, 
+                        "idname": "L-Band", 
+                        "idnum": 1, 
+                        "numincar": 0, 
+                        "numlo": 4
+                    }, 
+                    {
+                        "LOs": [
+                            {
+                                "loidfreq": 499900784.0, 
+                                "loidname": "Agilent", 
+                                "loidnum": 6
+                            }, 
+                            {
+                                "loidfreq": 445400000.0, 
+                                "loidname": "MERLIN synthesiser A", 
+                                "loidnum": 7
+                            }, 
+                            {
+                                "loidfreq": 128000000.0, 
+                                "loidname": "FIXED", 
+                                "loidnum": 8
+                            }, 
+                            {
+                                "loidfreq": 1024000000.0, 
+                                "loidname": "UNDS1GHZ", 
+                                "loidnum": 5
+                            }
+                        ], 
+                        "azbeamsquint": 0.0, 
+                        "basebandfrequency": 256000000.0, 
+                        "carang": -1.0, 
+                        "carpos": 1, 
+                        "compressorreturnpressure": 0.0, 
+                        "compressorsupplypressure": 0.0, 
+                        "cryopressure": 0.0, 
+                        "cryotemp": 20.5, 
+                        "elbeamsquint": 0.0, 
+                        "freqidname": "C-Band_5GHz", 
+                        "freqidnum": "00000001", 
+                        "frequency": 5072000000.0, 
+                        "heliumbottlepressure": 0.0, 
+                        "idname": "C-Band", 
+                        "idnum": 2, 
+                        "numincar": 0, 
+                        "numlo": 4
+                    }, 
+                    {
+                        "LOs": [
+                            {
+                                "loidfreq": 17520000000.0, 
+                                "loidname": "FIXEDK", 
+                                "loidnum": 86
+                            }, 
+                            {
+                                "loidfreq": 390600000.0, 
+                                "loidname": "Agilent", 
+                                "loidnum": 85
+                            }, 
+                            {
+                                "loidfreq": 447400000.0, 
+                                "loidname": "MERLIN synthesiser A", 
+                                "loidnum": 82
+                            }, 
+                            {
+                                "loidfreq": 128000000.0, 
+                                "loidname": "FIXED", 
+                                "loidnum": 84
+                            }, 
+                            {
+                                "loidfreq": 1024000000.0, 
+                                "loidname": "UNDS1GHZ", 
+                                "loidnum": 83
+                            }
+                        ], 
+                        "azbeamsquint": 0.0, 
+                        "basebandfrequency": 256000000.0, 
+                        "carang": -1.0, 
+                        "carpos": 5, 
+                        "compressorreturnpressure": 0.0, 
+                        "compressorsupplypressure": 0.0, 
+                        "cryopressure": 0.0, 
+                        "cryotemp": 0.0, 
+                        "elbeamsquint": 0.0, 
+                        "freqidname": "K-Band_22GHz", 
+                        "freqidnum": "00000fe3", 
+                        "frequency": 19030400000.0, 
+                        "heliumbottlepressure": 0.0, 
+                        "idname": "K-Band", 
+                        "idnum": 3, 
+                        "numincar": 0, 
+                        "numlo": 5
+                    }
+                ]
+            }, 
+            "source": [
+                "000143aa", 
+                "2015+6554", 
+                "J2015+6554"
+            ], 
+            "statusflags1": "00000000000000000000001000000110", 
+            "statusflags2": "00000001", 
+            "statusflags3": "00000000", 
+            "tickbox_status": {
+                "avg_delay": 0.0, 
+                "delay": 0.0, 
+                "mjds": -207360043201.0, 
+                "status": "00000000000000000000000000000000"
+            }, 
+            "time_isot": "2018-09-26T10:00:56.154", 
+            "time_mjd": 58387.41731660153, 
+            "time_mjds": 5044672856.154372
+        }, 
+        "telname": "Darnhall", 
+        "telnumber": 7
+    }, 
+    "Defford": {
+        "binary_message_length": 2756, 
+        "msgflags": "0000", 
+        "status": {
+            "DINT_status": {
+                "adc3": {
+                    "delay": 0.0, 
+                    "mjds": -207360043201.0, 
+                    "status": "00000000000000000000000000000000", 
+                    "tick_phase": 0.0
+                }, 
+                "adc8": {
+                    "delay": 0.0, 
+                    "mjds": -207360043201.0, 
+                    "status": "00000000000000000000000000000000", 
+                    "tick_phase": 0.0
+                }, 
+                "mjds": -207360043201.0
+            }, 
+            "EDFA_status": {
+                "VOAsetting": 0.0, 
+                "casetemp": 0.0, 
+                "coiltemp": 0.0, 
+                "controllersstatus": {
+                    "PSUcurrent": 0.0, 
+                    "PSUcurrentlowerlim": 0.0, 
+                    "PSUcurrentupperlim": 0.0, 
+                    "PSUmode": "00000000", 
+                    "PSUreason": "", 
+                    "PSUvoltage": 0.0, 
+                    "PSUvoltagelowerlim": 0.0, 
+                    "PSUvoltageupperlim": 0.0, 
+                    "firmwaremajorversion": "00000000", 
+                    "firmwareminorversion": "00000000", 
+                    "laserpower": "00000000", 
+                    "unitnumber": "00000000"
+                }, 
+                "dest": "00000000", 
+                "errors": {
+                    "errorlist": [], 
+                    "numerrors": 0
+                }, 
+                "heatertemp": 0.0, 
+                "mjds": -207360043201.0, 
+                "number": "ffffffff", 
+                "numpumpstatuses": 0, 
+                "numstagestatuses": 0, 
+                "pumpstatuses": [], 
+                "safetystatus": {
+                    "gain": 0.0, 
+                    "maximumsignal": 0.0, 
+                    "minimumsignal": 0.0, 
+                    "safetystatus": "00000000", 
+                    "switchingtime": 0.0
+                }, 
+                "stagestatuses": []
+            }, 
+            "actual_azel": [
+                3.316094952436687, 
+                1.4836770038454055, 
+                "Az/El", 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                -207360043201.0
+            ], 
+            "allocation": "control", 
+            "azmotor": true, 
+            "control": "Control_Room", 
+            "demanded_azel": [
+                3.316094952436687, 
+                1.4836829959578581, 
+                "Az/El", 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                -207360043201.0
+            ], 
+            "demanded_lonlat": [
+                3.316094952436687, 
+                1.4836829959578581, 
+                "Az/El", 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                5044672855.151008
+            ], 
+            "elmotor": true, 
+            "exp": [
+                "ffffffff", 
+                ""
+            ], 
+            "jobname": "", 
+            "jobnum": "ffffffff", 
+            "noisediode_status": {
+                "autocal": 0, 
+                "duty": -1.0, 
+                "enabled": "00000000", 
+                "mjds": -207360043201.0, 
+                "period": -1.0, 
+                "phase": -1.0, 
+                "totpow": 0
+            }, 
+            "offsets_azel": [
+                0.0, 
+                0.0, 
+                "00000001", 
+                0.0, 
+                0.0, 
+                "00000001"
+            ], 
+            "receiverstatus": {
+                "active_recs": {
+                    "carouselang": -1.0, 
+                    "carouselpos": 0, 
+                    "recnumloc": 0
+                }, 
+                "currentrec": "L-Band", 
+                "currentreccryotemp": 0.0, 
+                "ifnoiseentries": [
+                    {
+                        "auto": 0, 
+                        "dectzero": 0, 
+                        "iflevel": 0, 
+                        "meanpower": 0, 
+                        "normnoisediode": 0, 
+                        "nsamp": 0, 
+                        "offpow": 0, 
+                        "onpow": 0, 
+                        "rms": 0, 
+                        "timeconst": 0, 
+                        "timeconstmean": 0
+                    }, 
+                    {
+                        "auto": 0, 
+                        "dectzero": 0, 
+                        "iflevel": 0, 
+                        "meanpower": 0, 
+                        "normnoisediode": 0, 
+                        "nsamp": 0, 
+                        "offpow": 0, 
+                        "onpow": 0, 
+                        "rms": 0, 
+                        "timeconst": 0, 
+                        "timeconstmean": 0
+                    }
+                ], 
+                "mjds": 5044672856.033256, 
+                "numactiverec": 1, 
+                "numrec": 2, 
+                "recstatuses": [
+                    {
+                        "LOs": [
+                            {
+                                "loidfreq": 499900503.0, 
+                                "loidname": "Agilent", 
+                                "loidnum": 861
+                            }, 
+                            {
+                                "loidfreq": 445400000.0, 
+                                "loidname": "MERLIN synthesiser A", 
+                                "loidnum": 860
+                            }, 
+                            {
+                                "loidfreq": 128000000.0, 
+                                "loidname": "FIXED", 
+                                "loidnum": 858
+                            }, 
+                            {
+                                "loidfreq": 1024000000.0, 
+                                "loidname": "UNDS1GHZ", 
+                                "loidnum": 859
+                            }
+                        ], 
+                        "azbeamsquint": -0.000190000006114133, 
+                        "basebandfrequency": 256000000.0, 
+                        "carang": -1.0, 
+                        "carpos": 0, 
+                        "compressorreturnpressure": 8.6184466125, 
+                        "compressorsupplypressure": 20.270586432600002, 
+                        "cryopressure": 0.0, 
+                        "cryotemp": 0.0, 
+                        "elbeamsquint": -0.0257799997925758, 
+                        "freqidname": "RM015freq", 
+                        "freqidnum": "00000001", 
+                        "frequency": 5072016096.0, 
+                        "heliumbottlepressure": 69.0, 
+                        "idname": "L-Band", 
+                        "idnum": 1, 
+                        "numincar": 0, 
+                        "numlo": 4
+                    }, 
+                    {
+                        "LOs": [
+                            {
+                                "loidfreq": 499900503.0, 
+                                "loidname": "AGILENT", 
+                                "loidnum": 6
+                            }, 
+                            {
+                                "loidfreq": 445400000.0, 
+                                "loidname": "MERLINLO", 
+                                "loidnum": 7
+                            }, 
+                            {
+                                "loidfreq": 128000000.0, 
+                                "loidname": "FIXED", 
+                                "loidnum": 8
+                            }, 
+                            {
+                                "loidfreq": 1024000000.0, 
+                                "loidname": "UNDS1GHZ", 
+                                "loidnum": 5
+                            }
+                        ], 
+                        "azbeamsquint": 0.0, 
+                        "basebandfrequency": 256000000.0, 
+                        "carang": -1.0, 
+                        "carpos": 1, 
+                        "compressorreturnpressure": 0.0, 
+                        "compressorsupplypressure": 0.0, 
+                        "cryopressure": 0.0, 
+                        "cryotemp": 0.0, 
+                        "elbeamsquint": 0.0, 
+                        "freqidname": "C-Band_5GHz", 
+                        "freqidnum": "00000167", 
+                        "frequency": 5072000000.0, 
+                        "heliumbottlepressure": 0.0, 
+                        "idname": "C-Band", 
+                        "idnum": 2, 
+                        "numincar": 0, 
+                        "numlo": 4
+                    }
+                ]
+            }, 
+            "source": [
+                "ffffffff", 
+                "", 
+                ""
+            ], 
+            "statusflags1": "00000000000000000000010000000000", 
+            "statusflags2": "00000001", 
+            "statusflags3": "00000000", 
+            "tickbox_status": {
+                "avg_delay": 0.0, 
+                "delay": 0.0, 
+                "mjds": -207360043201.0, 
+                "status": "00000000000000000000000000000000"
+            }, 
+            "time_isot": "2018-09-26T10:00:55.151", 
+            "time_mjd": 58387.417304988514, 
+            "time_mjds": 5044672855.151008
+        }, 
+        "telname": "Defford", 
+        "telnumber": 5
+    }, 
+    "Knockin": {
+        "binary_message_length": 3440, 
+        "msgflags": "0040", 
+        "status": {
+            "DINT_status": {
+                "adc3": {
+                    "delay": 0.0, 
+                    "mjds": -207360043201.0, 
+                    "status": "00000000000000000000000000000000", 
+                    "tick_phase": 0.0
+                }, 
+                "adc8": {
+                    "delay": 0.0, 
+                    "mjds": -207360043201.0, 
+                    "status": "00000000000000000000000000000000", 
+                    "tick_phase": 0.0
+                }, 
+                "mjds": -207360043201.0
+            }, 
+            "EDFA_status": {
+                "VOAsetting": 0.0, 
+                "casetemp": 0.0, 
+                "coiltemp": 0.0, 
+                "controllersstatus": {
+                    "PSUcurrent": 0.0, 
+                    "PSUcurrentlowerlim": 0.0, 
+                    "PSUcurrentupperlim": 0.0, 
+                    "PSUmode": "00000000", 
+                    "PSUreason": "", 
+                    "PSUvoltage": 0.0, 
+                    "PSUvoltagelowerlim": 0.0, 
+                    "PSUvoltageupperlim": 0.0, 
+                    "firmwaremajorversion": "00000000", 
+                    "firmwareminorversion": "00000000", 
+                    "laserpower": "00000000", 
+                    "unitnumber": "00000000"
+                }, 
+                "dest": "00000000", 
+                "errors": {
+                    "errorlist": [], 
+                    "numerrors": 0
+                }, 
+                "heatertemp": 0.0, 
+                "mjds": -207360043201.0, 
+                "number": "ffffffff", 
+                "numpumpstatuses": 0, 
+                "numstagestatuses": 0, 
+                "pumpstatuses": [], 
+                "safetystatus": {
+                    "gain": 0.0, 
+                    "maximumsignal": 0.0, 
+                    "minimumsignal": 0.0, 
+                    "safetystatus": "00000000", 
+                    "switchingtime": 0.0
+                }, 
+                "stagestatuses": []
+            }, 
+            "actual_azel": [
+                3.0191198671694988, 
+                1.5658348576840775, 
+                "Az/El", 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                -207360043201.0
+            ], 
+            "allocation": "deallocate", 
+            "azmotor": true, 
+            "control": "Control_Room", 
+            "demanded_azel": [
+                3.0191198671694988, 
+                1.5658288655716248, 
+                "Az/El", 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                -207360043201.0
+            ], 
+            "demanded_lonlat": [
+                3.0191198671694988, 
+                1.565822873459172, 
+                "Az/El", 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                5044672856.154286
+            ], 
+            "elmotor": true, 
+            "exp": [
+                "ffffffff", 
+                ""
+            ], 
+            "jobname": "", 
+            "jobnum": "ffffffff", 
+            "noisediode_status": {
+                "autocal": 0, 
+                "duty": -1.0, 
+                "enabled": "00000000", 
+                "mjds": -207360043201.0, 
+                "period": -1.0, 
+                "phase": -1.0, 
+                "totpow": 0
+            }, 
+            "offsets_azel": [
+                0.0, 
+                0.0, 
+                "00000001", 
+                0.0, 
+                0.0, 
+                "00000001"
+            ], 
+            "receiverstatus": {
+                "active_recs": {
+                    "carouselang": 0.6782349579776401, 
+                    "carouselpos": 1, 
+                    "recnumloc": 0
+                }, 
+                "currentrec": "C-Band", 
+                "currentreccryotemp": 23.2, 
+                "ifnoiseentries": [
+                    {
+                        "auto": 0, 
+                        "dectzero": 0, 
+                        "iflevel": 0, 
+                        "meanpower": 0, 
+                        "normnoisediode": 0, 
+                        "nsamp": 0, 
+                        "offpow": 0, 
+                        "onpow": 0, 
+                        "rms": 0, 
+                        "timeconst": 0, 
+                        "timeconstmean": 0
+                    }, 
+                    {
+                        "auto": 0, 
+                        "dectzero": 0, 
+                        "iflevel": 0, 
+                        "meanpower": 0, 
+                        "normnoisediode": 0, 
+                        "nsamp": 0, 
+                        "offpow": 0, 
+                        "onpow": 0, 
+                        "rms": 0, 
+                        "timeconst": 0, 
+                        "timeconstmean": 0
+                    }
+                ], 
+                "mjds": 5044672856.977871, 
+                "numactiverec": 1, 
+                "numrec": 3, 
+                "recstatuses": [
+                    {
+                        "LOs": [
+                            {
+                                "loidfreq": 390627812.5, 
+                                "loidname": "Agilent", 
+                                "loidnum": 861
+                            }, 
+                            {
+                                "loidfreq": 358500000.0, 
+                                "loidname": "MERLIN synthesiser A", 
+                                "loidnum": 860
+                            }, 
+                            {
+                                "loidfreq": 128000000.0, 
+                                "loidname": "FIXED", 
+                                "loidnum": 858
+                            }, 
+                            {
+                                "loidfreq": 1024000000.0, 
+                                "loidname": "UNDS1GHZ", 
+                                "loidnum": 859
+                            }
+                        ], 
+                        "azbeamsquint": 0.0, 
+                        "basebandfrequency": 256000000.0, 
+                        "carang": -1.0, 
+                        "carpos": 3, 
+                        "compressorreturnpressure": 0.0, 
+                        "compressorsupplypressure": 0.0, 
+                        "cryopressure": 0.0, 
+                        "cryotemp": 0.0, 
+                        "elbeamsquint": 0.0, 
+                        "freqidname": "RM015freq", 
+                        "freqidnum": "00000001", 
+                        "frequency": 4356090000.0, 
+                        "heliumbottlepressure": 0.0, 
+                        "idname": "L-Band", 
+                        "idnum": 1, 
+                        "numincar": 0, 
+                        "numlo": 4
+                    }, 
+                    {
+                        "LOs": [
+                            {
+                                "loidfreq": 499900878.0, 
+                                "loidname": "Agilent", 
+                                "loidnum": 6
+                            }, 
+                            {
+                                "loidfreq": 445400000.0, 
+                                "loidname": "MERLIN synthesiser A", 
+                                "loidnum": 7
+                            }, 
+                            {
+                                "loidfreq": 128000000.0, 
+                                "loidname": "FIXED", 
+                                "loidnum": 8
+                            }, 
+                            {
+                                "loidfreq": 1024000000.0, 
+                                "loidname": "UNDS1GHZ", 
+                                "loidnum": 5
+                            }
+                        ], 
+                        "azbeamsquint": 0.0, 
+                        "basebandfrequency": 256000000.0, 
+                        "carang": -1.0, 
+                        "carpos": 1, 
+                        "compressorreturnpressure": 6.6879145713, 
+                        "compressorsupplypressure": 20.2016388597, 
+                        "cryopressure": 0.0, 
+                        "cryotemp": 23.2, 
+                        "elbeamsquint": 0.0, 
+                        "freqidname": "C-Band_5GHz", 
+                        "freqidnum": "00000001", 
+                        "frequency": 5072000000.0, 
+                        "heliumbottlepressure": 4.0, 
+                        "idname": "C-Band", 
+                        "idnum": 2, 
+                        "numincar": 0, 
+                        "numlo": 4
+                    }, 
+                    {
+                        "LOs": [
+                            {
+                                "loidfreq": 17520000000.0, 
+                                "loidname": "FIXEDK", 
+                                "loidnum": 86
+                            }, 
+                            {
+                                "loidfreq": 452500878.0, 
+                                "loidname": "AGILENT", 
+                                "loidnum": 85
+                            }, 
+                            {
+                                "loidfreq": 408500000.0, 
+                                "loidname": "MERLINLO", 
+                                "loidnum": 82
+                            }, 
+                            {
+                                "loidfreq": 128000000.0, 
+                                "loidname": "FIXED", 
+                                "loidnum": 84
+                            }, 
+                            {
+                                "loidfreq": 1024000000.0, 
+                                "loidname": "UNDS1GHZ", 
+                                "loidnum": 83
+                            }
+                        ], 
+                        "azbeamsquint": 0.0, 
+                        "basebandfrequency": 256000000.0, 
+                        "carang": -1.0, 
+                        "carpos": 5, 
+                        "compressorreturnpressure": 0.0, 
+                        "compressorsupplypressure": 0.0, 
+                        "cryopressure": 0.0, 
+                        "cryotemp": 0.0, 
+                        "elbeamsquint": 0.0, 
+                        "freqidname": "K-Band_22GHz", 
+                        "freqidnum": "00001156", 
+                        "frequency": 22256000000.0, 
+                        "heliumbottlepressure": 0.0, 
+                        "idname": "K-Band", 
+                        "idnum": 3, 
+                        "numincar": 0, 
+                        "numlo": 5
+                    }
+                ]
+            }, 
+            "source": [
+                "ffffffff", 
+                "", 
+                ""
+            ], 
+            "statusflags1": "00000000000000000000010000000000", 
+            "statusflags2": "00000001", 
+            "statusflags3": "00000000", 
+            "tickbox_status": {
+                "avg_delay": 0.0, 
+                "delay": 0.0, 
+                "mjds": -207360043201.0, 
+                "status": "00000000000000000000000000000000"
+            }, 
+            "time_isot": "2018-09-26T10:00:56.154", 
+            "time_mjd": 58387.417316600535, 
+            "time_mjds": 5044672856.154286
+        }, 
+        "telname": "Knockin", 
+        "telnumber": 4
+    }, 
+    "Lovell": {
+        "binary_message_length": 2280, 
+        "msgflags": "0040", 
+        "status": {
+            "DINT_status": {
+                "adc3": {
+                    "delay": 0.0, 
+                    "mjds": -207360043201.0, 
+                    "status": "00000000000000000000000000000000", 
+                    "tick_phase": 0.0
+                }, 
+                "adc8": {
+                    "delay": 0.0, 
+                    "mjds": -207360043201.0, 
+                    "status": "00000000000000000000000000000000", 
+                    "tick_phase": 0.0
+                }, 
+                "mjds": -207360043201.0
+            }, 
+            "EDFA_status": {
+                "VOAsetting": 0.0, 
+                "casetemp": 0.0, 
+                "coiltemp": 0.0, 
+                "controllersstatus": {
+                    "PSUcurrent": 0.0, 
+                    "PSUcurrentlowerlim": 0.0, 
+                    "PSUcurrentupperlim": 0.0, 
+                    "PSUmode": "00000000", 
+                    "PSUreason": "", 
+                    "PSUvoltage": 0.0, 
+                    "PSUvoltagelowerlim": 0.0, 
+                    "PSUvoltageupperlim": 0.0, 
+                    "firmwaremajorversion": "00000000", 
+                    "firmwareminorversion": "00000000", 
+                    "laserpower": "00000000", 
+                    "unitnumber": "00000000"
+                }, 
+                "dest": "00000000", 
+                "errors": {
+                    "errorlist": [], 
+                    "numerrors": 0
+                }, 
+                "heatertemp": 0.0, 
+                "mjds": -207360043201.0, 
+                "number": "ffffffff", 
+                "numpumpstatuses": 0, 
+                "numstagestatuses": 0, 
+                "pumpstatuses": [], 
+                "safetystatus": {
+                    "gain": 0.0, 
+                    "maximumsignal": 0.0, 
+                    "minimumsignal": 0.0, 
+                    "safetystatus": "00000000", 
+                    "switchingtime": 0.0
+                }, 
+                "stagestatuses": []
+            }, 
+            "actual_azel": [
+                2.589867897095603, 
+                1.5909391716921615, 
+                "Az/El", 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                -207360043201.0
+            ], 
+            "allocation": "deallocate", 
+            "azmotor": true, 
+            "control": "Manual", 
+            "demanded_azel": [
+                0.0, 
+                0.0, 
+                "Az/El", 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                -207360043201.0
+            ], 
+            "demanded_lonlat": [
+                0.0, 
+                0.0, 
+                "Invalid", 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                5044672856.162433
+            ], 
+            "elmotor": true, 
+            "exp": [
+                "ffffffff", 
+                ""
+            ], 
+            "jobname": "", 
+            "jobnum": "ffffffff", 
+            "noisediode_status": {
+                "autocal": 0, 
+                "duty": -1.0, 
+                "enabled": "00000000", 
+                "mjds": -207360043201.0, 
+                "period": -1.0, 
+                "phase": -1.0, 
+                "totpow": 0
+            }, 
+            "offsets_azel": [
+                0.0, 
+                0.0, 
+                "00000001", 
+                0.0, 
+                0.0, 
+                "00000001"
+            ], 
+            "receiverstatus": {
+                "active_recs": {
+                    "carouselang": -1.0, 
+                    "carouselpos": 0, 
+                    "recnumloc": 0
+                }, 
+                "currentrec": "L-Band", 
+                "currentreccryotemp": 0.0, 
+                "ifnoiseentries": [
+                    {
+                        "auto": 0, 
+                        "dectzero": 0, 
+                        "iflevel": 0, 
+                        "meanpower": 0, 
+                        "normnoisediode": 0, 
+                        "nsamp": 0, 
+                        "offpow": 0, 
+                        "onpow": 0, 
+                        "rms": 0, 
+                        "timeconst": 0, 
+                        "timeconstmean": 0
+                    }, 
+                    {
+                        "auto": 0, 
+                        "dectzero": 0, 
+                        "iflevel": 0, 
+                        "meanpower": 0, 
+                        "normnoisediode": 0, 
+                        "nsamp": 0, 
+                        "offpow": 0, 
+                        "onpow": 0, 
+                        "rms": 0, 
+                        "timeconst": 0, 
+                        "timeconstmean": 0
+                    }
+                ], 
+                "mjds": 5044672856.783087, 
+                "numactiverec": 1, 
+                "numrec": 2, 
+                "recstatuses": [
+                    {
+                        "LOs": [], 
+                        "azbeamsquint": 0.0, 
+                        "basebandfrequency": 0.0, 
+                        "carang": -1.0, 
+                        "carpos": 0, 
+                        "compressorreturnpressure": 0.0, 
+                        "compressorsupplypressure": 0.0, 
+                        "cryopressure": 0.0, 
+                        "cryotemp": 0.0, 
+                        "elbeamsquint": 0.0, 
+                        "freqidname": "", 
+                        "freqidnum": "ffffffff", 
+                        "frequency": 0.0, 
+                        "heliumbottlepressure": 0.0, 
+                        "idname": "L-Band", 
+                        "idnum": 1, 
+                        "numincar": 0, 
+                        "numlo": 0
+                    }, 
+                    {
+                        "LOs": [], 
+                        "azbeamsquint": 0.0, 
+                        "basebandfrequency": 0.0, 
+                        "carang": -1.0, 
+                        "carpos": 1, 
+                        "compressorreturnpressure": 0.0, 
+                        "compressorsupplypressure": 0.0, 
+                        "cryopressure": 0.0, 
+                        "cryotemp": 0.0, 
+                        "elbeamsquint": 0.0, 
+                        "freqidname": "", 
+                        "freqidnum": "ffffffff", 
+                        "frequency": 0.0, 
+                        "heliumbottlepressure": 0.0, 
+                        "idname": "C-Band", 
+                        "idnum": 2, 
+                        "numincar": 0, 
+                        "numlo": 0
+                    }
+                ]
+            }, 
+            "source": [
+                "ffffffff", 
+                "", 
+                ""
+            ], 
+            "statusflags1": "00000000000000000000110000000000", 
+            "statusflags2": "00000001", 
+            "statusflags3": "00000000", 
+            "tickbox_status": {
+                "avg_delay": 0.0, 
+                "delay": 0.0, 
+                "mjds": -207360043201.0, 
+                "status": "00000000000000000000000000000000"
+            }, 
+            "time_isot": "2018-09-26T10:00:56.162", 
+            "time_mjd": 58387.417316694824, 
+            "time_mjds": 5044672856.162433
+        }, 
+        "telname": "Lovell", 
+        "telnumber": 0
+    }, 
+    "Mark 2": {
+        "binary_message_length": 2764, 
+        "msgflags": "0000", 
+        "status": {
+            "DINT_status": {
+                "adc3": {
+                    "delay": 0.0, 
+                    "mjds": -207360043201.0, 
+                    "status": "00000000000000000000000000000000", 
+                    "tick_phase": 0.0
+                }, 
+                "adc8": {
+                    "delay": 0.0, 
+                    "mjds": -207360043201.0, 
+                    "status": "00000000000000000000000000000000", 
+                    "tick_phase": 0.0
+                }, 
+                "mjds": -207360043201.0
+            }, 
+            "EDFA_status": {
+                "VOAsetting": 0.0, 
+                "casetemp": 0.0, 
+                "coiltemp": 0.0, 
+                "controllersstatus": {
+                    "PSUcurrent": 0.0, 
+                    "PSUcurrentlowerlim": 0.0, 
+                    "PSUcurrentupperlim": 0.0, 
+                    "PSUmode": "00000000", 
+                    "PSUreason": "", 
+                    "PSUvoltage": 0.0, 
+                    "PSUvoltagelowerlim": 0.0, 
+                    "PSUvoltageupperlim": 0.0, 
+                    "firmwaremajorversion": "00000000", 
+                    "firmwareminorversion": "00000000", 
+                    "laserpower": "00000000", 
+                    "unitnumber": "00000000"
+                }, 
+                "dest": "00000000", 
+                "errors": {
+                    "errorlist": [], 
+                    "numerrors": 0
+                }, 
+                "heatertemp": 0.0, 
+                "mjds": -207360043201.0, 
+                "number": "ffffffff", 
+                "numpumpstatuses": 0, 
+                "numstagestatuses": 0, 
+                "pumpstatuses": [], 
+                "safetystatus": {
+                    "gain": 0.0, 
+                    "maximumsignal": 0.0, 
+                    "minimumsignal": 0.0, 
+                    "safetystatus": "00000000", 
+                    "switchingtime": 0.0
+                }, 
+                "stagestatuses": []
+            }, 
+            "actual_azel": [
+                0.24735384089939097, 
+                0.5247398340890018, 
+                "Az/El", 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                -207360043201.0
+            ], 
+            "allocation": "control", 
+            "azmotor": true, 
+            "control": "eMerlin", 
+            "demanded_azel": [
+                0.24718566556978983, 
+                0.5250292020427516, 
+                "Az/El", 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                -207360043201.0
+            ], 
+            "demanded_lonlat": [
+                5.305464222961229, 
+                1.15042747387421, 
+                "J2000", 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                5044672855.700893
+            ], 
+            "elmotor": true, 
+            "exp": [
+                "00000001", 
+                "pointing"
+            ], 
+            "jobname": "pointing_20180925", 
+            "jobnum": "00286004", 
+            "noisediode_status": {
+                "autocal": 0, 
+                "duty": -1.0, 
+                "enabled": "00000000", 
+                "mjds": -207360043201.0, 
+                "period": -1.0, 
+                "phase": -1.0, 
+                "totpow": 0
+            }, 
+            "offsets_azel": [
+                0.0, 
+                -0.002495778034601528, 
+                "00000001", 
+                0.0, 
+                0.0, 
+                "00000001"
+            ], 
+            "receiverstatus": {
+                "active_recs": {
+                    "carouselang": 0.43554691350360397, 
+                    "carouselpos": 1, 
+                    "recnumloc": 0
+                }, 
+                "currentrec": "C-Band", 
+                "currentreccryotemp": 9.4, 
+                "ifnoiseentries": [
+                    {
+                        "auto": 0, 
+                        "dectzero": 0, 
+                        "iflevel": 0, 
+                        "meanpower": 0, 
+                        "normnoisediode": 0, 
+                        "nsamp": 0, 
+                        "offpow": 0, 
+                        "onpow": 0, 
+                        "rms": 0, 
+                        "timeconst": 0, 
+                        "timeconstmean": 0
+                    }, 
+                    {
+                        "auto": 0, 
+                        "dectzero": 0, 
+                        "iflevel": 0, 
+                        "meanpower": 0, 
+                        "normnoisediode": 0, 
+                        "nsamp": 0, 
+                        "offpow": 0, 
+                        "onpow": 0, 
+                        "rms": 0, 
+                        "timeconst": 0, 
+                        "timeconstmean": 0
+                    }
+                ], 
+                "mjds": 5044672856.901396, 
+                "numactiverec": 1, 
+                "numrec": 3, 
+                "recstatuses": [
+                    {
+                        "LOs": [
+                            {
+                                "loidfreq": 499900691.0, 
+                                "loidname": "Agilent", 
+                                "loidnum": 0
+                            }, 
+                            {
+                                "loidfreq": 445400000.0, 
+                                "loidname": "MERLIN synthesiser A", 
+                                "loidnum": 1
+                            }
+                        ], 
+                        "azbeamsquint": 0.0, 
+                        "basebandfrequency": 0.0, 
+                        "carang": -1.0, 
+                        "carpos": 4, 
+                        "compressorreturnpressure": 0.0, 
+                        "compressorsupplypressure": 0.0, 
+                        "cryopressure": 0.0, 
+                        "cryotemp": 0.0, 
+                        "elbeamsquint": 0.0, 
+                        "freqidname": "Pulsar_Std", 
+                        "freqidnum": "00000000", 
+                        "frequency": 1744022112.0, 
+                        "heliumbottlepressure": 0.0, 
+                        "idname": "L-Band", 
+                        "idnum": 1, 
+                        "numincar": 0, 
+                        "numlo": 2
+                    }, 
+                    {
+                        "LOs": [
+                            {
+                                "loidfreq": 499900691.0, 
+                                "loidname": "Agilent", 
+                                "loidnum": 6
+                            }, 
+                            {
+                                "loidfreq": 445400000.0, 
+                                "loidname": "MERLIN synthesiser A", 
+                                "loidnum": 7
+                            }, 
+                            {
+                                "loidfreq": 128000000.0, 
+                                "loidname": "FIXED", 
+                                "loidnum": 8
+                            }, 
+                            {
+                                "loidfreq": 1024000000.0, 
+                                "loidname": "UNDS1GHZ", 
+                                "loidnum": 5
+                            }
+                        ], 
+                        "azbeamsquint": 0.0, 
+                        "basebandfrequency": 256000000.0, 
+                        "carang": -1.0, 
+                        "carpos": 1, 
+                        "compressorreturnpressure": 1.7926368954, 
+                        "compressorsupplypressure": 0.0, 
+                        "cryopressure": 0.0, 
+                        "cryotemp": 9.4, 
+                        "elbeamsquint": 0.0, 
+                        "freqidname": "C-Band_5GHz", 
+                        "freqidnum": "00000001", 
+                        "frequency": 5072000000.0, 
+                        "heliumbottlepressure": 0.0, 
+                        "idname": "C-Band", 
+                        "idnum": 2, 
+                        "numincar": 0, 
+                        "numlo": 4
+                    }, 
+                    {
+                        "LOs": [
+                            {
+                                "loidfreq": 499900691.0, 
+                                "loidname": "Agilent", 
+                                "loidnum": 0
+                            }, 
+                            {
+                                "loidfreq": 445400000.0, 
+                                "loidname": "MERLIN synthesiser A", 
+                                "loidnum": 1
+                            }, 
+                            {
+                                "loidfreq": 128000000.0, 
+                                "loidname": "", 
+                                "loidnum": 2
+                            }, 
+                            {
+                                "loidfreq": 1024000000.0, 
+                                "loidname": "", 
+                                "loidnum": 3
+                            }
+                        ], 
+                        "azbeamsquint": 0.0, 
+                        "basebandfrequency": 0.0, 
+                        "carang": -1.0, 
+                        "carpos": 3, 
+                        "compressorreturnpressure": 0.0, 
+                        "compressorsupplypressure": 0.0, 
+                        "cryopressure": 0.0, 
+                        "cryotemp": 0.0, 
+                        "elbeamsquint": 0.0, 
+                        "freqidname": "23024MHz", 
+                        "freqidnum": "00000000", 
+                        "frequency": 4816022112.0, 
+                        "heliumbottlepressure": 0.0, 
+                        "idname": "K-Band", 
+                        "idnum": 3, 
+                        "numincar": 0, 
+                        "numlo": 4
+                    }
+                ]
+            }, 
+            "source": [
+                "000143aa", 
+                "2015+6554", 
+                "J2015+6554"
+            ], 
+            "statusflags1": "00000000000000000000001000000110", 
+            "statusflags2": "00000001", 
+            "statusflags3": "00000000", 
+            "tickbox_status": {
+                "avg_delay": 0.0, 
+                "delay": 0.0, 
+                "mjds": -207360043201.0, 
+                "status": "00000000000000000000000000000000"
+            }, 
+            "time_isot": "2018-09-26T10:00:55.701", 
+            "time_mjd": 58387.41731135293, 
+            "time_mjds": 5044672855.700893
+        }, 
+        "telname": "Mark 2", 
+        "telnumber": 1
+    }, 
+    "Pickmere": {
+        "binary_message_length": 1868, 
+        "msgflags": "0000", 
+        "status": {
+            "DINT_status": {
+                "adc3": {
+                    "delay": 0.0, 
+                    "mjds": -207360043201.0, 
+                    "status": "00000000000000000000000000000000", 
+                    "tick_phase": 0.0
+                }, 
+                "adc8": {
+                    "delay": 0.0, 
+                    "mjds": -207360043201.0, 
+                    "status": "00000000000000000000000000000000", 
+                    "tick_phase": 0.0
+                }, 
+                "mjds": -207360043201.0
+            }, 
+            "EDFA_status": {
+                "VOAsetting": 0.0, 
+                "casetemp": 0.0, 
+                "coiltemp": 0.0, 
+                "controllersstatus": {
+                    "PSUcurrent": 0.0, 
+                    "PSUcurrentlowerlim": 0.0, 
+                    "PSUcurrentupperlim": 0.0, 
+                    "PSUmode": "00000000", 
+                    "PSUreason": "", 
+                    "PSUvoltage": 0.0, 
+                    "PSUvoltagelowerlim": 0.0, 
+                    "PSUvoltageupperlim": 0.0, 
+                    "firmwaremajorversion": "00000000", 
+                    "firmwareminorversion": "00000000", 
+                    "laserpower": "00000000", 
+                    "unitnumber": "00000000"
+                }, 
+                "dest": "00000000", 
+                "errors": {
+                    "errorlist": [], 
+                    "numerrors": 0
+                }, 
+                "heatertemp": 0.0, 
+                "mjds": -207360043201.0, 
+                "number": "ffffffff", 
+                "numpumpstatuses": 0, 
+                "numstagestatuses": 0, 
+                "pumpstatuses": [], 
+                "safetystatus": {
+                    "gain": 0.0, 
+                    "maximumsignal": 0.0, 
+                    "minimumsignal": 0.0, 
+                    "safetystatus": "00000000", 
+                    "switchingtime": 0.0
+                }, 
+                "stagestatuses": []
+            }, 
+            "actual_azel": [
+                4.18880418638211, 
+                -2.0943990971348283, 
+                "Az/El", 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                -207360043201.0
+            ], 
+            "allocation": "control", 
+            "azmotor": true, 
+            "control": "Control_Room", 
+            "demanded_azel": [
+                4.18880418638211, 
+                -2.0943990971348283, 
+                "Az/El", 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                -207360043201.0
+            ], 
+            "demanded_lonlat": [
+                4.18880418638211, 
+                -2.0943990971348283, 
+                "Az/El", 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                5044672856.150716
+            ], 
+            "elmotor": true, 
+            "exp": [
+                "ffffffff", 
+                ""
+            ], 
+            "jobname": "", 
+            "jobnum": "ffffffff", 
+            "noisediode_status": {
+                "autocal": 0, 
+                "duty": -1.0, 
+                "enabled": "00000000", 
+                "mjds": -207360043201.0, 
+                "period": -1.0, 
+                "phase": -1.0, 
+                "totpow": 0
+            }, 
+            "offsets_azel": [
+                0.0, 
+                0.0, 
+                "00000001", 
+                0.0, 
+                0.0, 
+                "00000001"
+            ], 
+            "receiverstatus": {
+                "active_recs": {
+                    "carouselang": 3.9269908169872374, 
+                    "carouselpos": 3, 
+                    "recnumloc": 0
+                }, 
+                "currentrec": "", 
+                "currentreccryotemp": "", 
+                "ifnoiseentries": [
+                    {
+                        "auto": 0, 
+                        "dectzero": 0, 
+                        "iflevel": 0, 
+                        "meanpower": 0, 
+                        "normnoisediode": 0, 
+                        "nsamp": 0, 
+                        "offpow": 0, 
+                        "onpow": 0, 
+                        "rms": 0, 
+                        "timeconst": 0, 
+                        "timeconstmean": 0
+                    }, 
+                    {
+                        "auto": 0, 
+                        "dectzero": 0, 
+                        "iflevel": 0, 
+                        "meanpower": 0, 
+                        "normnoisediode": 0, 
+                        "nsamp": 0, 
+                        "offpow": 0, 
+                        "onpow": 0, 
+                        "rms": 0, 
+                        "timeconst": 0, 
+                        "timeconstmean": 0
+                    }
+                ], 
+                "mjds": 5044672856.767415, 
+                "numactiverec": 1, 
+                "numrec": 2, 
+                "recstatuses": [
+                    {
+                        "LOs": [], 
+                        "azbeamsquint": 0.0, 
+                        "basebandfrequency": 0.0, 
+                        "carang": 1.590978778e-314, 
+                        "carpos": 0, 
+                        "compressorreturnpressure": 0.0, 
+                        "compressorsupplypressure": 0.0, 
+                        "cryopressure": 0.0, 
+                        "cryotemp": 0.0, 
+                        "elbeamsquint": 0.0, 
+                        "freqidname": "", 
+                        "freqidnum": "ffffffff", 
+                        "frequency": 0.0, 
+                        "heliumbottlepressure": 0.0, 
+                        "idname": "nd", 
+                        "idnum": 1631726915, 
+                        "numincar": 3, 
+                        "numlo": 0
+                    }, 
+                    {
+                        "LOs": [], 
+                        "azbeamsquint": 0.0, 
+                        "basebandfrequency": 0.0, 
+                        "carang": 1.590978778e-314, 
+                        "carpos": 0, 
+                        "compressorreturnpressure": 0.0, 
+                        "compressorsupplypressure": 0.0, 
+                        "cryopressure": 0.0, 
+                        "cryotemp": 0.0, 
+                        "elbeamsquint": 0.0, 
+                        "freqidname": "", 
+                        "freqidnum": "ffffffff", 
+                        "frequency": 0.0, 
+                        "heliumbottlepressure": 0.0, 
+                        "idname": "nd", 
+                        "idnum": 1631726923, 
+                        "numincar": -369243786, 
+                        "numlo": 0
+                    }
+                ]
+            }, 
+            "source": [
+                "ffffffff", 
+                "", 
+                ""
+            ], 
+            "statusflags1": "00000000000000000000110000000000", 
+            "statusflags2": "00000001", 
+            "statusflags3": "00000000", 
+            "tickbox_status": {
+                "avg_delay": 0.0, 
+                "delay": 0.0, 
+                "mjds": -207360043201.0, 
+                "status": "00000000000000000000000000000000"
+            }, 
+            "time_isot": "2018-09-26T10:00:56.151", 
+            "time_mjd": 58387.41731655921, 
+            "time_mjds": 5044672856.150716
+        }, 
+        "telname": "Pickmere", 
+        "telnumber": 6
+    }
+}

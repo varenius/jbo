@@ -44,6 +44,7 @@ print(teldata.keys())
 
 # Create empty dictionary to store telescope status data
 while inputs:
+    print("new loop")
     readable, writable, exceptional = select.select(inputs, outputs, inputs)
     for s in readable:
         if s is server:
@@ -80,6 +81,8 @@ while inputs:
             try:
                 request = s.recv(1024)
                 print("Got request", request)
+                if request =="":
+                    request = None
                 # If python 3 (and not python 2), then decode
                 if (sys.version_info > (3, 0)):
                     request = request.decode()
@@ -108,13 +111,15 @@ while inputs:
                     reply = telstring
                 else:
                     reply = "IGNORED"
+                reply = str(len(reply)) + reply
                 # If python 3 (and not python 2), then encode
                 if (sys.version_info > (3, 0)):
                     reply = reply.encode()
                 s.send(reply)
                 print("Sent message", reply)
             except queue.Empty:
-                outputs.remove(s)
+                pass
+                #outputs.remove(s)
         except:
             print("ERROR writing to client.")
 
@@ -124,3 +129,4 @@ while inputs:
             outputs.remove(s)
         s.close()
         del message_queues[s]
+    print(len(outputs))
