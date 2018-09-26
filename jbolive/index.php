@@ -151,5 +151,3 @@ function get_timestamp($obj, $t) {
 </div>
 </body>
 </html>
-<?php //echo $td; ?>
-
