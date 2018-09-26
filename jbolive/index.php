@@ -60,7 +60,8 @@ function get_jobname($obj, $t) {
 
 function get_cel($obj, $t) {
   if (!empty($obj->$t->status->actual_azel)) {
-    return round($obj->$t->status->actual_azel[1],2);
+    $val = round($obj->$t->status->actual_azel[1]*180.0/M_PI,2);
+    return number_format($val,2) . '&deg';
   }
   else {
     return '';
@@ -69,7 +70,8 @@ function get_cel($obj, $t) {
 
 function get_caz($obj, $t) {
   if (!empty($obj->$t->status->actual_azel)) {
-    return round($obj->$t->status->actual_azel[0],2);
+    $val = round($obj->$t->status->actual_azel[0]*180.0/M_PI,2);
+    return number_format($val,2) . '&deg';
   }
   else {
     return '';
