@@ -80,12 +80,22 @@ function get_caz($obj, $t) {
 }
 
 function get_control($obj, $t) {
+  $beg = '<td>';
+  $val = '';
+  $end = '</td>';
   if (!empty($obj->$t->status->control)) {
-    return $obj->$t->status->control;
+    $val = $obj->$t->status->control;
+    if ($val == 'Observing_room') {
+      $beg = "<td style='background-color: #49FFFF;'>";
+    }
+    elseif ($val == 'eMerlin') {
+      $beg = "<td style='background-color: #AAA8FF;'>";
+    }
+    elseif ($val == 'Control_Room') {
+      $beg = "<td style='background-color: #4BFF48;'>";
+    }
   }
-  else {
-    return '';
-  }
+  return $beg . $val . $end;
 }
 
 function get_currentrec($obj, $t) {
@@ -126,7 +136,7 @@ function get_timestamp($obj, $t) {
   </thead>
   <tbody>
     <tr>
-      <th>Control</th><?php foreach ($tnames as $tn) {echo '<td>' . get_control($obj, $tn) . '</td>'; }?>
+      <th>Control</th><?php foreach ($tnames as $tn) {echo get_control($obj, $tn) ; }?>
     </tr>
     <tr>
       <th>Jobname</th><?php foreach ($tnames as $tn) {echo '<td>' . get_jobname($obj, $tn) . '</td>'; }?>
