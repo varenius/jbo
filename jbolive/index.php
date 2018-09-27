@@ -43,16 +43,54 @@ function get_teldata($address = '127.0.0.1', $port=50000) {
 
     # Done, close socket
     socket_close($socket);
+    //echo($teldata)
     return $teldata;
 }
 $td = get_teldata();
 $obj = json_decode($td);
 $tnames = array('42ft', '7metre', 'Lovell', 'Mark 2', 'Pickmere', 'Darnhall', 'Knockin', 'Defford', 'Cambridge');
+$timages = array('42ft.jpg', '7m.jpg','lo.jpg', 'mk2.jpg', 'pi.jpg', 'da.jpg', 'kn.jpg', 'de.jpg', 'cm.jpg');
+$diameters = array('13 m', '7 m', '76 m','28x25 m', '25 m', '25 m', '25 m', '25 m', '32 m');
 
 function get_jobname($obj, $t) {
   if (!empty($obj->$t->status->jobname)) {
     $val = $obj->$t->status->jobname;
     return str_replace('_',' ',$val);
+  }
+  else {
+    return '';
+  }
+}
+
+function get_coord($obj, $t) {
+  if (!empty($obj->$t->status->demanded_lonlat)) {
+    return $obj->$t->status->demanded_lonlat[2];
+  }
+  else {
+    return '';
+  }
+}
+
+function get_RA($obj, $t) {
+  if (!empty($obj->$t->status->demanded_lonlat)) {
+    $val = $obj->$t->status->demanded_lonlat[0]*12.0/M_PI;
+    $h = floor($val);
+    $m= floor(($val-$h)*60);
+    $s= round(($val-$h-$m/60)*3600,3);
+    return  $h . 'h' . $m .  "m" . $s . "s";
+  }
+  else {
+    return '';
+  }
+}
+
+function get_Dec($obj, $t) {
+  if (!empty($obj->$t->status->demanded_lonlat)) {
+    $val = $obj->$t->status->demanded_lonlat[1]*180.0/M_PI;
+    $deg = floor($val);
+    $amin= floor(($val-$deg)*60);
+    $asec= round(($val-$deg-$amin/60)*3600,2);
+    return  $deg . '&deg' . $amin .  "'" . $asec . "''";
   }
   else {
     return '';
@@ -94,17 +132,24 @@ function get_control($obj, $t) {
     elseif ($val == 'Control_Room') {
       $beg = "<td style='background-color: #4BFF48;'>";
     }
+    elseif ($val == 'VLBI') {
+      $beg = "<td style='background-color: #FFFF60;'>";
+    }
   }
-  return $beg . $val . $end;
+  return $beg . str_replace('_',' ',$val) . $end;
 }
 
 function get_currentrec($obj, $t) {
+  $beg = '<td>';
+  $val = '';
+  $end = '</td>';
   if (!empty($obj->$t->status->receiverstatus->currentrec)) {
-    return $obj->$t->status->receiverstatus->currentrec;
+    $val = $obj->$t->status->receiverstatus->currentrec;
+      //if (strpos($val, 'L') !== false) {
+      //  $beg = "<td style='background-color: #BDBDBD;'>";
+      //}
   }
-  else {
-    return '';
-  }
+  return $beg . $val . $end;
 }
 
 function get_cryotemp($obj, $t) {
@@ -114,6 +159,25 @@ function get_cryotemp($obj, $t) {
   else {
     return '';
   }
+}
+
+//echo var_dump($obj->Cambridge->status->receiverstatus->recstatuses[0]->LOs[0]->loidfreq);
+
+function get_lok($obj, $t, $k) {
+  $lo = ''; 
+  if (!empty($obj->$t->status->receiverstatus->recstatuses)) {
+    $crec =$obj->$t->status->receiverstatus->currentrec;
+    foreach ($obj->$t->status->receiverstatus->recstatuses as $rec) {
+      if (!empty($rec->idname)) {
+        if ($rec->idname==$crec) {
+          if (!empty($rec->LOs[$k-1]->loidfreq)) {
+	    $lo=$rec->LOs[$k-1]->loidfreq/1e6 . ' MHz';
+          }
+        }
+      }
+    }
+  }
+  return $lo;
 }
 
 function get_timestamp($obj, $t) {
@@ -131,7 +195,14 @@ function get_timestamp($obj, $t) {
 <table>
   <thead>
     <tr>
+      <td></td><?php foreach ($timages as $ti) {echo "<td> <img src='images/" . $ti . "' width='100%' ></td>"; }?>
+    </tr>
+    <tr>
+    <tr>
       <td></td><?php foreach ($tnames as $tn) {echo '<th>' . $tn . '</th>'; }?>
+    </tr>
+    <tr>
+      <th>Diameter</th><?php foreach ($diameters as $td) {echo '<td>' . $td . '</td>'; }?>
     </tr>
   </thead>
   <tbody>
@@ -148,7 +219,22 @@ function get_timestamp($obj, $t) {
       <th>Elevation</th><?php foreach ($tnames as $tn) {echo '<td>' . get_cel($obj, $tn) . '</td>'; }?>
     </tr>
     <tr>
-      <th>Receiver</th><?php foreach ($tnames as $tn) {echo '<td>' . get_currentrec($obj, $tn) . '</td>'; }?>
+      <th>Coordinate system </th><?php foreach ($tnames as $tn) {echo '<td>' . get_coord($obj, $tn) . '</td>'; }?>
+    </tr>
+    <tr>
+      <th>R.A. / Long. </th><?php foreach ($tnames as $tn) {echo '<td>' . get_RA($obj, $tn) . '</td>'; }?>
+    </tr>
+    <tr>
+      <th>Dec. / Lat. </th><?php foreach ($tnames as $tn) {echo '<td>' . get_Dec($obj, $tn) . '</td>'; }?>
+    </tr>
+    <tr>
+      <th>Receiver</th><?php foreach ($tnames as $tn) {echo get_currentrec($obj, $tn) ; }?>
+    </tr>
+    <tr>
+      <th>LO1</th><?php foreach ($tnames as $tn) {echo '<td>' . get_lok($obj, $tn, 1) . '</td>'; }?>
+    </tr>
+    <tr>
+      <th>LO2</th><?php foreach ($tnames as $tn) {echo '<td>' . get_lok($obj, $tn, 2) . '</td>'; }?>
     </tr>
     <tr>
       <th>Cryo temperature</th><?php foreach ($tnames as $tn) {echo '<td>' . get_cryotemp($obj, $tn) . '</td>'; }?>
@@ -159,5 +245,7 @@ function get_timestamp($obj, $t) {
   </tbody>
 </table>
 </div>
+</br>
+NOTE: This information is for the use of Jodrell Bank Observatory staff in our astronomy and engineering applications. We cannot guarantee the accuracy of the data or fitness for use for any other purposes.
 </body>
 </html>
