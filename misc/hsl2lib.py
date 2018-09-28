@@ -1,5 +1,7 @@
 #!/usr/bin/python
 #-*- coding: utf-8 -*-
+# NOTE: Special modules required: bitarray (to read HSL2 bit codes), netifaces
+#       (to find out 192-IP of this computer), astropy (to convert time formats)
 # NOTE: Many fields have MJDs, modified julian date in seconds. 
 #       A value of -207360043201.0 in this field means 0 i.e. not set, since
 #       -207360043201.0/(3600*24) = -2400000.5
@@ -11,6 +13,7 @@ import array
 import sys
 import numpy as np
 from bitstring import BitArray
+import netifaces as ni
 
 try:
     from astropy.time import Time as at
@@ -20,6 +23,15 @@ except ImportError:
     print("""WARNING: Cannot import astropy.time. Will therefore skip 
     automatic conversion of timestamps to ISO format.  Modified Julian Date
     (MJD) and MJD in seconds (mjds) will still be available in dictionaries.""")
+
+def get_192IP():
+    """ Gets the 192.168.101.X IP of the current machine, assuming this is tied
+    to the interface where we want to receiver the HSL2 multicast
+    information."""
+    for iface in ni.interfaces():
+        ipv4addr = ni.ifaddresses(iface)[2][0]['addr']
+        if '192.168.101.' in ipv4addr:
+            return ipv4addr
 
 def b2d(b, i):
     """ Slice 8 bytes out of binary sequence, starting
