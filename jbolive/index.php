@@ -17,8 +17,6 @@ tr:nth-child(even) {background-color: #f2f2f2;}
 </style>
 </head>
 <body>
-<h1>JBO live telescope status (updates every <?php echo $refresh_seconds;?> seconds)</h1>
-
 
 <?php
 function get_teldata($address = '127.0.0.1', $port=50000) {
@@ -197,11 +195,12 @@ function get_timestamp($obj, $t) {
 <table>
   <thead>
     <tr>
-      <td></td><?php foreach ($timages as $ti) {echo "<td> <img src='images/" . $ti . "' width='100%' ></td>"; }?>
+      <td><h2>JBO live status<h2></td><?php foreach ($timages as $ti) {echo "<td> <img src='images/" . $ti . "' width='100%' ></td>"; }?>
     </tr>
     <tr>
     <tr>
       <td></td><?php foreach ($tnames as $tn) {echo '<th>' . $tn . '</th>'; }?>
+
     </tr>
     <tr>
       <th>Diameter</th><?php foreach ($diameters as $td) {echo '<td>' . $td . '</td>'; }?>
@@ -248,6 +247,6 @@ function get_timestamp($obj, $t) {
 </table>
 </div>
 </br>
-NOTE: This information is for the use of Jodrell Bank Observatory staff in our astronomy and engineering applications. We cannot guarantee the accuracy of the data or fitness for use for any other purposes.
+NOTE: The page automatically refreshes every <?php echo  $refresh_seconds;?>s. This information is for the use of Jodrell Bank Observatory staff in our astronomy and engineering applications. We cannot guarantee the accuracy of the data or fitness for use for any other purposes.
 </body>
 </html>
