@@ -683,7 +683,7 @@ if __name__ == "__main__":
     # Configuration
     mcast_port  = 7022
     mcast_group = "239.0.0.254"
-    iface_ip    = "192.168.101.99" # Assume this computer has this 192-address
+    iface_ip    = get_192IP()
     
     # Connect to socket
     msock = joinMcast(mcast_group, mcast_port, iface_ip)
