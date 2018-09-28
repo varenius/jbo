@@ -32,7 +32,8 @@ function get_teldata($address = '127.0.0.1', $port=50000) {
     $result = socket_connect($socket, $address, $port);
     if ($result === false) {
         echo "socket_connect() failed.\nReason: ($result) " . 
-              socket_strerror(socket_last_error($socket)) . "\n";
+		socket_strerror(socket_last_error($socket)) .
+		". Are you sure hsl2receiver.py is running?";
     }
     
     # Request data for all telescopes
