@@ -1,7 +1,8 @@
+<?php $refresh_seconds = 30;?>
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="refresh" content="5">
+<meta http-equiv="refresh" content="<?php echo $refresh_seconds;?>">
 <style>
 th {
     background-color: #4CAF50;
@@ -16,7 +17,7 @@ tr:nth-child(even) {background-color: #f2f2f2;}
 </style>
 </head>
 <body>
-<h1>JBO live telescope status (updates every 5 seconds)</h1>
+<h1>JBO live telescope status (updates every <?php echo $refresh_seconds;?> seconds)</h1>
 
 
 <?php
