@@ -31,7 +31,8 @@ except socket.error as serr:
         sys.exit(1)
 
 # Define string to send to get data
-msg = 'TELDATA?'
+msg = 'ALL'
+#msg = 'Mark 2'
 # If in python3, use bytestring
 if (sys.version_info > (3, 0)):
     msg = msg.encode()
@@ -43,6 +44,10 @@ while True:
     if (sys.version_info > (3, 0)):
         data = data.decode()
     teldata = json.loads(data)
-    print_teldata(teldata['Mark 2'])
+    with open('data.json', 'w') as outfile:
+        json.dump(teldata, outfile, sort_keys=True, indent=4)
+    #print_teldata(teldata['Mark 2'])
+    #print_teldata(teldata)
+    sys.exit()
     time.sleep(1)
 s.close()

@@ -6,6 +6,7 @@
 import socket
 import struct
 import binascii
+import datetime
 import array
 import sys
 import numpy as np
@@ -99,10 +100,7 @@ def readexp(b, h):
          
 def readLO(b,h,i):
     lo = {}
-    # Some telescopes have weird data in the loidnum field, e.g. 
-    # "0000035d", "0000035c", "0000035a", "0000035b". So, store loidnum
-    # as a string rather than e.g. integer.
-    lo["loidnum"] = h2s(h,i)
+    lo["loidnum"] = b2i(b,i)
     lo["loidname"] = b2c(b,i+1).replace("\x00","")
     lo["loidfreq"] = b2d(b,i+9)
     return lo
@@ -114,20 +112,31 @@ def readrec(b, h, i):
     # receiver info 40 bytes
     #  so offset index to next receiver is = 62+numlo*18 + 1
     rec = {}
-    rec["idnum"] = h2s(h,i) # Use h2s and not h2i since weird values sometimes
+    rec["idnum"] = b2i(b,i)
     rec["idname"] = b2c(b,i+1).replace("\x00","")
     rec["carpos"] = h2i(h,i+9)
     rec["carang"] = b2d(b,i+10)
-    rec["numincar"] = h2s(h,i+12) # Use h2s and not h2i since weird values sometimes
+    rec["numincar"] = b2i(b,i+12)
     rec["freqidnum"] = h2s(h,i+13)
     rec["freqidname"] = b2c(b,i+14).replace("\x00","")
     rec["numlo"] = h2i(h,i+22)
+    nextbyte = i+23
+    rec["LOs"] = []
     for k in range(rec["numlo"]):
         # read each LO
-        offset = k*18 # each LO table is 18 bytes
-        bs = i+23+offset
-        lo = readLO(b,h,bs)
-        rec["lo"+str(k)] = lo
+        lo = readLO(b,h,nextbyte)
+        rec["LOs"].append(lo)
+        nextbyte += 18 #each LO table is 18 bytes
+    rec['frequency'] = b2d(b,nextbyte)
+    rec['basebandfrequency'] = b2d(b,nextbyte+2)
+    rec['azbeamsquint'] = b2d(b,nextbyte+4)
+    rec['elbeamsquint'] = b2d(b,nextbyte+6)
+    # ... focus etc.
+    rec['cryotemp'] = b2d(b,nextbyte+30)
+    rec['cryopressure'] = b2d(b,nextbyte+32)
+    rec['compressorsupplypressure'] = b2d(b,nextbyte+34)
+    rec['compressorreturnpressure'] = b2d(b,nextbyte+36)
+    rec['heliumbottlepressure'] = b2d(b,nextbyte+38)
     return rec
 
 def readIFnoise(b,h,i):
@@ -556,18 +565,20 @@ def parse_receivers(b,h, i=123):
         recstat['active_recs']['recnumloc'] = h2i(h, i+offset+3)
         offset +=4
 
-    # Read receiver statuses for this telescope message
+    # read receiver statuses table
     recstat['recstatuses'] = []
-    # Recoffset acumulates the length of all the receiver info for this telescope
-    currentrec = ""
+    # store the current equipped receiver in currentrec variable for easy
+    # access later
+    recstat['currentrec'] = ""
+    recstat['currentreccryotemp'] = ""
     for recn in range(recstat['numrec']):
         rec = readrec(b,h,i+offset)
         recstat['recstatuses'].append(rec)
         # Each receiver entry is 63 bytes of static info plus 18 bytes per LO entry
         offset += 63 + rec['numlo'] * 18
         if rec['carpos']==recstat['active_recs']['carouselpos']:
-            currentrec = rec['idname']
-    recstat['currentrec'] = currentrec
+            recstat['currentrec'] = rec['idname']
+            recstat['currentreccryotemp'] = rec['cryotemp']
    
     # There are two Receiver IF and Noise Diode Data entries for each
     # currently active receiver (one for each receiver channel). Table
@@ -616,7 +627,8 @@ def joinMcast(mcast_addr,port,if_ip):
     
     print("""Will attempt to listen to multicast assuming, this computer has a
             network interface with the 192-network IP """ + if_ip + """. If no
-            data, change iface_ip variable to right IP for this computer.""")
+            data, change iface_ip variable to right IP for this computer AND
+            make sure port 7022 is open (e.g. ufw allow 7022).""")
 
     #create a UDP socket
     mcastsock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
@@ -659,7 +671,7 @@ if __name__ == "__main__":
     # Configuration
     mcast_port  = 7022
     mcast_group = "239.0.0.254"
-    iface_ip    = "192.168.101.10" # Assume this computer has this 192-address
+    iface_ip    = "192.168.101.99" # Assume this computer has this 192-address
     
     # Connect to socket
     msock = joinMcast(mcast_group, mcast_port, iface_ip)
@@ -689,7 +701,8 @@ if __name__ == "__main__":
                     print("ERROR: Failed to read HSL2 binary ", binary)
                     print("       Exception:", e)
             if teldatum:
-                print("Received", teldatum['binary_message_length'], "bytes of HSL2 data for", teldatum['telname'])
+                utcnow = datetime.datetime.utcnow().isoformat()
+                print("{0} UTC: Received {1} bytes of HSL2 data for {2}".format(utcnow, teldatum['binary_message_length'], teldatum['telname']))
                 teldata[teldatum['telname']] = teldatum
                 #if "Cam" in teldatum['telname']:
                 #    print_teldata(teldatum)
