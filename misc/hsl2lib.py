@@ -582,6 +582,7 @@ def parse_receivers(b,h, i=123):
     # store the current equipped receiver in currentrec variable for easy
     # access later
     recstat['currentrec'] = ""
+    recstat['currentLOs'] = []
     recstat['currentreccryotemp'] = ""
     for recn in range(recstat['numrec']):
         rec = readrec(b,h,i+offset)
@@ -590,6 +591,7 @@ def parse_receivers(b,h, i=123):
         offset += 63 + rec['numlo'] * 18
         if rec['carpos']==recstat['active_recs']['carouselpos']:
             recstat['currentrec'] = rec['idname']
+            recstat['currentLOs'] = rec['LOs']
             recstat['currentreccryotemp'] = rec['cryotemp']
    
     # There are two Receiver IF and Noise Diode Data entries for each

@@ -148,6 +148,11 @@ function get_currentrec($obj, $t) {
       //if (strpos($val, 'L') !== false) {
       //  $beg = "<td style='background-color: #BDBDBD;'>";
       //}
+      if (strpos($t, 'Defford') !== false) {
+        if ((($t->status->offsets_azel[0]*180.0/M_PI)>-1.0) and (($t->status->offsets_azel[1]*180.0/M_PI)>-1.0)) {
+          $val = "C-Band";
+	}
+      }
   }
   return $beg . $val . $end;
 }
@@ -163,19 +168,30 @@ function get_cryotemp($obj, $t) {
 
 //echo var_dump($obj->Cambridge->status->receiverstatus->recstatuses[0]->LOs[0]->loidfreq);
 
+function get_azoffset($obj, $t) {
+  if (!empty($obj->$t->status->offsets_azel)) {
+    $val = round($obj->$t->status->offsets_azel[0]*180.0/M_PI,3);
+    return number_format($val,3) . '&deg';
+  }
+  else {
+    return '';
+  }
+}
+
+function get_eloffset($obj, $t) {
+  if (!empty($obj->$t->status->offsets_azel)) {
+    $val = round($obj->$t->status->offsets_azel[1]*180.0/M_PI,3);
+    return number_format($val,3) . '&deg';
+  }
+  else {
+    return '';
+  }
+}
+
 function get_lok($obj, $t, $k) {
   $lo = ''; 
-  if (!empty($obj->$t->status->receiverstatus->recstatuses)) {
-    $crec =$obj->$t->status->receiverstatus->currentrec;
-    foreach ($obj->$t->status->receiverstatus->recstatuses as $rec) {
-      if (!empty($rec->idname)) {
-        if ($rec->idname==$crec) {
-          if (!empty($rec->LOs[$k-1]->loidfreq)) {
-	    $lo=$rec->LOs[$k-1]->loidfreq/1e6 . ' MHz';
-          }
-        }
-      }
-    }
+  if (!empty($obj->$t->status->receiverstatus->currentLOs)) {
+    $lo=$obj->$t->status->receiverstatus->currentLOs[$k-1]->loidfreq/1e6 . ' MHz';
   }
   return $lo;
 }
@@ -220,6 +236,12 @@ function get_timestamp($obj, $t) {
       <th>Elevation</th><?php foreach ($tnames as $tn) {echo '<td>' . get_cel($obj, $tn) . '</td>'; }?>
     </tr>
     <tr>
+      <th>Az. offset</th><?php foreach ($tnames as $tn) {echo '<td>' . get_eloffset($obj, $tn) . '</td>'; }?>
+    </tr>
+    <tr>
+      <th>El. offset</th><?php foreach ($tnames as $tn) {echo '<td>' . get_eloffset($obj, $tn) . '</td>'; }?>
+    </tr>
+    <tr>
       <th>Coordinate system </th><?php foreach ($tnames as $tn) {echo '<td>' . get_coord($obj, $tn) . '</td>'; }?>
     </tr>
     <tr>
@@ -238,8 +260,8 @@ function get_timestamp($obj, $t) {
       <th>LO2</th><?php foreach ($tnames as $tn) {echo '<td>' . get_lok($obj, $tn, 2) . '</td>'; }?>
     </tr>
     <tr>
-      <th>Cryo temperature</th><?php foreach ($tnames as $tn) {echo '<td>' . get_cryotemp($obj, $tn) . '</td>'; }?>
-    </tr>
+    <!--  <th>Cryo temperature</th><?php foreach ($tnames as $tn) {echo '<td>' . get_cryotemp($obj, $tn) . '</td>'; }?>
+    </tr>-->
     <tr>
       <th>HSL2 UTC timestamp</th><?php foreach ($tnames as $tn) {echo '<td>' . get_timestamp($obj, $tn) . '</td>'; }?>
     </tr>
@@ -247,6 +269,9 @@ function get_timestamp($obj, $t) {
 </table>
 </div>
 </br>
-NOTE: The page automatically refreshes every <?php echo  $refresh_seconds;?>s. This information is for the use of Jodrell Bank Observatory staff in our astronomy and engineering applications. We cannot guarantee the accuracy of the data or fitness for use for any other purposes.
+NOTE: This information is for the use of Jodrell Bank Observatory staff in our
+astronomy and engineering applications. We cannot guarantee the accuracy of the
+data or fitness for use for any other purposes. The page refreshes
+every <?php echo  $refresh_seconds;?>s. 
 </body>
 </html>
