@@ -77,7 +77,7 @@ function get_RA($obj, $t) {
     $h = floor($val);
     $m= floor(($val-$h)*60);
     $s= round(($val-$h-$m/60)*3600,3);
-    return  $h . 'h' . $m .  "m" . $s . "s";
+    return  str_pad($h, 2, "0", STR_PAD_LEFT) . 'h' . str_pad($m, 2, "0", STR_PAD_LEFT) .  "m" . str_pad($s, 2, "0", STR_PAD_LEFT) . "s";
   }
   else {
     return '';
@@ -90,7 +90,7 @@ function get_Dec($obj, $t) {
     $deg = floor($val);
     $amin= floor(($val-$deg)*60);
     $asec= round(($val-$deg-$amin/60)*3600,2);
-    return  $deg . '&deg' . $amin .  "'" . $asec . "''";
+    return  str_pad($deg, 2, "0", STR_PAD_LEFT) . '&deg' .str_pad($amin, 2, "0", STR_PAD_LEFT) .  "'" . str_pad($asec, 2, "0", STR_PAD_LEFT) . "''";
   }
   else {
     return '';
