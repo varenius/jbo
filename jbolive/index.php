@@ -149,7 +149,7 @@ function get_currentrec($obj, $t) {
       //  $beg = "<td style='background-color: #BDBDBD;'>";
       //}
       if (strpos($t, 'Defford') !== false) {
-        if ((($t->status->offsets_azel[0]*180.0/M_PI)>-1.0) and (($t->status->offsets_azel[1]*180.0/M_PI)>-1.0)) {
+        if (($obj->$t->status->offsets_azel[1]*180.0/M_PI)>-1.0) {
           $val = "C-Band";
 	}
       }
@@ -236,7 +236,7 @@ function get_timestamp($obj, $t) {
       <th>Elevation</th><?php foreach ($tnames as $tn) {echo '<td>' . get_cel($obj, $tn) . '</td>'; }?>
     </tr>
     <tr>
-      <th>Az. offset</th><?php foreach ($tnames as $tn) {echo '<td>' . get_eloffset($obj, $tn) . '</td>'; }?>
+      <th>Az. offset</th><?php foreach ($tnames as $tn) {echo '<td>' . get_azoffset($obj, $tn) . '</td>'; }?>
     </tr>
     <tr>
       <th>El. offset</th><?php foreach ($tnames as $tn) {echo '<td>' . get_eloffset($obj, $tn) . '</td>'; }?>
@@ -254,10 +254,10 @@ function get_timestamp($obj, $t) {
       <th>Receiver</th><?php foreach ($tnames as $tn) {echo get_currentrec($obj, $tn) ; }?>
     </tr>
     <tr>
-      <th>LO1</th><?php foreach ($tnames as $tn) {echo '<td>' . get_lok($obj, $tn, 1) . '</td>'; }?>
+      <th>Agilent LO</th><?php foreach ($tnames as $tn) {echo '<td>' . get_lok($obj, $tn, 1) . '</td>'; }?>
     </tr>
     <tr>
-      <th>LO2</th><?php foreach ($tnames as $tn) {echo '<td>' . get_lok($obj, $tn, 2) . '</td>'; }?>
+      <th>MERLIN LO</th><?php foreach ($tnames as $tn) {echo '<td>' . get_lok($obj, $tn, 2) . '</td>'; }?>
     </tr>
     <tr>
     <!--  <th>Cryo temperature</th><?php foreach ($tnames as $tn) {echo '<td>' . get_cryotemp($obj, $tn) . '</td>'; }?>
