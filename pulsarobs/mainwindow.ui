@@ -197,7 +197,7 @@
       <item row="3" column="0">
        <widget class="QLabel" name="label_LO1">
         <property name="text">
-         <string>LO1</string>
+         <string>LO1 [MHz]</string>
         </property>
        </widget>
       </item>
@@ -211,7 +211,7 @@
       <item row="4" column="0">
        <widget class="QLabel" name="label_LO2">
         <property name="text">
-         <string>LO2</string>
+         <string>LO2 [MHz]</string>
         </property>
        </widget>
       </item>
