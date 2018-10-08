@@ -259,8 +259,8 @@ function get_timestamp($obj, $t) {
     <tr>
       <th>MERLIN LO</th><?php foreach ($tnames as $tn) {echo '<td>' . get_lok($obj, $tn, 2) . '</td>'; }?>
     </tr>
-    <tr>
-    <!--  <th>Cryo temperature</th><?php foreach ($tnames as $tn) {echo '<td>' . get_cryotemp($obj, $tn) . '</td>'; }?>
+    <!-- <tr>
+     <th>Cryo temperature</th><?php foreach ($tnames as $tn) {echo '<td>' . get_cryotemp($obj, $tn) . '</td>'; }?>
     </tr>-->
     <tr>
       <th>HSL2 UTC timestamp</th><?php foreach ($tnames as $tn) {echo '<td>' . get_timestamp($obj, $tn) . '</td>'; }?>
