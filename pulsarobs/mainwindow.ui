@@ -132,7 +132,11 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QLineEdit" name="lineEdit_Allocation"/>
+       <widget class="QLineEdit" name="lineEdit_Allocation">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_Control">
@@ -142,7 +146,11 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QLineEdit" name="lineEdit_Control"/>
+       <widget class="QLineEdit" name="lineEdit_Control">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_Receiver">
@@ -152,7 +160,11 @@
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="QLineEdit" name="lineEdit_Receiver"/>
+       <widget class="QLineEdit" name="lineEdit_Receiver">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item row="3" column="0">
        <widget class="QLabel" name="label_LO1">
@@ -162,7 +174,11 @@
        </widget>
       </item>
       <item row="3" column="1">
-       <widget class="QLineEdit" name="lineEdit_LO1"/>
+       <widget class="QLineEdit" name="lineEdit_LO1">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item row="4" column="0">
        <widget class="QLabel" name="label_LO2">
@@ -172,7 +188,11 @@
        </widget>
       </item>
       <item row="4" column="1">
-       <widget class="QLineEdit" name="lineEdit_LO2"/>
+       <widget class="QLineEdit" name="lineEdit_LO2">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item row="5" column="0">
        <widget class="QLabel" name="label_CryoTemp">
@@ -182,7 +202,11 @@
        </widget>
       </item>
       <item row="5" column="1">
-       <widget class="QLineEdit" name="lineEdit_CryoTemp"/>
+       <widget class="QLineEdit" name="lineEdit_CryoTemp">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item row="6" column="0">
        <widget class="QLabel" name="label_Timestamp">
@@ -192,7 +216,11 @@
        </widget>
       </item>
       <item row="6" column="1">
-       <widget class="QLineEdit" name="lineEdit_Timestamp"/>
+       <widget class="QLineEdit" name="lineEdit_Timestamp">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -230,7 +258,11 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QLineEdit" name="lineEdit_Source"/>
+       <widget class="QLineEdit" name="lineEdit_Source">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_Status">
@@ -240,7 +272,11 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QLineEdit" name="lineEdit_Status"/>
+       <widget class="QLineEdit" name="lineEdit_Status">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_StartUT">
@@ -250,7 +286,11 @@
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="QLineEdit" name="lineEdit_StartUT"/>
+       <widget class="QLineEdit" name="lineEdit_StartUT">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item row="3" column="0">
        <widget class="QLabel" name="label_EndUT">
@@ -260,7 +300,11 @@
        </widget>
       </item>
       <item row="3" column="1">
-       <widget class="QLineEdit" name="lineEdit_EndUT"/>
+       <widget class="QLineEdit" name="lineEdit_EndUT">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item row="4" column="0">
        <widget class="QLabel" name="label_Progress">
