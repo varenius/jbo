@@ -9,10 +9,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.initUi()
         self.telescope = "Mark 2"
         self.initHSL2()
-        self.updateUi()
+        self.initUi()
 
     def initHSL2(self):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -25,6 +24,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             else:
                 print("ERROR: Cannot connect to HSL2 server, is it not running?")
                 sys.exit(1)
+        print("HSL2 init complete")
+
 
     def initUi(self):
         tl = self.tableWidget_TargetList
@@ -49,10 +50,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.pushButton_addTargetButton.clicked.connect(self.addObsItem)
         self.pushButton_RemoveScheduledSource.clicked.connect(self.delObsItem)
         
-        # Observing que init
+        # Observing queue init
         oq = self.tableWidget_ObservingQueue
         oq.setColumnCount(1)
         oq.setHorizontalHeaderLabels(["Name"])
+
+        # Timer init
+        self.uitimer = QtCore.QTimer()
+        self.uitimer.timeout.connect(self.updateUi)
+        self.uitimer.start(1000)
+        
+        self.updateUi()
+
 
     def addObsItem(self):
         tl = self.tableWidget_TargetList
@@ -68,9 +77,21 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def updateUi(self):
         self.getTeldata()
         td = self.teldata
+        rec = td['status']['receiverstatus']['currentrec']
+        act = np.array(td['status']['actual_azel'][0:2])*180/np.pi
+        dem = np.array(td['status']['demanded_azel'][0:2])*180/np.pi
+        LO1 = td['status']['receiverstatus']['currentLOs'][0]['loidfreq']/1e6
+        LO2 = td['status']['receiverstatus']['currentLOs'][1]['loidfreq']/1e6
+        self.lineEdit_Allocation.setText(td['status']['allocation'])
         self.lineEdit_Control.setText(td['status']['control'])
-        print(self.teldata)
-
+        self.lineEdit_Azimuth.setText('{:.5f}'.format(act[0]))
+        self.lineEdit_Elevation.setText('{:.5f}'.format(act[1]))
+        self.lineEdit_Receiver.setText(rec)
+        self.lineEdit_LO1.setText('{0}'.format(LO1))
+        self.lineEdit_LO2.setText('{0}'.format(LO2))
+        self.lineEdit_Timestamp.setText(td['status']['time_isot'] + ' UTC')
+        #print(self.teldata)
+    
     def getTeldata(self):
         self.sock.sendall(self.telescope.encode()) # Encode to bytestring
         data = self.sock.recv(65536)

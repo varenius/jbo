@@ -33,9 +33,13 @@ msock.setblocking(0)
 # Server config, waiting for clients to request data (as a dictionary sent via socket)
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.setblocking(0)
-#server.bind(('localhost', 50000)) # Only listen to localhost
-server.bind(('', 50000))
+server.bind(('130.88.9.212', 50000)) # 130 network IP of this computer.
 server.listen(5) # Accept up to 5 local connections
+# Server config, waiting for clients to request data (as a dictionary sent via socket)
+localserver = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+localserver.setblocking(0)
+localserver.bind(('localhost', 50000)) # Only listen to localhost
+localserver.listen(5) # Accept up to 5 local connections
 inputs = [server, msock]
 outputs = []
 message_queues = {}
@@ -45,11 +49,14 @@ teldata = {}
 while inputs:
     readable, writable, exceptional = select.select(inputs, outputs, inputs)
     for s in readable:
-        if s is server:
+        if (s is server) or (s is localserver):
             connection, client_address = s.accept()
-            connection.setblocking(0)
-            inputs.append(connection)
-            message_queues[connection] = queue.Queue()
+            if (s is server) and (client_address[0] not in ['130.88.9.216','130.88.9.244']):
+                connection.close()
+            else:
+                connection.setblocking(0)
+                inputs.append(connection)
+                message_queues[connection] = queue.Queue()
         elif s is msock:
             # Read data
             binary = s.recv(4096)
