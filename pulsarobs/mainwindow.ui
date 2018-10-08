@@ -40,10 +40,18 @@
      </property>
      <layout class="QGridLayout" name="gridLayout_tracking">
       <item row="1" column="1">
-       <widget class="QLineEdit" name="lineEdit_Elevation"/>
+       <widget class="QLineEdit" name="lineEdit_Elevation">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item row="5" column="1">
-       <widget class="QLineEdit" name="lineEdit_ElError"/>
+       <widget class="QLineEdit" name="lineEdit_ElError">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item row="5" column="0">
        <widget class="QLabel" name="label_ElError">
@@ -53,7 +61,11 @@
        </widget>
       </item>
       <item row="6" column="1">
-       <widget class="QLineEdit" name="lineEdit_Coordsys"/>
+       <widget class="QLineEdit" name="lineEdit_Coordsys">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_AzOffset">
@@ -63,10 +75,18 @@
        </widget>
       </item>
       <item row="4" column="1">
-       <widget class="QLineEdit" name="lineEdit_AzError"/>
+       <widget class="QLineEdit" name="lineEdit_AzError">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item row="3" column="1">
-       <widget class="QLineEdit" name="lineEdit_ElOffset"/>
+       <widget class="QLineEdit" name="lineEdit_ElOffset">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item row="3" column="0">
        <widget class="QLabel" name="label_ElOffset">
@@ -76,10 +96,18 @@
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="QLineEdit" name="lineEdit_AzOffset"/>
+       <widget class="QLineEdit" name="lineEdit_AzOffset">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QLineEdit" name="lineEdit_Azimuth"/>
+       <widget class="QLineEdit" name="lineEdit_Azimuth">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item row="4" column="0">
        <widget class="QLabel" name="label_AzError">
