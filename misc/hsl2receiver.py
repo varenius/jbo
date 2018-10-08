@@ -33,7 +33,8 @@ msock.setblocking(0)
 # Server config, waiting for clients to request data (as a dictionary sent via socket)
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.setblocking(0)
-server.bind(('localhost', 50000)) # Only listen to localhost
+#server.bind(('localhost', 50000)) # Only listen to localhost
+server.bind(('', 50000))
 server.listen(5) # Accept up to 5 local connections
 inputs = [server, msock]
 outputs = []
