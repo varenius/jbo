@@ -30,9 +30,9 @@
      <property name="geometry">
       <rect>
        <x>210</x>
-       <y>20</y>
+       <y>60</y>
        <width>181</width>
-       <height>251</height>
+       <height>221</height>
       </rect>
      </property>
      <property name="title">
@@ -57,13 +57,6 @@
        <widget class="QLabel" name="label_ElError">
         <property name="text">
          <string>Elerror</string>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="1">
-       <widget class="QLineEdit" name="lineEdit_Coordsys">
-        <property name="readOnly">
-         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -130,35 +123,21 @@
         </property>
        </widget>
       </item>
-      <item row="6" column="0">
-       <widget class="QLabel" name="label_Coordsys">
-        <property name="text">
-         <string>Coordsys</string>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
     <widget class="QGroupBox" name="groupBox_GeneralStatus">
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>20</y>
+       <y>60</y>
        <width>191</width>
-       <height>251</height>
+       <height>221</height>
       </rect>
      </property>
      <property name="title">
       <string>General</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_Allocation">
-        <property name="text">
-         <string>Allocation</string>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="1">
        <widget class="QLineEdit" name="lineEdit_Allocation">
         <property name="readOnly">
@@ -166,29 +145,8 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_Control">
-        <property name="text">
-         <string>Control</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QLineEdit" name="lineEdit_Control">
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_Receiver">
-        <property name="text">
-         <string>Receiver</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QLineEdit" name="lineEdit_Receiver">
+      <item row="3" column="1">
+       <widget class="QLineEdit" name="lineEdit_LO1">
         <property name="readOnly">
          <bool>true</bool>
         </property>
@@ -201,8 +159,8 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
-       <widget class="QLineEdit" name="lineEdit_LO1">
+      <item row="4" column="1">
+       <widget class="QLineEdit" name="lineEdit_LO2">
         <property name="readOnly">
          <bool>true</bool>
         </property>
@@ -215,42 +173,82 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="1">
-       <widget class="QLineEdit" name="lineEdit_LO2">
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="lineEdit_Receiver">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_Control">
+        <property name="text">
+         <string>Control</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_Allocation">
+        <property name="text">
+         <string>Allocation</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_Receiver">
+        <property name="text">
+         <string>Receiver</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="lineEdit_Control">
         <property name="readOnly">
          <bool>true</bool>
         </property>
        </widget>
       </item>
       <item row="5" column="0">
-       <widget class="QLabel" name="label_CryoTemp">
+       <widget class="QLabel" name="label_Coordsys">
         <property name="text">
-         <string>Cryo temp</string>
+         <string>Coordsys</string>
         </property>
        </widget>
       </item>
       <item row="5" column="1">
-       <widget class="QLineEdit" name="lineEdit_CryoTemp">
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="0">
-       <widget class="QLabel" name="label_Timestamp">
-        <property name="text">
-         <string>Timestamp</string>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="1">
-       <widget class="QLineEdit" name="lineEdit_Timestamp">
+       <widget class="QLineEdit" name="lineEdit_Coordsys">
         <property name="readOnly">
          <bool>true</bool>
         </property>
        </widget>
       </item>
      </layout>
+    </widget>
+    <widget class="QLabel" name="label_Timestamp">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>30</y>
+       <width>111</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>HSL2 timestamp</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineEdit_Timestamp">
+     <property name="geometry">
+      <rect>
+       <x>140</x>
+       <y>30</y>
+       <width>241</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
     </widget>
    </widget>
    <widget class="QGroupBox" name="groupBox_ObservingStatus">
