@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1221</width>
+    <height>504</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>PulsarObserver</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="QGroupBox" name="groupBox_TelescopeStatus">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>401</width>
+      <height>291</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Telescope status</string>
+    </property>
+    <widget class="QGroupBox" name="groupBox_tracking">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>20</y>
+       <width>171</width>
+       <height>251</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Tracking</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_tracking">
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="lineEdit_Elevation"/>
+      </item>
+      <item row="5" column="1">
+       <widget class="QLineEdit" name="lineEdit_ElError"/>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="label_ElError">
+        <property name="text">
+         <string>Elerror</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1">
+       <widget class="QLineEdit" name="lineEdit_Coordsys"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_AzOffset">
+        <property name="text">
+         <string>Azoffset</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QLineEdit" name="lineEdit_AzError"/>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLineEdit" name="lineEdit_ElOffset"/>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_ElOffset">
+        <property name="text">
+         <string>Eloffset</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="lineEdit_AzOffset"/>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="lineEdit_Azimuth"/>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_AzError">
+        <property name="text">
+         <string>Azerror</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_Elevation">
+        <property name="text">
+         <string>Elevation</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_Azimuth">
+        <property name="text">
+         <string>Azimuth</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0">
+       <widget class="QLabel" name="label_Coordsys">
+        <property name="text">
+         <string>Coordsys</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QGroupBox" name="groupBox_GeneralStatus">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>20</y>
+       <width>181</width>
+       <height>251</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>General</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_Allocation">
+        <property name="text">
+         <string>Allocation</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="lineEdit_Allocation"/>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_Control">
+        <property name="text">
+         <string>Control</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="lineEdit_Control"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_Receiver">
+        <property name="text">
+         <string>Receiver</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="lineEdit_Receiver"/>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_LO1">
+        <property name="text">
+         <string>LO1</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLineEdit" name="lineEdit_LO1"/>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_LO2">
+        <property name="text">
+         <string>LO2</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QLineEdit" name="lineEdit_LO2"/>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="label_CryoTemp">
+        <property name="text">
+         <string>Cryo temp</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="QLineEdit" name="lineEdit_CryoTemp"/>
+      </item>
+      <item row="6" column="0">
+       <widget class="QLabel" name="label_Timestamp">
+        <property name="text">
+         <string>Timestamp</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1">
+       <widget class="QLineEdit" name="lineEdit_Timestamp"/>
+      </item>
+     </layout>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_ObservingStatus">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>0</y>
+      <width>221</width>
+      <height>431</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Observing status</string>
+    </property>
+    <widget class="QGroupBox" name="groupBox_CurrentObservation">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>201</width>
+       <height>181</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Current observation</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_Source">
+        <property name="text">
+         <string>Source</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="lineEdit_Source"/>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_Status">
+        <property name="text">
+         <string>Status</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="lineEdit_Status"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_StartUT">
+        <property name="text">
+         <string>Start UT</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="lineEdit_StartUT"/>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_EndUT">
+        <property name="text">
+         <string>End UT</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLineEdit" name="lineEdit_EndUT"/>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_Progress">
+        <property name="text">
+         <string>Progress</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QProgressBar" name="progressBar">
+        <property name="value">
+         <number>24</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QGroupBox" name="groupBox_ObservingQueue">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>200</y>
+       <width>201</width>
+       <height>221</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Observing queue</string>
+     </property>
+     <widget class="QPushButton" name="pushButton_RemoveScheduledSource">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>150</y>
+        <width>181</width>
+        <height>32</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Remove selected</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBox_AutoSchedule">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>190</y>
+        <width>181</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Auto-fill empty queue</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QTableWidget" name="tableWidget_ObservingQueue">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>181</width>
+        <height>111</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="eventLogGroupBox">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>290</y>
+      <width>401</width>
+      <height>141</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Event log</string>
+    </property>
+    <widget class="QTextEdit" name="eventLogTextEdit">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>381</width>
+       <height>101</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_TargetList">
+    <property name="geometry">
+     <rect>
+      <x>630</x>
+      <y>0</y>
+      <width>581</width>
+      <height>431</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Available targets</string>
+    </property>
+    <widget class="QPushButton" name="pushButton_addTargetButton">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>390</y>
+       <width>181</width>
+       <height>32</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Add selected to queue</string>
+     </property>
+    </widget>
+    <widget class="QTableWidget" name="tableWidget_TargetList">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>561</width>
+       <height>351</height>
+      </rect>
+     </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
+     <property name="selectionMode">
+      <enum>QAbstractItemView::SingleSelection</enum>
+     </property>
+     <property name="selectionBehavior">
+      <enum>QAbstractItemView::SelectRows</enum>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1221</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>
