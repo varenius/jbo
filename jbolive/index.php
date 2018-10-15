@@ -135,6 +135,9 @@ function get_control($obj, $t) {
     elseif ($val == 'VLBI') {
       $beg = "<td style='background-color: #FFFF60;'>";
     }
+    elseif ($val == 'Test') {
+      $beg = "<td style='background-color: #FFFFA6;'>";
+    }
   }
   return $beg . str_replace('_',' ',$val) . $end;
 }
