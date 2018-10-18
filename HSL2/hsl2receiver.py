@@ -31,16 +31,16 @@ msock = joinMcast(mcast_group, mcast_port, iface_ip)
 msock.setblocking(0)
 
 # Server config, waiting for clients to request data (as a dictionary sent via socket)
-server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.setblocking(0)
-server.bind(('130.88.9.212', 50000)) # 130 network IP of this computer.
-server.listen(5) # Accept up to 5 local connections
-# Server config, waiting for clients to request data (as a dictionary sent via socket)
 localserver = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 localserver.setblocking(0)
 localserver.bind(('localhost', 50000)) # Only listen to localhost
 localserver.listen(5) # Accept up to 5 local connections
-inputs = [server, msock]
+# Server config, waiting for clients to request data (as a dictionary sent via socket)
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server.setblocking(0)
+server.bind((get_130IP(), 50000)) # 130 network IP of this computer.
+server.listen(5) # Accept up to 5 local connections
+inputs = [localserver, server, msock]
 outputs = []
 message_queues = {}
 

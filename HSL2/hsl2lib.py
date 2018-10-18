@@ -33,6 +33,14 @@ def get_192IP():
         if '192.168.101.' in ipv4addr:
             return ipv4addr
 
+def get_130IP():
+    """ Gets the 130.88.9.X IP of the current machine, assuming this is tied
+    to the interface where we want to talk to clients requesting info."""
+    for iface in ni.interfaces():
+        ipv4addr = ni.ifaddresses(iface)[2][0]['addr']
+        if '130.88.9.' in ipv4addr:
+            return ipv4addr
+
 def b2d(b, i):
     """ Slice 8 bytes out of binary sequence, starting
         at position i, and return as double. """
@@ -297,8 +305,9 @@ def bin_swap_hex(binary):
     (little/big endian) binary"""
     # Assume each item is 4-bytes, so number of items to swap is len(rawmsg)/4
     nb = int(len(binary)*0.25)
+    #print(len(binary), nb*4)
     # swap byte order
-    msg = struct.pack('<'+str(nb)+'i', *struct.unpack('>'+str(nb)+'i', binary))
+    msg = struct.pack('<'+str(nb)+'i', *struct.unpack('>'+str(nb)+'i', binary[0:nb*4]))
 
     # convert msg to hexadecimal version for convenience
     hexmsg = binascii.hexlify(msg)
@@ -407,11 +416,11 @@ def parse_telstatus(stm, b,h):
     telstatus['control'] = control_to_name(h2s(h, 38)) # Controller-symbol
     # Statusflags 
     telstatus['statusflags1'] = BitArray(hex=h2s(h, 39)).bin # See table 4.53
-    if telstatus['statusflags1'][-2]:
+    if telstatus['statusflags1'][-2]=='1':
         telstatus['azmotor'] = True
     else:
         telstatus['azmotor'] = False
-    if telstatus['statusflags1'][-3]:
+    if telstatus['statusflags1'][-3]=='1':
         telstatus['elmotor'] = True
     else:
         telstatus['elmotor'] = False
@@ -537,7 +546,7 @@ def parse_sitestatus(b,h,i):
 def parse_errors(b,h,i):
     # 
     errors = {}
-    errors['numerrors']= h2i(h,i)
+    errors['numerrors']= b2i(b,i)
     offset = 1
     errors['errorlist']=[]
     for k in range(errors['numerrors']):
@@ -680,7 +689,7 @@ if __name__ == "__main__":
     print("Running hsl2lib standalone, will parse binary stream...")
     # If DEBUG, allow exceptions to stop code. If False, catch exceptions and
     # only print ERROR: line.
-    DEBUG = False
+    DEBUG = True
     
     # Configuration
     mcast_port  = 7022
