@@ -170,7 +170,7 @@ def makeOJD(vex):
     conf ="sac = SubArrayConfig.find('{0}conf')\n".format(vex.exp)
     conf +="gac = GlobalConfig.DEFAULT\n"
     conf +="exp = Experiment(1, '{0}')\n".format(vex.exp)
-    conf +="par =  OJDParameters().globalConfig(gac).subArrayConfig(sac).experiment(exp).stopIntegratingOffPosition(False).applyGeometricDelay(False)\n"
+    conf +="par =  OJDParameters().globalConfig(gac).subArrayConfig(sac).experiment(exp).stopIntegratingOffPosition(False).applyGeometricDelay(False).doTroposphericCorrection(False)\n"
     #conf +="exTel = ExcludedTelescope(Telescope.Lovell) # Does this do anything?\n" 
     of.write(conf)
 
