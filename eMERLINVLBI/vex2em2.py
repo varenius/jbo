@@ -191,7 +191,7 @@ def vlbitimeplusdt(vlbistring,dt):
     return newstring
 
 def twoletter(telescope):
-    tels = {'Darnhall':'Da', 'Pickmere':'Ta' , 'Mk2': 'Jm', 'Knockin' : 'Kn', 'Defford': 'De', 'Cambridge' : 'Cm', 'Lovell': 'Jl'}
+    tels = {'Darnhall':'Da', 'Pickmere':'Pi' , 'Mk2': 'Jm', 'Knockin' : 'Kn', 'Defford': 'De', 'Cambridge' : 'Cm', 'Lovell': 'Jl'}
     return tels[telescope]
 
 def makeFTP(vex, tels, doubleSB = False):
@@ -278,7 +278,7 @@ def makeFBUF(vex, tels, doubleSB = False):
                 startstring = startstemp.format(stel,vex.exp.lower(),scan['id'].lower(),str(port))
                 stopstring = stopstemp.format(stel)
             of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "'), 15, flexbuffcmd,("+startstring+",),)\n")
-            of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + ", 15, flexbuffcmd,("+stopstring+",),)\n")
+            of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + ", 10, flexbuffcmd,("+stopstring+",),)\n")
             if 'ftp' in scan.keys():
                 if doubleSB:
                     # Use 0 (and 1 in other doubleSB clause below) at end of tel in filename
@@ -292,7 +292,7 @@ def makeFBUF(vex, tels, doubleSB = False):
                 startstring = startstemp.format(stel+'1',vex.exp.lower(),scan['id'].lower(),str(port+4))
                 stopstring = stopstemp.format(stel+'1')
                 of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "'), 15, flexbuffcmd,("+startstring+",),)\n")
-                of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + ", 15, flexbuffcmd,("+stopstring+",),)\n")
+                of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + ", 10, flexbuffcmd,("+stopstring+",),)\n")
                 if 'ftp' in scan.keys():
                     ftpstring2 = ftpstemp.format(stel+'1',vex.exp.lower(),scan['id'].lower(),vlbitimeplusdt(scan['start'],int(scan['ftp'][0])),vlbitimeplusdt(scan['start'],int(scan['ftp'][1])))
                     of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + " + 5, 15, flexbuffcmd,("+ftpstring2+",),)\n")
