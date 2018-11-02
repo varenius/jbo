@@ -6,6 +6,17 @@ import json
 import socket
 import errno
 import sys
+import numpy as np
+
+def print_teldata(td):
+    if td['status']:
+        arec = td['status']['receiverstatus']['currentrec']
+        act = np.array(td['status']['actual_azel'][0:2])*180/np.pi
+        dem = np.array(td['status']['demanded_azel'][0:2])*180/np.pi
+        toprint = td['status']['time_isot'], "Binary length", td['binary_message_length'], td['telname'], "Control", td['status']['control'], "Az ", act[0], " dem ", dem[0], " El ", act[1], " dem ", dem[1],"Receiver: ", arec
+    else:
+        toprint = td['telname'], td['telnumber'], 'NOSTATUS'
+    print(toprint)
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 try:
@@ -31,5 +42,5 @@ data = s.recv(65536)
 if (sys.version_info > (3, 0)):
     data = data.decode()
 teldata = json.loads(data)
-print(teldata)
+print_teldata(teldata)
 s.close()
