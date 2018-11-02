@@ -1,7 +1,7 @@
 import re, datetime, sys
     
-flexbuff= {'ip' : '192.168.81.76', 'mac' : '00:07:43:11:fd:d8', 'buffer':1024, 'comport':2620}
-jiveftp = {'ip': '192.42.120.93', } 
+flexbuff3= {'dataip' : '192.168.81.76', 'datamac' : '00:07:43:11:fd:d8', 'comip': '192.168.101.43', 'combuffer':1024, 'comport':2620}
+flexbuff2= {'dataip' : '192.168.81.77', 'datamac' : '00:07:43:11:fd:e8', 'comip': '192.168.101.42', 'combuffer':1024, 'comport':2620}
 
 class vexfile:
     def __init__(self,infile,keytel):
@@ -130,11 +130,13 @@ def makeConfig(vex, tels):
     obs += "\n"
     of.write(obs)
     
-    ncount = 0
     sb0 = 0 # First subband to be extracted as VDIF, next will be sb0+4.
-    for tel in tels:
-        of.write("obs.addVLBI(Telescope."+tel + ", "+str(sb0+4*(ncount//4))+ ", '" + flexbuff['ip'] + "', '" + flexbuff['mac'] + "')\n")
-        ncount +=1
+    for ncount, tel in enumerate(tels):
+        if ncount<3:
+            flexbuff = flexbuff2
+        else:
+            flexbuff = flexbuff3
+        of.write("obs.addVLBI(Telescope."+tel + ", "+str(sb0+4*(ncount//4))+ ", '" + flexbuff['dataip'] + "', '" + flexbuff['datamac'] + "')\n")
 
     of.write("\n")
     of.write("conf = SubArrayConfig.save('"+vex.exp+"conf', obs)")
@@ -204,22 +206,26 @@ def makeFTP(vex, tels, doubleSB = False):
     of.write("    dt = datetime.datetime.strptime(vlbi_time, '%Yy%jd%Hh%Mm%Ss')\n")
     of.write("    return time.mktime(dt.timetuple())\n")
     of.write("\n")
-    of.write("def flexbuffcmd(message):\n")
+    of.write("def flexbuffcmd(comip, comport, message):\n")
     of.write("    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)\n")
-    of.write("    sock.connect(('{0}', {1}))\n".format(flexbuff['ip'],flexbuff['comport']))
+    of.write("    sock.connect((comip, comport))\n")
     of.write("    sock.send(message)\n")
-    of.write("    print('sent to flexbuff: ' + message)\n")
-    of.write("    data = sock.recv({0})\n".format(flexbuff['buffer']))
-    of.write("    print('flexbuff answer: ', data)\n")
+    of.write("    print('sent to '+comip+':'+comport + ': + message')\n")
+    of.write("    data = sock.recv(1024)\n")
+    of.write("    print(comip + 'answer: ', data)\n")
     of.write("    sock.close()\n\n")
 
-    of.write("def autoftp(fname):\n")
-    of.write("    os.system('ssh oper@{0} ncftpput -p JBO {1} ftpdata /home/oper/data/' + fname)\n".format(flexbuff['ip'],jiveftp['ip']))
-
+    of.write("def autoftp(comip, fname):\n")
+    of.write("    os.system('ssh oper@' + comip + ' ncftpput -p JBO 192.42.120.93 ftpdata /home/oper/data/' + fname)\n")
     of.write("s = sched.scheduler(time.time, time.sleep)\n")
     of.write("\n")
     for scan in vex.scans:
         for port,tel in enumerate(tels):
+            #  Store first 3 data streams on flexbuff2, rest on flexbuff3
+            if port<3:
+                fb = flexbuff2
+            else:
+                fb = flexbuff3
             stel = twoletter(tel).lower()
             if 'ftp' in scan.keys():
                 # Allow 30 sec for record and disk2file to finish.
@@ -250,13 +256,13 @@ def makeFBUF(vex, tels, doubleSB = False):
     of.write("    response = urllib2.urlopen(req)\n")
     of.write("    the_page = response.read() # Not used\n\n")
 
-    of.write("def flexbuffcmd(message):\n")
+    of.write("def flexbuffcmd(comip, comport, message):\n")
     of.write("    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)\n")
-    of.write("    sock.connect(('{0}', {1}))\n".format(flexbuff['ip'],flexbuff['comport']))
+    of.write("    sock.connect((comip, comport))\n")
     of.write("    sock.send(message)\n")
-    of.write("    print('sent to flexbuff: ' + message)\n")
-    of.write("    data = sock.recv({0})\n".format(flexbuff['buffer']))
-    of.write("    print('flexbuff answer: ', data)\n")
+    of.write("    print('sent to '+comip+':'+comport + ': + message')\n")
+    of.write("    data = sock.recv(1024)\n")
+    of.write("    print(comip + 'answer: ', data)\n")
     of.write("    sock.close()\n\n")
 
     of.write("s = sched.scheduler(time.time, time.sleep)\n")
@@ -267,18 +273,27 @@ def makeFBUF(vex, tels, doubleSB = False):
     startstemp = "'runtime = {0} ; net_protocol = pudp : 32M : 256M : 8 ; mtu = 9000 ; net_port = 1300{3}  ; mode = VDIF_8000-512-1-2 ; record = on : {1}_{0}_{2}.vdif;'" # 0;tel, 1:exp, 2:scanid (no0001) 3:port-number 0,1,2...in the order telescopes are added, so in order of tel list
     stopstemp = "'runtime = {0} ; record = off ;'" # 0;tel
     ftpstemp = "'runtime = {0} ; scan_set={1}_{0}_{2}:{3}:{4} ; disk2file={1}_{0}_{2}.vdif ;'" # 0;tel, 1:exp, 2:scanid (no0001) 3:starttime, 4:start+2
+    evlbitemp = "'runtime = {0} ; evlbi? ;'" # 0;tel
     for scan in vex.scans:
         for port,tel in enumerate(tels):
+            #  Store first 3 data streams on flexbuff2, rest on flexbuff3
+            if port<3:
+                fb = flexbuff2
+            else:
+                fb = flexbuff3
             stel = twoletter(tel).lower()
             if doubleSB:
                 # Use 0 (and 1 in other doubleSB clause below) at end of tel in filename
                 startstring = startstemp.format(stel+'0',vex.exp.lower(),scan['id'].lower(),str(port))
                 stopstring = stopstemp.format(stel+'0')
+                evlbistring = evlbitemp.format(stel+'0')
             else:
                 startstring = startstemp.format(stel,vex.exp.lower(),scan['id'].lower(),str(port))
                 stopstring = stopstemp.format(stel)
-            of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "'), 15, flexbuffcmd,("+startstring+",),)\n")
-            of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + ", 10, flexbuffcmd,("+stopstring+",),)\n")
+                evlbistring = evlbitemp.format(stel)
+            of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "'), 15, flexbuffcmd,('{0}','{1}',{2}".format(fb['comip'], fb['comport'], startstring)+",),)\n")
+            of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + ", 10, flexbuffcmd,('{0}','{1}',{2}".format(fb['comip'], fb['comport'], stopstring)+",),)\n")
+            of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + ", 10, flexbuffcmd,('{0}','{1}',{2}".format(fb['comip'], fb['comport'], evlbistring)+",),)\n")
             if 'ftp' in scan.keys():
                 if doubleSB:
                     # Use 0 (and 1 in other doubleSB clause below) at end of tel in filename
@@ -287,15 +302,15 @@ def makeFBUF(vex, tels, doubleSB = False):
                     # no trailing 0
                     ftpstring = ftpstemp.format(stel,vex.exp.lower(),scan['id'].lower(),vlbitimeplusdt(scan['start'],int(scan['ftp'][0])),vlbitimeplusdt(scan['start'],int(scan['ftp'][1])))
                 # Wait 5 seconds for record to finish, then run disk2file
-                of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + " + 5, 15, flexbuffcmd,("+ftpstring+",),)\n")
+                of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + " + 5, 15, flexbuffcmd,('{0}','{1}',{2}".format(fb['comip'], fb['comport'], ftpstring)+",),)\n")
             if doubleSB:
                 startstring = startstemp.format(stel+'1',vex.exp.lower(),scan['id'].lower(),str(port+4))
                 stopstring = stopstemp.format(stel+'1')
-                of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "'), 15, flexbuffcmd,("+startstring+",),)\n")
-                of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + ", 10, flexbuffcmd,("+stopstring+",),)\n")
+                of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "'), 15, flexbuffcmd,('{0}','{1}',{2}".format(fb['comip'], fb['comport'], startstring)+",),)\n")
+                of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + ", 10, flexbuffcmd,('{0}','{1}',{2}".format(fb['comip'], fb['comport'], stopstring)+",),)\n")
                 if 'ftp' in scan.keys():
                     ftpstring2 = ftpstemp.format(stel+'1',vex.exp.lower(),scan['id'].lower(),vlbitimeplusdt(scan['start'],int(scan['ftp'][0])),vlbitimeplusdt(scan['start'],int(scan['ftp'][1])))
-                    of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + " + 5, 15, flexbuffcmd,("+ftpstring2+",),)\n")
+                    of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + " + 5, 15, flexbuffcmd,('{0}','{1}',{2}".format(fb['comip'], fb['comport'], ftpstring2)+",),)\n")
 
     of.write("for j in s.queue:\n")
     of.write("    print(j)\n")
@@ -306,13 +321,13 @@ def makeFBUF(vex, tels, doubleSB = False):
 def main(args):
     vex = vexfile(args[1], args[2])
     print(vex.scans)
-    #tels = ['Darnhall', 'Pickmere', 'Mk2', 'Knockin', 'Defford', 'Cambridge']
+    tels = ['Darnhall', 'Pickmere', 'Mk2', 'Knockin', 'Defford', 'Cambridge']
     #tels = ['Darnhall', 'Pickmere', 'Knockin', 'Defford', 'Cambridge']
-    tels = ['Darnhall', 'Pickmere', 'Knockin', 'Cambridge']
+    #tels = ['Darnhall', 'Pickmere', 'Knockin', 'Cambridge']
     makeConfig(vex,tels)
     makeOJD(vex)
     makeFBUF(vex,tels, doubleSB=False)
-    makeFTP(vex,tels, doubleSB=False)
+    #makeFTP(vex,tels, doubleSB=False)
 
 if __name__ == "__main__":
     main(sys.argv)
