@@ -51,7 +51,7 @@ while inputs:
     for s in readable:
         if (s is server) or (s is localserver):
             connection, client_address = s.accept()
-            if (s is server) and (client_address[0] not in ['130.88.9.216','130.88.9.244']):
+            if (s is server) and (client_address[0] not in ['130.88.9.216','130.88.9.244','130.88.9.19']):
                 connection.close()
             else:
                 connection.setblocking(0)
