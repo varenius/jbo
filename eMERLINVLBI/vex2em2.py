@@ -136,6 +136,8 @@ def makeConfig(vex, tels):
             flexbuff = flexbuff2
         else:
             flexbuff = flexbuff3
+        if tel=='Mk2':
+            tel='MK2'
         of.write("obs.addVLBI(Telescope."+tel + ", "+str(sb0+4*(ncount//4))+ ", '" + flexbuff['dataip'] + "', '" + flexbuff['datamac'] + "')\n")
 
     of.write("\n")
@@ -208,7 +210,7 @@ def makeFTP(vex, tels, doubleSB = False):
     of.write("\n")
     of.write("def flexbuffcmd(comip, comport, message):\n")
     of.write("    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)\n")
-    of.write("    sock.connect((comip, comport))\n")
+    of.write("    sock.connect((comip, int(comport)))\n")
     of.write("    sock.send(message)\n")
     of.write("    print('sent to '+comip+':'+comport + ': + message')\n")
     of.write("    data = sock.recv(1024)\n")
@@ -258,7 +260,7 @@ def makeFBUF(vex, tels, doubleSB = False):
 
     of.write("def flexbuffcmd(comip, comport, message):\n")
     of.write("    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)\n")
-    of.write("    sock.connect((comip, comport))\n")
+    of.write("    sock.connect((comip, int(comport)))\n")
     of.write("    sock.send(message)\n")
     of.write("    print('sent to '+comip+':'+comport + ': + message')\n")
     of.write("    data = sock.recv(1024)\n")
@@ -293,7 +295,7 @@ def makeFBUF(vex, tels, doubleSB = False):
                 evlbistring = evlbitemp.format(stel)
             of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "'), 15, flexbuffcmd,('{0}','{1}',{2}".format(fb['comip'], fb['comport'], startstring)+",),)\n")
             of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + ", 10, flexbuffcmd,('{0}','{1}',{2}".format(fb['comip'], fb['comport'], stopstring)+",),)\n")
-            of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + ", 10, flexbuffcmd,('{0}','{1}',{2}".format(fb['comip'], fb['comport'], evlbistring)+",),)\n")
+            of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + ", 20, flexbuffcmd,('{0}','{1}',{2}".format(fb['comip'], fb['comport'], evlbistring)+",),)\n")
             if 'ftp' in scan.keys():
                 if doubleSB:
                     # Use 0 (and 1 in other doubleSB clause below) at end of tel in filename
