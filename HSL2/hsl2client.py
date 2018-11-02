@@ -20,20 +20,16 @@ except socket.error as serr:
         sys.exit(1)
 
 # Define string to send to get data
-#msg = 'ALL' # ALL for all telescopes, telname i.e. 'Mark 2' for Mk2 data etc.
 msg = 'Mark 2' # for single telescope, e.g. 'Mark 2'
-msg = "Pickmere"
 # If in python3, use bytestring
 if (sys.version_info > (3, 0)):
     msg = msg.encode()
 
-while True:
-    s.sendall(msg)
-    data = s.recv(65536)
-    # If in python3, decode from bytestring
-    if (sys.version_info > (3, 0)):
-        data = data.decode()
-    teldata = json.loads(data)
-    print(teldata)
-    sys.exit()
+s.sendall(msg)
+data = s.recv(65536)
+# If in python3, decode from bytestring
+if (sys.version_info > (3, 0)):
+    data = data.decode()
+teldata = json.loads(data)
+print(teldata)
 s.close()
