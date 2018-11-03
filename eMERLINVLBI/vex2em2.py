@@ -126,7 +126,9 @@ def makeConfig(vex, tels):
     obs += "obs.widarOffsetId='vlbi'\n"
     obs += "obs.delayApplyVDIF = True # apply a delay model - but note in OJDParameters it is possible to switch off the geometric part\n"
     obs += "obs.fringeRotateVDIF = False # generally VLBI seems to want to do this for itself\n"
-    obs += "obs.setSubBand(4,32.e6,64e6) # DEFINE MANUALLY: Set or add second subband to be extracted, must be exactly 4 offset from the other one used. Pair defined below, e.g. 0,4 or 1,5.\n"
+    obs += "# DEFINE SUBBANDS MANUALLY: Set or add. Pairs must be offset 4, e.g. 0,4 or 1,5.\n"
+    obs += "# obs.setSubBand(index, center freq relative to LO in Hz, bandwidth in Hz, usually 64e6)\n"
+    obs += "obs.setSubBand(4,32.e6,64e6)"
     obs += "\n"
     of.write(obs)
     
@@ -137,6 +139,7 @@ def makeConfig(vex, tels):
         else:
             flexbuff = flexbuff3
         if tel=='Mk2':
+            # Mk2 is called MK2 when selected with the addVLBI function
             tel='MK2'
         of.write("obs.addVLBI(Telescope."+tel + ", "+str(sb0+4*(ncount//4))+ ", '" + flexbuff['dataip'] + "', '" + flexbuff['datamac'] + "')\n")
 
