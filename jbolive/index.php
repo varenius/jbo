@@ -50,7 +50,7 @@ $td = get_teldata();
 $obj = json_decode($td);
 $tnames = array('42ft', '7metre', 'Lovell', 'Mark 2', 'Pickmere', 'Darnhall', 'Knockin', 'Defford', 'Cambridge');
 $timages = array('42ft.jpg', '7m.jpg','lo.jpg', 'mk2.jpg', 'pi.jpg', 'da.jpg', 'kn.jpg', 'de.jpg', 'cm.jpg');
-$diameters = array('13 m', '7 m', '76 m','28x25 m', '25 m', '25 m', '25 m', '25 m', '32 m');
+$diameters = array('13 m', '7 m', '76 m','38x25 m', '25 m', '25 m', '25 m', '25 m', '32 m');
 
 function get_jobname($obj, $t) {
   if (!empty($obj->$t->status->jobname)) {
