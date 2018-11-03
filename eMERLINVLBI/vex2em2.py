@@ -1,7 +1,7 @@
 import re, datetime, sys
     
-flexbuff3= {'dataip' : '192.168.81.76', 'datamac' : '00:07:43:11:fd:d8', 'comip': '192.168.101.43', 'combuffer':1024, 'comport':2620}
-flexbuff2= {'dataip' : '192.168.81.77', 'datamac' : '00:07:43:11:fd:e8', 'comip': '192.168.101.42', 'combuffer':1024, 'comport':2620}
+flexbuff3= {'dataip' : '192.168.81.76', 'datamac' : '00:07:43:11:fd:d8', 'comip': '192.168.101.43', 'comport':2620}
+flexbuff2= {'dataip' : '192.168.81.77', 'datamac' : '00:07:43:11:fd:e8', 'comip': '192.168.101.42', 'comport':2620}
 
 class vexfile:
     def __init__(self,infile,keytel):
