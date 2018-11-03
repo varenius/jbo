@@ -232,10 +232,10 @@ def makeFTP(vex, tels, doubleSB = False):
             if 'ftp' in scan.keys():
                 # Allow 30 sec for record and disk2file to finish.
                 if doubleSB:
-                    of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + " + 30, 15, autoftp,({3}, {4}, '{1}_{0}_{2}.vdif',),)\n".format(stel+'0',vex.exp.lower(),scan['id'].lower(), fb['comip'], fb['comport']))
-                    of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + " +30, 15, autoftp,({3}, {4}, '{1}_{0}_{2}.vdif',),)\n".format(stel+'1',vex.exp.lower(),scan['id'].lower(), fb['comip'], fb['comport']))
+                    of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + " + 30, 15, autoftp,('{3}', '{4}', '{1}_{0}_{2}.vdif',),)\n".format(stel+'0',vex.exp.lower(),scan['id'].lower(), fb['comip'], fb['comport']))
+                    of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + " +30, 15, autoftp,('{3}', '{4}', '{1}_{0}_{2}.vdif',),)\n".format(stel+'1',vex.exp.lower(),scan['id'].lower(), fb['comip'], fb['comport']))
                 else:
-                    of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + " + 30, 15, autoftp,('{3}, {4}, {1}_{0}_{2}.vdif',),)\n".format(stel,vex.exp.lower(),scan['id'].lower(), fb['comip'], fb['comport']))
+                    of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + " + 30, 15, autoftp,('{3}', '{4}', '{1}_{0}_{2}.vdif',),)\n".format(stel,vex.exp.lower(),scan['id'].lower(), fb['comip'], fb['comport']))
     of.write("for j in s.queue:\n")
     of.write("    print(j)\n")
     of.write("s.run()\n")
@@ -323,13 +323,13 @@ def makeFBUF(vex, tels, doubleSB = False):
 def main(args):
     vex = vexfile(args[1], args[2])
     print(vex.scans)
-    tels = ['Darnhall', 'Pickmere', 'Mk2', 'Knockin', 'Defford', 'Cambridge']
+    #tels = ['Darnhall', 'Pickmere', 'Mk2', 'Knockin', 'Defford', 'Cambridge']
     #tels = ['Darnhall', 'Pickmere', 'Knockin', 'Defford', 'Cambridge']
-    #tels = ['Darnhall', 'Pickmere', 'Knockin', 'Cambridge']
+    tels = ['Darnhall', 'Pickmere', 'Knockin', 'Cambridge']
     makeConfig(vex,tels)
     makeOJD(vex)
     makeFBUF(vex,tels, doubleSB=False)
-    #makeFTP(vex,tels, doubleSB=False)
+    makeFTP(vex,tels, doubleSB=False)
 
 if __name__ == "__main__":
     main(sys.argv)
