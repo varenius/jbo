@@ -235,10 +235,10 @@ def makeFTP(vex, tels, doubleSB = False):
             if 'ftp' in scan.keys():
                 # Allow 30 sec for record and disk2file to finish.
                 if doubleSB:
-                    of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + " + 30, 15, autoftp,('{3}', '{4}', '{1}_{0}_{2}.vdif',),)\n".format(stel+'0',vex.exp.lower(),scan['id'].lower(), fb['comip'], fb['comport']))
-                    of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + " +30, 15, autoftp,('{3}', '{4}', '{1}_{0}_{2}.vdif',),)\n".format(stel+'1',vex.exp.lower(),scan['id'].lower(), fb['comip'], fb['comport']))
+                    of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + " + 30, 15, autoftp,('{3}', '{1}_{0}_{2}.vdif',),)\n".format(stel+'0',vex.exp.lower(),scan['id'].lower(), fb['comip']))
+                    of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + " +30, 15, autoftp,('{3}', '{1}_{0}_{2}.vdif',),)\n".format(stel+'1',vex.exp.lower(),scan['id'].lower(), fb['comip']))
                 else:
-                    of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + " + 30, 15, autoftp,('{3}', '{4}', '{1}_{0}_{2}.vdif',),)\n".format(stel,vex.exp.lower(),scan['id'].lower(), fb['comip'], fb['comport']))
+                    of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + " + 30, 15, autoftp,('{3}', '{1}_{0}_{2}.vdif',),)\n".format(stel,vex.exp.lower(),scan['id'].lower(), fb['comip']))
     of.write("for j in s.queue:\n")
     of.write("    print(j)\n")
     of.write("s.run()\n")
