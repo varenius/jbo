@@ -43,7 +43,7 @@ function get_teldata($address = '127.0.0.1', $port=50000) {
 
     # Done, close socket
     socket_close($socket);
-    //echo($teldata)
+    //echo($teldata);
     return $teldata;
 }
 $td = get_teldata();
@@ -194,7 +194,12 @@ function get_eloffset($obj, $t) {
 function get_lok($obj, $t, $k) {
   $lo = ''; 
   if (!empty($obj->$t->status->receiverstatus->currentLOs)) {
-    $lo=$obj->$t->status->receiverstatus->currentLOs[$k-1]->loidfreq/1e6 . ' MHz';
+    $CLOs = $obj->$t->status->receiverstatus->currentLOs;
+    // Check if more than 4 LOs in current setup. If so, we have K-band
+    // where LO[0] is the fixed 17GHz LO, so skip that and offset k-value 
+    // by 1 to read the variable LOs instead also at K-band.
+    if(count($CLOs)>4) { $k=$k+1; }
+    $lo=$CLOs[$k-1]->loidfreq/1e6 . ' MHz';
   }
   return $lo;
 }
