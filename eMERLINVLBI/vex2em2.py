@@ -1,7 +1,7 @@
 import re, datetime, sys
     
-flexbuff3= {'dataip' : '192.168.81.76', 'datamac' : '00:07:43:11:fd:d8', 'comip': '192.168.101.43', 'combuffer':1024, 'comport':2620}
-flexbuff2= {'dataip' : '192.168.81.77', 'datamac' : '00:07:43:11:fd:e8', 'comip': '192.168.101.42', 'combuffer':1024, 'comport':2620}
+flexbuff3= {'dataip' : '192.168.81.76', 'datamac' : '00:07:43:11:fd:d8', 'comip': '192.168.101.43', 'comport':2620}
+flexbuff2= {'dataip' : '192.168.81.77', 'datamac' : '00:07:43:11:fd:e8', 'comip': '192.168.101.42', 'comport':2620}
 
 class vexfile:
     def __init__(self,infile,keytel):
@@ -123,10 +123,12 @@ def makeConfig(vex, tels):
     obs += "              BaseBandModel(1, freq, 8, 1.0, Polarization.code.Right, 8)]\n"
     obs += "obs = ObservationConfiguration(basebands)\n"
     obs += "obs.setBaselines(Telescope.allCross(Telescope.asList(tels),True))\n"
-    obs += "obs.widarOffsetId='vlbi'\n"
-    obs += "obs.delayApplyVDIF = True # apply a delay model - but note in OJDParameters it is possible to switch off the geometric part\n"
-    obs += "obs.fringeRotateVDIF = False # generally VLBI seems to want to do this for itself\n"
-    obs += "obs.setSubBand(4,32.e6,64e6) # DEFINE MANUALLY: Set or add second subband to be extracted, must be exactly 4 offset from the other one used. Pair defined below, e.g. 0,4 or 1,5.\n"
+    obs += "obs.widarOffsetId='vlbi' # vlbi mode means zero widar offsets, all tels same LOs\n"
+    obs += "obs.delayApplyVDIF = True # apply a delay model - but turn off geometry and troposphere in OJD\n"
+    obs += "obs.fringeRotateVDIF = False # Don't fringerotate, Jive will do this?\n"
+    obs += "# DEFINE SUBBANDS MANUALLY: Set or add. Pairs must be offset 4, e.g. 0,4 or 1,5.\n"
+    obs += "# obs.setSubBand(index, center freq relative to LO in Hz, bandwidth in Hz, usually 64e6)\n"
+    obs += "obs.setSubBand(4,32.e6,64e6)"
     obs += "\n"
     of.write(obs)
     
@@ -137,6 +139,7 @@ def makeConfig(vex, tels):
         else:
             flexbuff = flexbuff3
         if tel=='Mk2':
+            # Mk2 is called MK2 when selected with the addVLBI function
             tel='MK2'
         of.write("obs.addVLBI(Telescope."+tel + ", "+str(sb0+4*(ncount//4))+ ", '" + flexbuff['dataip'] + "', '" + flexbuff['datamac'] + "')\n")
 
@@ -295,7 +298,8 @@ def makeFBUF(vex, tels, doubleSB = False):
                 evlbistring = evlbitemp.format(stel)
             of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "'), 15, flexbuffcmd,('{0}','{1}',{2}".format(fb['comip'], fb['comport'], startstring)+",),)\n")
             of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + ", 10, flexbuffcmd,('{0}','{1}',{2}".format(fb['comip'], fb['comport'], stopstring)+",),)\n")
-            of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + ", 20, flexbuffcmd,('{0}','{1}',{2}".format(fb['comip'], fb['comport'], evlbistring)+",),)\n")
+            # Send evlbi? command 1 second after the stop command
+            of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + "+ 1, 20, flexbuffcmd,('{0}','{1}',{2}".format(fb['comip'], fb['comport'], evlbistring)+",),)\n")
             if 'ftp' in scan.keys():
                 if doubleSB:
                     # Use 0 (and 1 in other doubleSB clause below) at end of tel in filename
