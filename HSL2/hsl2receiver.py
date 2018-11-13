@@ -112,6 +112,7 @@ while inputs:
                     reply = telstring
                 else:
                     reply = "IGNORED"
+                reply = "BEG"+reply+"END"
                 # If python 3 (and not python 2), then encode
                 if (sys.version_info > (3, 0)):
                     reply = reply.encode()

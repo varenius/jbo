@@ -20,8 +20,8 @@ def print_teldata(td):
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 try:
-    #s.connect(('localhost', 50000))
-    s.connect(('130.88.9.212', 50000))
+    s.connect(('localhost', 50000))
+    #s.connect(('130.88.9.212', 50000))
 except socket.error as serr:
     if serr.errno != errno.ECONNREFUSED:
         # Not the error we are looking for, re-raise
@@ -37,10 +37,20 @@ if (sys.version_info > (3, 0)):
     msg = msg.encode()
 
 s.sendall(msg)
-data = s.recv(65536)
-# If in python3, decode from bytestring
-if (sys.version_info > (3, 0)):
-    data = data.decode()
-teldata = json.loads(data)
+# The answer will be a string starting with BEG, and ending with END.
+# The data in between can be loaded as a json dictionary of telescope info
+parts = ""
+while True:
+    part = s.recv(4096)
+    # If in python3, decode from bytestring
+    if (sys.version_info > (3, 0)):
+        part = part.decode()
+    if part[0:3]=="BEG":
+        parts = part
+    else :
+        parts += part
+    if part[-3:]=="END":
+        break
+teldata = json.loads(parts[3:-3])
 print_teldata(teldata)
 s.close()
