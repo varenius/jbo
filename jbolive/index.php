@@ -40,10 +40,11 @@ function get_teldata($address = '127.0.0.1', $port=50000) {
 
     # Receiver data for all telescopes
     $teldata = socket_read($socket, 131072);
+    $teldata = substr($teldata, 3, strlen($teldata)-6);
 
     # Done, close socket
     socket_close($socket);
-    //echo($teldata);
+    #echo var_dump($teldata);
     return $teldata;
 }
 $td = get_teldata();
