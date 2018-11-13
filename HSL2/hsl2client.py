@@ -20,8 +20,8 @@ def print_teldata(td):
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 try:
-    s.connect(('localhost', 50000))
-    #s.connect(('130.88.9.212', 50000))
+    #s.connect(('localhost', 50000))
+    s.connect(('130.88.9.212', 50000))
 except socket.error as serr:
     if serr.errno != errno.ECONNREFUSED:
         # Not the error we are looking for, re-raise
@@ -31,7 +31,8 @@ except socket.error as serr:
         sys.exit(1)
 
 # Define string to send to get data
-msg = 'Mark 2' # for single telescope, e.g. 'Mark 2'
+#msg = 'Mark 2' # for single telescope, e.g. 'Mark 2', or 'ALL' to get dictionary of all telescope data
+msg = 'ALL'
 # If in python3, use bytestring
 if (sys.version_info > (3, 0)):
     msg = msg.encode()
@@ -52,5 +53,5 @@ while True:
     if part[-3:]=="END":
         break
 teldata = json.loads(parts[3:-3])
-print_teldata(teldata)
+print_teldata(teldata['Mark 2'])
 s.close()
