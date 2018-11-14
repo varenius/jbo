@@ -326,7 +326,7 @@ def makeFBUF(vex, tels, doubleSB = False):
 
 def usage():
     msg = "INFO: Script to generate eMERLIN VLBI control scripts:\n"
-    msg += "      Config, OJD, FBUF, FTP for telescopes hardcoded in main()."
+    msg += "      Config, OJD, FBUF, FTP for telescopes hardcoded in main().\n"
     msg += "USAGE: python script.py vexfile scantel\n e.g. python vex2em2.py ep111b.vex Cm"
     print(msg)
     
