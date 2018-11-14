@@ -324,17 +324,27 @@ def makeFBUF(vex, tels, doubleSB = False):
     of.write("s.run()\n")
     of.close()
 
+def usage():
+    msg = "INFO: Script to generate eMERLIN VLBI control scripts:\n"
+    msg += "      Config, OJD, FBUF, FTP for telescopes hardcoded in main()."
+    msg += "USAGE: python script.py vexfile scantel\n e.g. python vex2em2.py ep111b.vex Cm"
+    print(msg)
     
 def main(args):
-    vex = vexfile(args[1], args[2])
-    print(vex.scans)
-    #tels = ['Darnhall', 'Pickmere', 'Mk2', 'Knockin', 'Defford', 'Cambridge']
-    #tels = ['Darnhall', 'Pickmere', 'Knockin', 'Defford', 'Cambridge']
-    tels = ['Darnhall', 'Pickmere', 'Knockin', 'Cambridge']
-    makeConfig(vex,tels)
-    makeOJD(vex)
-    makeFBUF(vex,tels, doubleSB=False)
-    makeFTP(vex,tels, doubleSB=False)
+    if len(args)!=3:
+        usage()
+    else:
+        vex = vexfile(args[1], args[2])
+        #print(vex.scans)
+        # Select telescopes to include in eMERLIN config and schedule
+        #tels = ['Darnhall', 'Pickmere', 'Mk2', 'Knockin', 'Defford', 'Cambridge']
+        tels = ['Darnhall', 'Pickmere', 'Knockin', 'Cambridge']
+        # Select which files to create
+        makeConfig(vex,tels) # Needed for all experiments
+        makeOJD(vex) # Needed for all experiments
+        #
+        makeFBUF(vex,tels, doubleSB=False) # Needed for recorded VLBI, not needed for eVLBI
+        makeFTP(vex,tels, doubleSB=False) # Only needed for FTP-scan observations, usually NMEs
 
 if __name__ == "__main__":
     main(sys.argv)
