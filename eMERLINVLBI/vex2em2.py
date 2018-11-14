@@ -214,6 +214,7 @@ def makeFTP(vex, tels, doubleSB = False):
     of.write("def flexbuffcmd(comip, comport, message):\n")
     of.write("    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)\n")
     of.write("    sock.connect((comip, int(comport)))\n")
+    of.write("    sock.settimeout(1.0) # 1 second timeout; keep schedule going in case we miss an answer\n")
     of.write("    sock.send(message)\n")
     of.write("    print('sent to '+comip+':'+comport + ': + message')\n")
     of.write("    data = sock.recv(1024)\n")
