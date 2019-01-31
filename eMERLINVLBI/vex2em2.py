@@ -2,6 +2,9 @@ import re, datetime, sys
     
 flexbuff3= {'dataip' : '192.168.81.76', 'datamac' : '00:07:43:11:fd:d8', 'comip': '192.168.101.43', 'comport':2620}
 flexbuff2= {'dataip' : '192.168.81.77', 'datamac' : '00:07:43:11:fd:e8', 'comip': '192.168.101.42', 'comport':2620}
+fbs = [flexbuff2, flexbuff3]
+nstreams = 4
+# First nstreams data streams will be stored on fbs[0], rest on fbs[1]
 
 class vexfile:
     def __init__(self,infile,keytel):
@@ -97,7 +100,7 @@ class vexfile:
                 break
         return ans
 
-def makeConfig(vex, tels):
+def makeConfig(vex, tels, doubleSB=False):
 
     of = open(vex.exp+'_Config.py','w')
 
@@ -133,15 +136,28 @@ def makeConfig(vex, tels):
     of.write(obs)
     
     sb0 = 0 # First subband to be extracted as VDIF, next will be sb0+4.
-    for ncount, tel in enumerate(tels):
-        if ncount<3:
-            flexbuff = flexbuff2
+    for port,tel in enumerate(tels):
+        #  Store first streams on one machine, rest on another
+        if port<nstreams:
+            fb = fbs[0]
         else:
-            flexbuff = flexbuff3
+            fb = fbs[1]
         if tel=='Mk2':
             # Mk2 is called MK2 when selected with the addVLBI function
             tel='MK2'
-        of.write("obs.addVLBI(Telescope."+tel + ", "+str(sb0+4*(ncount//4))+ ", '" + flexbuff['dataip'] + "', '" + flexbuff['datamac'] + "')\n")
+        of.write("obs.addVLBI(Telescope."+tel + ", "+str(sb0+4*(port//4))+ ", '" + fb['dataip'] + "', '" + fb['datamac'] + "')\n")
+    if doubleSB:
+        for port,tel in enumerate(tels):
+            port2 = port+4
+            #  Store first streams on one machine, rest on another
+            if port2<nstreams:
+                fb = fbs[0]
+            else:
+                fb = fbs[1]
+            if tel=='Mk2':
+                # Mk2 is called MK2 when selected with the addVLBI function
+                tel='MK2'
+            of.write("obs.addVLBI(Telescope."+tel + ", "+str(sb0+4*(port2//4))+ ", '" + fb['dataip'] + "', '" + fb['datamac'] + "')\n")
 
     of.write("\n")
     of.write("conf = SubArrayConfig.save('"+vex.exp+"conf', obs)")
@@ -227,11 +243,11 @@ def makeFTP(vex, tels, doubleSB = False):
     of.write("\n")
     for scan in vex.scans:
         for port,tel in enumerate(tels):
-            #  Store first 3 data streams on flexbuff2, rest on flexbuff3
-            if port<3:
-                fb = flexbuff2
+            #  Store first streams on one machine, rest on another
+            if port<nstreams:
+                fb = fbs[0]
             else:
-                fb = flexbuff3
+                fb = fbs[1]
             stel = twoletter(tel).lower()
             if 'ftp' in scan.keys():
                 # Allow 30 sec for record and disk2file to finish.
@@ -282,11 +298,11 @@ def makeFBUF(vex, tels, doubleSB = False):
     evlbitemp = "'runtime = {0} ; evlbi? ;'" # 0;tel
     for scan in vex.scans:
         for port,tel in enumerate(tels):
-            #  Store first 3 data streams on flexbuff2, rest on flexbuff3
-            if port<3:
-                fb = flexbuff2
+            #  Store first streams on one machine, rest on another
+            if port<nstreams:
+                fb = fbs[0]
             else:
-                fb = flexbuff3
+                fb = fbs[1]
             stel = twoletter(tel).lower()
             if doubleSB:
                 # Use 0 (and 1 in other doubleSB clause below) at end of tel in filename
@@ -311,8 +327,13 @@ def makeFBUF(vex, tels, doubleSB = False):
                 # Wait 5 seconds for record to finish, then run disk2file
                 of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + " + 5, 15, flexbuffcmd,('{0}','{1}',{2}".format(fb['comip'], fb['comport'], ftpstring)+",),)\n")
             if doubleSB:
-                startstring = startstemp.format(stel+'1',vex.exp.lower(),scan['id'].lower(),str(port+4))
-                stopstring = stopstemp.format(stel+'1')
+                port2 = port+4
+                if port2<nstreams:
+                    fb = fbs[0]
+                else:
+                    fb = fbs[1]
+                    startstring = startstemp.format(stel+'1',vex.exp.lower(),scan['id'].lower(),str(port2))
+                    stopstring = stopstemp.format(stel+'1')
                 of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "'), 15, flexbuffcmd,('{0}','{1}',{2}".format(fb['comip'], fb['comport'], startstring)+",),)\n")
                 of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + ", 10, flexbuffcmd,('{0}','{1}',{2}".format(fb['comip'], fb['comport'], stopstring)+",),)\n")
                 if 'ftp' in scan.keys():
@@ -338,13 +359,14 @@ def main(args):
         #print(vex.scans)
         # Select telescopes to include in eMERLIN config and schedule
         #tels = ['Darnhall', 'Pickmere', 'Mk2', 'Knockin', 'Defford', 'Cambridge']
-        tels = ['Darnhall', 'Pickmere', 'Knockin', 'Cambridge']
+        #tels = ['Mk2', 'Defford', 'Cambridge','Knockin']
+        tels = ['Darnhall', 'Defford', 'Cambridge','Knockin']
         # Select which files to create
-        makeConfig(vex,tels) # Needed for all experiments
+        makeConfig(vex,tels,doubleSB=True) # Needed for all experiments
         makeOJD(vex) # Needed for all experiments
         #
-        makeFBUF(vex,tels, doubleSB=False) # Needed for recorded VLBI, not needed for eVLBI
-        makeFTP(vex,tels, doubleSB=False) # Only needed for FTP-scan observations, usually NMEs
+        makeFBUF(vex,tels, doubleSB=True) # Needed for recorded VLBI, not needed for eVLBI
+        #makeFTP(vex,tels, doubleSB=False) # Only needed for FTP-scan observations, usually NMEs
 
 if __name__ == "__main__":
     main(sys.argv)
