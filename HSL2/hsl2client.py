@@ -50,7 +50,7 @@ while True:
         parts = part
     else :
         parts += part
-    if part[-3:]=="END":
+    if parts[-3:]=="END":
         break
 teldata = json.loads(parts[3:-3])
 print_teldata(teldata['Mark 2'])
