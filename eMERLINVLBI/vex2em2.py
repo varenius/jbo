@@ -1,7 +1,10 @@
 import re, datetime, sys
     
-flexbuff3= {'dataip' : '192.168.81.76', 'datamac' : '00:07:43:11:fd:d8', 'comip': '192.168.101.43', 'comport':2620}
-flexbuff2= {'dataip' : '192.168.81.77', 'datamac' : '00:07:43:11:fd:e8', 'comip': '192.168.101.42', 'comport':2620}
+# Define all config values for flexbuff machines, for control and data flows
+flexbuff3= {'dataip' : '192.168.81.73', 'datamac' : '00:07:43:11:fd:d8', 'comip': '192.168.101.43', 'comport':2620}
+flexbuff2= {'dataip' : '192.168.81.72', 'datamac' : '00:07:43:11:fd:e8', 'comip': '192.168.101.42', 'comport':2620}
+flexbuff1= {'dataip' : '192.168.81.71', 'datamac' : '00:1b:21:bb:db:9e', 'comip': '192.168.101.41', 'comport':2620}
+# Select which flexbuffs to use. normally 2,3 for eMERLIN recording as fb1 is used for DBBC/FILA
 fbs = [flexbuff2, flexbuff3]
 nstreams = 4
 # First nstreams data streams will be stored on fbs[0], rest on fbs[1]
