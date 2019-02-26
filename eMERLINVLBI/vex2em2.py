@@ -363,12 +363,12 @@ def main(args):
         # Select telescopes to include in eMERLIN config and schedule
         #tels = ['Darnhall', 'Pickmere', 'Mk2', 'Knockin', 'Defford', 'Cambridge']
         #tels = ['Mk2', 'Defford', 'Cambridge','Knockin']
-        tels = ['Darnhall', 'Defford', 'Cambridge','Knockin']
+        tels = ['Darnhall', 'Defford', 'Cambridge','Knockin', 'Pickmere']
         # Select which files to create
-        makeConfig(vex,tels,doubleSB=True) # Needed for all experiments
+        makeConfig(vex,tels,doubleSB=False) # Needed for all experiments
         makeOJD(vex) # Needed for all experiments
         #
-        makeFBUF(vex,tels, doubleSB=True) # Needed for recorded VLBI, not needed for eVLBI
+        makeFBUF(vex,tels, doubleSB=False) # Needed for recorded VLBI, not needed for eVLBI
         #makeFTP(vex,tels, doubleSB=False) # Only needed for FTP-scan observations, usually NMEs
 
 if __name__ == "__main__":
