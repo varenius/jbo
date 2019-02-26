@@ -123,7 +123,7 @@ def makeConfig(vex, tels, doubleSB=False):
     #of2.fdef
     #of2.save()
 
-    obs = "freq = ObservingFrequency.find('"+vex.exp+"') # Make sure this frequency exists. If not, create from nearby one (or use another with baseband offset).\n"
+    obs = "freq = ObservingFrequency.find('VLBI_"+vex.exp+"') # Make sure this frequency exists. If not, create from nearby one (or use another with baseband offset).\n"
     obs += "tels = " + str(tels) + "\n"
     obs += "basebands = [ BaseBandModel(0, freq, 8, 1.0, Polarization.code.Left, 8),\n"
     obs += "              BaseBandModel(1, freq, 8, 1.0, Polarization.code.Right, 8)]\n"
@@ -131,7 +131,7 @@ def makeConfig(vex, tels, doubleSB=False):
     obs += "obs.setBaselines(Telescope.allCross(Telescope.asList(tels),True))\n"
     obs += "obs.widarOffsetId='vlbi' # vlbi mode means zero widar offsets, all tels same LOs\n"
     obs += "obs.delayApplyVDIF = True # apply a delay model - but turn off geometry and troposphere in OJD\n"
-    obs += "obs.fringeRotateVDIF = False # Don't fringerotate, Jive will do this?\n"
+    obs += "obs.fringeRotateVDIF = False # Don't fringerotate, Jive will do this.\n"
     obs += "# DEFINE SUBBANDS MANUALLY: Set or add. Pairs must be offset 4, e.g. 0,4 or 1,5.\n"
     obs += "# obs.setSubBand(index, center freq relative to LO in Hz, bandwidth in Hz, usually 64e6)\n"
     obs += "obs.setSubBand(4,32.e6,64e6)"
@@ -163,7 +163,7 @@ def makeConfig(vex, tels, doubleSB=False):
             of.write("obs.addVLBI(Telescope."+tel + ", "+str(sb0+4*(port2//4))+ ", '" + fb['dataip'] + "', '" + fb['datamac'] + "')\n")
 
     of.write("\n")
-    of.write("conf = SubArrayConfig.save('"+vex.exp+"conf', obs)")
+    of.write("conf = SubArrayConfig.save('VLBI_"+vex.exp+"conf', obs)")
 
     of.close()
 
@@ -181,7 +181,7 @@ def makeOJD(vex):
     header += "\n"
     header += "vf = java.text.SimpleDateFormat(\"yyyy'y'D'd'HH'h'mm'm'ss's'\")\n"
     header += "vf.setTimeZone(java.util.TimeZone.getTimeZone('UTC'))\n"
-    header += "ojd = OJD('{0}')\n".format(vex.exp)
+    header += "ojd = OJD('VLBI_{0}')\n".format(vex.exp)
     of.write(header)
 
     of.write("\n#sources to be observed\n")
@@ -193,7 +193,7 @@ def makeOJD(vex):
 
     of.write("\n")
     of.write("#correlator config\n")
-    conf ="sac = SubArrayConfig.find('{0}conf')\n".format(vex.exp)
+    conf ="sac = SubArrayConfig.find('VLBI_{0}conf')\n".format(vex.exp)
     conf +="gac = GlobalConfig.DEFAULT\n"
     conf +="exp = Experiment(1, '{0}')\n".format(vex.exp)
     conf +="par =  OJDParameters().globalConfig(gac).subArrayConfig(sac).experiment(exp).stopIntegratingOffPosition(False).applyGeometricDelay(False).doTroposphericCorrection(False)\n"
