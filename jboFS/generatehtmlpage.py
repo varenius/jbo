@@ -256,6 +256,7 @@ header += '  <link rel="stylesheet" href="css/styles.css">\n'
 header += '</head>\n'
 body = '<body>\n'
 body += '<h1>{0}</h1>\n'.format('Jodrell Bank VLBI friend auto-checklist for '+sess)
+body += 'Note: This page is preliminary and should not be trusted. Ask Eskil for details. \n'
 #body += '  <script src="js/scripts.js"></script>\n'
 body += '<table id=experiments>\n'
 body += '  <thead>\n'
