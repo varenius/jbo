@@ -55,7 +55,7 @@ def check_antabfs(exp, mon, yy, clear=False):
     else:
         return False
 
-def get_feedback(exp, mon, yy, clear=False):
+def get_feedback(exp, mon, yy, clear=True):
     # Get feedback page from e.g. http://old.evlbi.org/session/feb19/n19m1.html
     d = './feedback/'
     if not os.path.exists(d):
@@ -183,10 +183,8 @@ for line in lines:
         if True:
             get_feedback(exp, sessmonth, yr)
             expdata.append([exp, antennas, check_prc(exp, jbtel), check_snp(exp, jbtel), check_feedback(exp), check_log(exp, ms, yr), check_antabfs(exp, ms, yr)])
-            if exp =='N19M1':
+            if exp =='EB068':
                 print expdata[-1]
-            #['N19C1', 'Jb2Wb1EfMcNtOn85T6UrTrYsHhSvZcBdIr', (True, True, True, '5664'), True, False, True, True]
-
 
 def format_tabdata(ed):
     s = ''
