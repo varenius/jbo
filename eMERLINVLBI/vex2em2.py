@@ -5,7 +5,7 @@ jbobuff3= {'dataip' : '192.168.81.73', 'datamac' : '00:07:43:11:fd:d8', 'comip':
 jbobuff2= {'dataip' : '192.168.81.72', 'datamac' : '00:07:43:11:fd:e8', 'comip': '192.168.101.42', 'comport':2620, 'name':'jbobuff2'}
 jbobuff1= {'dataip' : '192.168.81.71', 'datamac' : '00:1b:21:bb:db:9e', 'comip': '192.168.101.41', 'comport':2620, 'name':'jbobuff1'}
 # Select which flexbuffs to use. normally 3,2 for eMERLIN recording as fb1 is used for DBBC/FILA.
-# We usually prioritise fb3 over fb2 as fb3 has more space. So in order of use:
+# We prioritise fb3 over fb2 as fb3 has more space. So in order of use:
 fbs = [jbobuff3, jbobuff2]
 nstreams = 4
 # First nstreams data streams will be stored on fbs[0], rest on fbs[1]
