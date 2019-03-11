@@ -101,14 +101,7 @@ def check_prc(exp, tel):
             if 'ifa=' in line:
                 patch = line.split('=')[1][0]
             if 'lo=loa' in line:
-                LO = line.split(',')[1][0:4]
-        # parse lines to see if one of the contains the setup call,
-        # this is manually added an may have been forgotten. It is e.g. 'set5664-mk2'.
-        mod = ''
-        for line in lines:
-            if re.match('set[0-9]{4}-', line):
-                mod = line
-                break
+                LO = line.split(',')[1].split('.')[0]
         #Check if patching found above is correct for the scheduled telescope
         if tel=='Jb1':
             patchans = '1'
@@ -116,9 +109,16 @@ def check_prc(exp, tel):
         elif tel=='Jb2':
             patchans = '2'
             modans = 'set' + LO + '-mk2'
+        # parse lines to see if one of the contains the setup call,
+        # this is manually added an may have been forgotten. It is e.g. 'set5664-mk2'.
+        mod = False
+        for line in lines:
+            if modans in line:
+                mod = True
+                break
         # Return bool1, bool2, bool3.
         # bool1 = prc file exists, bool2 = patching correct, bool3 = setLO-line correct
-        return [True, patchans==patch, modans==mod, LO]
+        return [True, patchans==patch, mod, LO]
     else:
         # File not found, so return false for all results
         return [False, False, False, 0]
@@ -183,7 +183,7 @@ for line in lines:
         if True:
             get_feedback(exp, sessmonth, yr)
             expdata.append([exp, antennas, check_prc(exp, jbtel), check_snp(exp, jbtel), check_feedback(exp), check_log(exp, ms, yr), check_antabfs(exp, ms, yr)])
-            if exp =='EB068':
+            if exp =='F19K1':
                 print expdata[-1]
 
 def format_tabdata(ed):
@@ -217,8 +217,6 @@ def format_tabdata(ed):
         if d[0][0:2]=='CL':
             s += '      <td>{0}</td>\n'.format('N/A')
         elif d[5]:
-            if d[0]=='N19C1':
-                print d, 'OK'
             s += '      <td>{0}</td>\n'.format('OK')
         else:
             s += '      <td>{0}</td>\n'.format('-')
