@@ -1,10 +1,11 @@
 import re, datetime, sys
+import argparse
     
 # Define all config values for flexbuff machines, for control and data flows
 jbobuff3= {'dataip' : '192.168.81.73', 'datamac' : '00:07:43:11:fd:d8', 'comip': '192.168.101.43', 'comport':2620, 'name':'jbobuff3'}
 jbobuff2= {'dataip' : '192.168.81.72', 'datamac' : '00:07:43:11:fd:e8', 'comip': '192.168.101.42', 'comport':2620, 'name':'jbobuff2'}
 jbobuff1= {'dataip' : '192.168.81.71', 'datamac' : '00:1b:21:bb:db:9e', 'comip': '192.168.101.41', 'comport':2620, 'name':'jbobuff1'}
-# Select which flexbuffs to use. normally 3,2 for eMERLIN recording as fb1 is used for DBBC/FILA.
+# Select which flexbuffs to use. Normally 3,2 for eMERLIN recording as fb1 is used for DBBC/FILA.
 # We prioritise fb3 over fb2 as fb3 has more space. So in order of use:
 fbs = [jbobuff3, jbobuff2]
 nstreams = 4
@@ -349,29 +350,37 @@ def makeFBUF(vex, tels, doubleSB = False):
     of.write("s.run()\n")
     of.close()
 
-def usage():
-    msg = "INFO: Script to generate eMERLIN VLBI control scripts:\n"
-    msg += "      Config, OJD, FBUF, FTP for telescopes hardcoded in main().\n"
-    msg += "USAGE: python script.py vexfile scantel\n e.g. python vex2em2.py ep111b.vex Cm"
-    print(msg)
-    
-def main(args):
-    if len(args)!=3:
-        usage()
-    else:
-        vex = vexfile(args[1], args[2])
-        #print(vex.scans)
-        # Select telescopes to include in eMERLIN config and schedule
-        #tels = ['Darnhall', 'Pickmere', 'Mk2', 'Knockin', 'Defford', 'Cambridge']
-        #tels = ['Mk2', 'Defford', 'Cambridge','Knockin']
-        tels = ['Darnhall', 'Defford', 'Cambridge','Knockin', 'Pickmere']
-        # Select which files to create
-        makeConfig(vex,tels,doubleSB=False) # Needed for all experiments
-        makeOJD(vex) # Needed for all experiments
-        #
-        makeFBUF(vex,tels, doubleSB=False) # Needed for recorded VLBI, not needed for eVLBI
-        #makeFTP(vex,tels, doubleSB=False) # Only needed for FTP-scan observations, usually NMEs
+def telnames(tels):
+    teldict = {'da':'Darnhall', 'pi':'Pickmere', 'mk':'Mk2', 'kn':'Knockin', 'de':'Defford', 'ca':'Cambridge', 'Lo':'Lovell'}
+    emtels = []
+    for t in tels:
+        tc = t.lower()[0:2]
+        if tc in teldict.keys():
+            emtels.append(teldict[tc])
+    return emtels 
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-v','--vexfile', nargs=1, help='VEX file to parse, e.g. ep111b.vex.', required=True, type=str)
+parser.add_argument('-k','--keytel', nargs=1, help='Two letter VEX telescope code, e.g. Cm or Jb. Copy scan times for this telescope to OJD. ', required=True, type=str)
+parser.add_argument('-t','--telescopes', nargs='+', help='Space separated list of eMERLIN telescopes to include in observation, e.g. -t Cambridge Defford Mk2.', required=True, type=str)
+parser.add_argument('-o','--output', nargs='+', help='Space separated list of desired output files. Options are: CONF OJD FBUF FTP', required=True, type=str)
+parser.add_argument('--doubleSB', dest='doubleSB', action='store_true', help='Record two VDIF streams (two spectral windows) per telescope. Default is only one stream per telescope.')
+parser.set_defaults(doubleSB=False)
+args = parser.parse_args()
 
 if __name__ == "__main__":
-    main(sys.argv)
-
+    print("Running with args: ", args)
+    vex = vexfile(args.vexfile[0], args.keytel[0])
+    #print(vex.scans)
+    # Select telescopes to include in eMERLIN config and schedule
+    #tels = ['Darnhall', 'Pickmere', 'Mk2', 'Knockin', 'Defford', 'Cambridge','Lovell']
+    tels = telnames(args.telescopes)
+    # Select which files to create
+    if 'CONF' in args.output:
+        makeConfig(vex,tels,args.doubleSB) # Needed for all experiments
+    if 'OJD' in args.output:
+        makeOJD(vex) # Needed for all experiments
+    if 'FBUF' in args.output:
+        makeFBUF(vex,tels, args.doubleSB) # Needed for recorded VLBI, not needed for eVLBI
+    if 'FTP' in args.output:
+        makeFTP(vex,tels, args.doubleSB) # Only needed for FTP-scan observations, usually NMEs
