@@ -351,7 +351,8 @@ def makeFBUF(vex, tels, doubleSB = False):
     of.close()
 
 def telnames(tels):
-    teldict = {'da':'Darnhall', 'pi':'Pickmere', 'mk':'Mk2', 'kn':'Knockin', 'de':'Defford', 'ca':'Cambridge', 'Lo':'Lovell'}
+    # Allow both Ca and Cm to be used for Cambridge abbreviation when selecting eMERLIN antennas
+    teldict = {'da':'Darnhall', 'pi':'Pickmere', 'mk':'Mk2', 'kn':'Knockin', 'de':'Defford', 'ca':'Cambridge', 'Lo':'Lovell','cm':'Cambridge'}
     emtels = []
     for t in tels:
         tc = t.lower()[0:2]
