@@ -202,7 +202,7 @@ def makeOJD(vex):
     conf +="# .applyGeometricDelay(False).doTroposphericCorrection(False)\n"
     conf +="# below currently only works when using the old delay model\n"
     conf +="# which is selected by .delayModel(1)\n"
-    conf +="par =  OJDParameters().globalConfig(gac).subArrayConfig(sac).experiment(exp).stopIntegratingOffPosition(False).applyGeometricDelay(False).doTroposphericCorrection(False).delayModel(1)\n"
+    conf +="par =  OJDParameters().globalConfig(gac).subArrayConfig(sac).experiment(exp).stopIntegratingOffPosition(False).applyGeometricDelay(False).doTroposphericCorrection(False).doLinkPathDelayCorrection(False).delayModel(1)\n"
     #conf +="exTel = ExcludedTelescope(Telescope.Lovell) # Does this do anything?\n" 
     of.write(conf)
 
