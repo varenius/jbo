@@ -167,7 +167,8 @@ for line in lines:
     if (res and jb):
         # Add spaces around brackets for stations and split.
         # Spaces needed to line item count correct for slicing stations
-        ls = line.replace('[',' [').replace(']','] ').split()
+        ls = line.replace('[',' [').replace(']','] ').replace('(',' (').replace(')',') ').split()
+        print ls
         exp = ls[0]
         day = ls[29]
         jbtel = jb.group(0)
@@ -183,7 +184,7 @@ for line in lines:
         if True:
             get_feedback(exp, sessmonth, yr)
             expdata.append([exp, antennas, check_prc(exp, jbtel), check_snp(exp, jbtel), check_feedback(exp), check_log(exp, ms, yr), check_antabfs(exp, ms, yr)])
-            if exp =='F19K1':
+            if exp =='EH036D':
                 print expdata[-1]
 
 def format_tabdata(ed):
