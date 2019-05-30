@@ -3,6 +3,8 @@
 import sys, os
 import datetime
 
+# NOTE: Needs the sshpass program to be installed by e.g. apt-get install sshpass
+
 # Define station
 st = 'jb'
 vpass = 'PASSWORD' # Password for vlbeer server
@@ -13,13 +15,13 @@ def print_usage():
     print('USAGE:   sendlog.py exp')
     print('EXAMPLE: sendlog.py n19l1{0}'.format(st))
     print('NOTE:    Assumed to be executed by FS procedure as')
-    print('         sy =exec python sendlog.py `lognm` &')
+    print('         sy =exec python /usr2/st/bin/sendlog.py `lognm` &')
 
 def upload_log(exp):
     now = datetime.datetime.now() # Get current date and time
     mon = now.strftime("%b").lower() # e.g. mar for March
     yy = str(now.year)[-2:] # e.g. 19 for 2019
-    vlbeerdir = '/vlbi_arch/{0}{1}/'.format(mon,yy)
+    vlbeerdir = '~/vlbi_arch/{0}{1}/'.format(mon,yy)
     log = '/usr2/log/{0}.log'.format(exp)
     outfile = '{0}.log'.format(exp)
     # Sometimes snp and prc files are renamed to exclude the station code, e.g.

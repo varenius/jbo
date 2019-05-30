@@ -10,7 +10,7 @@ import os
 
 # START OF CONFIG
 # Ouput log directory
-logdir = "./logs"
+logdir = "/home/oper/maserlogging/logs"
 # GPIB address of GPIB unit used to read data
 gpibaddr = '20'
 # USB port used, check "dmesg" when connecting USB-to-GPIB 
