@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>eMERLIN sensitivity calculator</title>
+<style type="text/css">
+/*number inputs*/
+input[type="number"] {
+width:50px; height:20px; 
+text-align:center; 
+margin:3px; 
+float:left;}
+
+/*select and equals elements*/
+select, .equals {
+margin:3px; 
+float:left;}
+
+/*output element*/
+output {
+display:block; 
+border:1px solid #333333; 
+border-radius:5px; 
+min-width:25px; height:25px; 
+margin:3px; padding:2px;
+text-align:center; 
+background:#000000; 
+color:#ffffff; 
+float:left; }
+</style>
+
+<script type="text/javascript">
+function updateOutput() { 
+        //get form 
+        var form = document.getElementById("calc");
+        // Get observation details
+        var bw = form.elements["bw"].value*1e6;
+        var tint = form.elements["tint"].value*3600;
+        var npol = form.elements["npol"].value;
+        var eta = 0.7;
+        var r = 1.1; // robust 0.5 correction
+        var band = form.elements["band"].value;
+        // Select SEFD values based on band and antennas
+        var antennas = ['lo','mk2','cm','pi','da','kn','de'];
+        var sefddata = {'L': [40,300,175,350,450,400,350], 
+                        'C': [70,300,175,325,325,325,1000]};
+        var sefds = [];
+        for (var k = 0; k < antennas.length; k++) {
+            if (form.elements[antennas[k]].checked) {
+                sefds.push(sefddata[band][k]);
+            }
+        }
+        // Calculate expected image RMS noise
+        var seff = 0.0;
+        for (var i = 0; i < sefds.length; i++) { 
+            for (var j = i+1; j < sefds.length; j++) { 
+            seff +=  1.0/(sefds[i]*sefds[j]);
+            }
+        var sens = Math.pow(seff,-0.5);
+        sens = r*sens/(eta * Math.pow(2*npol*tint*bw,0.5));
+	if (band=='L') {
+	   sens *=Math.pow(0.6,-0.5)}
+        }
+        // Update form with result, rounded to 1 decimal
+        form.elements["result"].value=Math.round(10*1e6*sens)/10;
+}
+
+</script>
+</head>
+<body onload="updateOutput()">
+
+<h1>eMERLIN Sensitivity calculator</h1>
+
+<form id="calc" oninput="updateOutput()">
+<fieldset>
+  <legend>Observation details</legend>
+<p>
+    <select name="band">
+      <option value="L">L</option>
+      <option value="C">C</option>
+    </select>
+  <label for = "band">Band</label>
+</p>
+<p>
+  <input name="bw" type="number" value="512" min=â€0â€³ max="512" />
+  <label for = "bw">Bandwidth [MHz]</label>
+</p>
+<p>
+  <input name="tint" type="number" value="8" min=â€0â€³ step="any" />
+  <label for = "tint">Time on source [hours]</label>
+</p>
+<p>
+  <input type="radio" name="npol" value="1"> Single polarisation</br>
+  <input type="radio" name="npol" value="2"checked="checked"> Dual polarisation</br>
+</p>
+</fieldset>
+<fieldset>
+  <legend>Antennas</legend>
+      <input name = "lo" type = "checkbox"/>
+      <label for = "lo">Lovell</label>
+      <input name = "mk2" type = "checkbox" checked="checked"/>
+      <label for = "mk2">Mark 2</label>
+      <input name = "cm" type = "checkbox" checked="checked"/>
+      <label for = "cm">Cambridge</label>
+      <input name = "pi" type = "checkbox" checked="checked"/>
+      <label for = "pi">Pickmere</label>
+      <input name = "da" type = "checkbox" checked="checked"/>
+      <label for = "da">Darnhall</label>
+      <input name = "kn" type = "checkbox" checked="checked"/>
+      <label for = "kn">Knockin</label>
+      <input name = "de" type = "checkbox" checked="checked"/>
+      <label for = "de">Defford</label>
+</fieldset>
+<fieldset>
+  <legend>Estimated image RMS</legend>
+  <output name="result">-</output>
+  <label for = "result">[uJy/beam]</label>
+</fieldset>
+</form> 
+Note: Assuming 40% data lost to RFI at L-band.
+
+</body>
+</html>
