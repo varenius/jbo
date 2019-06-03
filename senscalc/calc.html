@@ -10,24 +10,57 @@ text-align:center;
 margin:3px; 
 float:left;}
 
-/*select and equals elements*/
-select, .equals {
-margin:3px; 
-float:left;}
-
 /*output element*/
 output {
 display:block; 
 border:1px solid #333333; 
 border-radius:5px; 
-min-width:25px; height:25px; 
+min-width:35px; height:25px; 
 margin:3px; padding:2px;
 text-align:center; 
 background:#000000; 
 color:#ffffff; 
-float:left; }
-</style>
+float:left; 
+font-size: large;
+}
 
+.collapsible {
+  background-color: #777;
+  color: white;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+.active, .collapsible:hover {
+  background-color: #555;
+}
+
+.collapsible:after {
+  content: '\002B';
+  color: white;
+  font-weight: bold;
+  float: right;
+  margin-left: 5px;
+}
+
+.active:after {
+  content: "\2212";
+}
+
+.content {
+  padding: 0 18px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  background-color: #f1f1f1;
+}
+</style>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
 <script type="text/javascript">
 function updateOutput() { 
         //get form 
@@ -37,8 +70,15 @@ function updateOutput() {
         var tint = form.elements["tint"].value*3600;
         var npol = form.elements["npol"].value;
         var eta = 0.7;
-        var r = 1.1; // robust 0.5 correction
         var band = form.elements["band"].value;
+        var weighting = form.elements["weighting"].value;
+        var r ;
+	if (weighting=='robust') {
+	    r = 1.1;
+        }
+	else { 
+	    r = 1.0;
+	}
         // Select SEFD values based on band and antennas
         var antennas = ['lo','mk2','cm','pi','da','kn','de'];
         var sefddata = {'L': [40,300,175,350,450,400,350], 
@@ -81,17 +121,22 @@ function updateOutput() {
   <label for = "band">Band</label>
 </p>
 <p>
-  <input name="bw" type="number" value="512" min=â€0â€³ max="512" />
+  <input name="bw" type="number" value="512" min=”0″ max="512" />
   <label for = "bw">Bandwidth [MHz]</label>
 </p>
 <p>
-  <input name="tint" type="number" value="8" min=â€0â€³ step="any" />
+  <input name="tint" type="number" value="8" min=”0″ step="any" />
   <label for = "tint">Time on source [hours]</label>
 </p>
 <p>
-  <input type="radio" name="npol" value="1"> Single polarisation</br>
-  <input type="radio" name="npol" value="2"checked="checked"> Dual polarisation</br>
+Polarisations:
+  <input type="radio" name="npol" value="1"> Single
+  <input type="radio" name="npol" value="2"checked="checked"> Dual</br></br>
+  Weighting:
+  <input type="radio" name="weighting" value="natural"> Natural
+  <input type="radio" name="weighting" value="robust" checked="checked"> Briggs robust 0.5</br>
 </p>
+Note: Assuming 40% data loss to RFI at L-band.
 </fieldset>
 <fieldset>
   <legend>Antennas</legend>
@@ -116,7 +161,53 @@ function updateOutput() {
   <label for = "result">[uJy/beam]</label>
 </fieldset>
 </form> 
-Note: Assuming 40% data lost to RFI at L-band.
+</br>
+<button class="collapsible">Theoretical background</button>
+<div class="content">
+</br>
+The sensitivity of a single baseline between two antennas \(i,j\) can, according to Eq. 9-14 in <a
+href="http://adsabs.harvard.edu/abs/1999ASPC..180..171W">Wrobel & Walker
+(1999)</a>, be written as 
+$$
+\Delta S_{ij} [\mathrm{Jy/beam}]= \frac{1}{\eta}\sqrt{\frac{SEFD_iSEFD_j}{2\Delta\nu\tau n_p}}
+$$
+where \(SEFD_i\) is the System Equivalent Flux Density of antenna \(i\),
+\(\eta\) is the system efficiency (taken to be \(0.7\)), \(\Delta\nu\) the observing
+bandwidth [Hz],  \(\tau\) the time on source [seconds], and \(n_p\) the
+number of polarisations averaged together [1 or 2]. 
+Given \(n\) antennas where each baseline has equal weight (natural weighting),
+the standard deviation (sensitivity) of the combined image is the propagated
+standard error of the weighted mean:
+$$
+\Delta S = \left(\sum_{i=1}^n \sum_{j=i+1}^n  \Delta S_{ij}^{-2}\right)^{-1/2}=\frac{SEFD^*}{\eta\sqrt{2\Delta\nu\tau n_p}} \quad \mathrm{where}\\
+SEFD^* = \left(\sum_{i=1}^n \sum_{j=i+1}^n \frac{1}{SEFD_iSEFD_j}\right)^{-1/2}
+$$
+which sums over all baselines without double counting, i.e. \(n(n-1)/2\) terms.
 
+<h3>Additional notes</h3>
+<ul>
+  <li>Data losses due to e.g. RFI can be accounted for by reducing \(\tau\) or \(\Delta\nu\). </li>
+  <li>Other
+weighting schemes, such as Briggs robust 0.5, normally result in 10% higher
+image noise (but improves resolution).</li>
+</ul>
+</div>
+
+<script>
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.maxHeight){
+      content.style.maxHeight = null;
+    } else {
+      content.style.maxHeight = content.scrollHeight + "px";
+    } 
+  });
+}
+</script>
 </body>
 </html>
