@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>eMERLIN sensitivity calculator</title>
+
+
+	
+<title>e-MERLIN Sensitivity Calculator</title>
 <style type="text/css">
 /*number inputs*/
 input[type="number"] {
@@ -71,6 +74,15 @@ function updateOutput() {
         var npol = form.elements["npol"].value;
         var eta = 0.7;
         var band = form.elements["band"].value;
+        if (band=='K') {
+            form.elements['de'].disabled= true;
+            form.elements['lo'].disabled= true;
+            form.elements['de'].checked= false;
+            form.elements['lo'].checked= false;
+        } else {
+            form.elements['de'].disabled= false;
+            form.elements['lo'].disabled= false;
+        }
         var weighting = form.elements["weighting"].value;
         var r ;
 	if (weighting=='robust') {
@@ -82,7 +94,9 @@ function updateOutput() {
         // Select SEFD values based on band and antennas
         var antennas = ['lo','mk2','cm','pi','da','kn','de'];
         var sefddata = {'L': [40,300,175,350,450,400,350], 
-                        'C': [70,300,175,325,325,325,1000]};
+                        'C': [70,300,175,325,325,325,1000],
+                        'K': [1e9,1000,1000,1000,1000,1000,1e9],
+};
         var sefds = [];
         for (var k = 0; k < antennas.length; k++) {
             if (form.elements[antennas[k]].checked) {
@@ -98,7 +112,8 @@ function updateOutput() {
         var sens = Math.pow(seff,-0.5);
         sens = r*sens/(eta * Math.pow(2*npol*tint*bw,0.5));
 	if (band=='L') {
-	   sens *=Math.pow(0.6,-0.5)}
+        // Scale to account for RFI losses
+	   sens *=Math.pow(0.7,-0.5)}
         }
         // Update form with result, rounded to 1 decimal
         form.elements["result"].value=Math.round(10*1e6*sens)/10;
@@ -108,17 +123,16 @@ function updateOutput() {
 </head>
 <body onload="updateOutput()">
 
-<h1>eMERLIN Sensitivity calculator</h1>
+<h1>e-MERLIN Sensitivity Calculator</h1>
 
 <form id="calc" oninput="updateOutput()">
 <fieldset>
   <legend>Observation details</legend>
 <p>
-    <select name="band">
-      <option value="L">L</option>
-      <option value="C">C</option>
-    </select>
-  <label for = "band">Band</label>
+Band: 
+  <input type="radio" name="band" value="L" checked="checked"> L (1.5 GHz)
+  <input type="radio" name="band" value="C"> C (5.0 GHz)
+  <input type="radio" name="band" value="K"> K (22.0 GHz)
 </p>
 <p>
   <input name="bw" type="number" value="512" min=”0″ max="512" />
@@ -130,13 +144,14 @@ function updateOutput() {
 </p>
 <p>
 Polarisations:
+  <input type="radio" name="npol" value="2" checked="checked"> Dual
   <input type="radio" name="npol" value="1"> Single
-  <input type="radio" name="npol" value="2"checked="checked"> Dual</br></br>
+  </br></br>
   Weighting:
+  <input type="radio" name="weighting" value="robust" checked="checked"> Briggs robust 0.5
   <input type="radio" name="weighting" value="natural"> Natural
-  <input type="radio" name="weighting" value="robust" checked="checked"> Briggs robust 0.5</br>
+</br>
 </p>
-Note: Assuming 40% data loss to RFI at L-band.
 </fieldset>
 <fieldset>
   <legend>Antennas</legend>
@@ -161,6 +176,14 @@ Note: Assuming 40% data loss to RFI at L-band.
   <label for = "result">[uJy/beam]</label>
 </fieldset>
 </form> 
+</br>
+<strong>Notes</strong></br>
+- Assuming 30% data loss to RFI at L-band. </br>
+- Time on source is usually about 65% of the total observing time, with 35% used for calibrators and slewing. </br>
+- Estimate based on high-elevation observing; lower elevations will give higher noise.</br>
+- Estimate for C-band assumes 5 GHz center frequency. The sensitivity varies across the full 4.5 - 7.5 GHz range.</br>
+- Estimate for K-band is preliminary; actual result may differ significantly.</br>
+- For more information visit http://www.e-merlin.ac.uk/observe.html.</br>
 </br>
 <button class="collapsible">Theoretical background</button>
 <div class="content">
