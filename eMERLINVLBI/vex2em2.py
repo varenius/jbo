@@ -126,6 +126,7 @@ def makeConfig(vex, tels, doubleSB=False):
     #of2.save()
 
     obs = "freq = ObservingFrequency.find('VLBI_"+vex.exp+"') # Make sure this frequency exists. If not, create from nearby one (or use another with baseband offset).\n"
+    obs = "# NOTE: Make sure the frequency and subband selection below matches the FREQ listed in the VEX file.\n"
     obs += "tels = " + str(tels) + "\n"
     obs += "basebands = [ BaseBandModel(0, freq, 8, 1.0, Polarization.code.Left, 8),\n"
     obs += "              BaseBandModel(1, freq, 8, 1.0, Polarization.code.Right, 8)]\n"
@@ -170,7 +171,7 @@ def makeConfig(vex, tels, doubleSB=False):
     of.close()
 
 
-def makeOJD(vex):
+def makeOJD(vex, slewMinutes):
     of = open(vex.exp+'_OJD.py','w')
     header = "#generated from {0}\n".format(vex.infile)
     header += "from uk.ac.man.jb.emerlin.ojd import *\n"
@@ -180,6 +181,14 @@ def makeOJD(vex):
     header += "from ojd.OJDMisc import *\n"
     header += "import java.text.SimpleDateFormat\n"
     header += "import java.util.TimeZone\n"
+    header += "import java.util.Calendar as Calendar\n"
+    header += "\n"
+    header += "def addMinutesToJavaUtilDate(date, dt):\n"
+    header += "    cal = Calendar.getInstance()\n"
+    header += "    cal.setTime(date)\n"
+    header += "    cal.add(Calendar.MINUTE, int(dt))\n"
+    header += "    return cal.getTime()\n"
+    header += "\n"
     header += "\n"
     header += "vf = java.text.SimpleDateFormat(\"yyyy'y'D'd'HH'h'mm'm'ss's'\")\n"
     header += "vf.setTimeZone(java.util.TimeZone.getTimeZone('UTC'))\n"
@@ -208,7 +217,10 @@ def makeOJD(vex):
 
     of.write("\n")
     of.write("#observations\n")
-    for scan in vex.scans:
+    for i,scan in enumerate(vex.scans):
+        if i==0 and slewMinutes>0:
+            print("...adding a scan on first VEX source "+str(slewMinutes)+ " min before actual VEX start for slewing...")
+            of.write("ojd.add(Observation('Slewing', src['"+scan['source'] + "'],par).start(JulianDate(addMinutesToJavaUtilDate(vf.parse('" + scan['start'] + "'),-"+str(slewMinutes)+"))).duration('" + str(slewMinutes) + " min'))\n")
         of.write("ojd.add(Observation('" + scan['id'] + "', src['"+scan['source'] + "'],par).start(JulianDate(vf.parse('" + scan['start'] + "'))).duration('" + scan['dur'] + " sec'))\n")
     of.write("ojd.schedule()\n")
     of.write("ojd.fillGaps()\n")
@@ -369,8 +381,10 @@ parser.add_argument('-v','--vexfile', nargs=1, help='VEX file to parse, e.g. ep1
 parser.add_argument('-k','--keytel', nargs=1, help='Two letter VEX telescope code, e.g. Cm or Jb. Copy scan times for this telescope to OJD. ', required=True, type=str)
 parser.add_argument('-t','--telescopes', nargs='+', help='Space separated list of eMERLIN telescopes to include in observation, e.g. -t Cambridge Defford Mk2.', required=True, type=str)
 parser.add_argument('-o','--output', nargs='+', help='Space separated list of desired output files. Options are: CONF OJD FBUF FTP', required=True, type=str)
+parser.add_argument('--slewMinutes', dest='slewMinutes', nargs=1, help='Number of minutes to slew to source before first actual VEX scan.', type=int)
 parser.add_argument('--doubleSB', dest='doubleSB', action='store_true', help='Record two VDIF streams (two spectral windows) per telescope. Default is only one stream per telescope.')
 parser.set_defaults(doubleSB=False)
+parser.set_defaults(slewMinutes=[20])
 args = parser.parse_args()
 
 if __name__ == "__main__":
@@ -384,8 +398,9 @@ if __name__ == "__main__":
     if 'CONF' in args.output:
         makeConfig(vex,tels,args.doubleSB) # Needed for all experiments
     if 'OJD' in args.output:
-        makeOJD(vex) # Needed for all experiments
+        makeOJD(vex, args.slewMinutes[0]) # Needed for all experiments
     if 'FBUF' in args.output:
         makeFBUF(vex,tels, args.doubleSB) # Needed for recorded VLBI, not needed for eVLBI
     if 'FTP' in args.output:
         makeFTP(vex,tels, args.doubleSB) # Only needed for FTP-scan observations, usually NMEs
+    print("...finished script!")
