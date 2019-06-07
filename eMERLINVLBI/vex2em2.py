@@ -107,7 +107,7 @@ class vexfile:
 
 def makeConfig(vex, tels, doubleSB=False):
 
-    of = open(vex.exp+'_Config.py','w')
+    of = open(vex.exp+'_CONF.py','w')
 
     header = "#generated from {0}\n".format(vex.infile)
     header += "from uk.ac.man.jb.emerlin.ojd import *\n"
