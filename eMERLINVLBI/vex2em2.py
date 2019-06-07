@@ -126,7 +126,7 @@ def makeConfig(vex, tels, doubleSB=False):
     #of2.save()
 
     obs = "freq = ObservingFrequency.find('VLBI_"+vex.exp+"') # Make sure this frequency exists. If not, create from nearby one (or use another with baseband offset).\n"
-    obs = "# NOTE: Make sure the frequency and subband selection below matches the FREQ listed in the VEX file.\n"
+    obs += "# NOTE: Make sure the frequency and subband selection below matches the FREQ listed in the VEX file.\n"
     obs += "tels = " + str(tels) + "\n"
     obs += "basebands = [ BaseBandModel(0, freq, 8, 1.0, Polarization.code.Left, 8),\n"
     obs += "              BaseBandModel(1, freq, 8, 1.0, Polarization.code.Right, 8)]\n"
