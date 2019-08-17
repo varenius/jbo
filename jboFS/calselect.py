@@ -28,7 +28,7 @@ def get_fs_tel():
 
 def fslog(msg):
     # Append message to the FS system log
-    cmd2 = "inject_snap \""+msg.replace(" ","\\ "))
+    cmd = "inject_snap '\"'"+msg.replace(" ","\\ ")
     os.system(cmd)
 
 if arg=="check":
