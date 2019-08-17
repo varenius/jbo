@@ -82,4 +82,4 @@ elif arg=="switch":
         else:
             fslog("ERROR: Input select command failed for {0} calswitch at {1}.".format(disable,addr[disable]))
     except: 
-        fslog("ERROR: Failed to enable PULSAR cal for {0} calswitch at {1}.".format(disable,addr[enable]))
+        fslog("ERROR: Failed to enable PULSAR cal for {0} calswitch at {1}.".format(disable,addr[disable]))
