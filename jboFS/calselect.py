@@ -47,7 +47,6 @@ if arg=="check":
                 fslog("ERROR: calswitch status command failed for {0} at {1}.".format(t, addr[t]))
         except: 
             fslog("ERROR: Failed to communicate with {0} calswitch at {1}".format(t,addr[t]))
-            sys.exit()
 
 elif arg=="switch":
     try: 
