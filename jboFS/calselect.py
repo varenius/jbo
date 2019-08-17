@@ -20,10 +20,11 @@ def get_fs_tel():
     # ONE line like "JB-MK2         Station Name"
     # with  either JB-MK2 or JB-LVL
     tsel = ""
-    for line in open(telfile):
-        if "Station Name" in line:
-            tsel = line.split()[0]
-        break
+    with open(telfile, "r") as inf:
+        for line in inf:
+            if "Station Name" in line:
+                tsel = line.split()[0]
+                break
     return tsel 
 
 def fslog(msg):
@@ -49,16 +50,16 @@ if arg=="check":
             fslog("ERROR: Failed to communicate with {0} calswitch at {1}".format(t,addr[t]))
 
 elif arg=="switch":
+    # get current FS telescope, JB-MK2 or JB-LVL
+    ctel = get_fs_tel()
+    # enable VLBI cal for ctel, disable for the other tel
+    if ctel =="JB-MK2":
+        enable = "mark2"
+        disable = "lovell"
+    elif ctel =="JB-LVL":
+        enable = "lovell"
+        disable = "mark2"
     try: 
-        # get current FS telescope, JB-MK2 or JB-LVL
-        ctel = get_fs_tel()
-        # enable VLBI cal for ctel, disable for the other tel
-        if ctel =="JB-MK2":
-            enable = "mark2"
-            disable = "lovell"
-        elif ctel =="JB-LVL":
-            enable = "lovell"
-            disable = "mark2"
         # enable cal
         tn1 = telnetlib.Telnet(addr[enable], port, timeout)
         tn1.read_until("\r\n", timeout)
@@ -68,6 +69,9 @@ elif arg=="switch":
             fslog("SUCCESS: calswitch for {0} set to VLBI".format(enable))
         else:
             fslog("ERROR: Input select command failed for {0} calswitch at {1}.".format(enable,addr[enable]))
+    except: 
+        fslog("ERROR: Failed to enable VLBI cal for {0} calswitch at {1}.".format(enable,addr[enable]))
+    try: 
         # disable cal
         tn2 = telnetlib.Telnet(addr[disable], port, timeout)
         tn2.read_until("\r\n", timeout)
@@ -78,4 +82,4 @@ elif arg=="switch":
         else:
             fslog("ERROR: Input select command failed for {0} calswitch at {1}.".format(disable,addr[disable]))
     except: 
-        fslog("ERROR: Failed to communicate with calswitch. Check connection?")
+        fslog("ERROR: Failed to enable PULSAR cal for {0} calswitch at {1}.".format(disable,addr[enable]))
