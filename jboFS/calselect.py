@@ -7,8 +7,8 @@ import os
 
 timeout = 1 # seconds to wait for comms
 # IPs of the telescopes
-addr = {'lovell': '192.168.101.23', 
-        'mark2':  '192.168.101.24'}
+addr = {'lovell': '192.168.101.24', 
+        'mark2':  '192.168.101.23'}
 port=23 #Standard telnet port 23
 # FS file containing the currently selected telescope; JB-MK2 or JB-LVL
 telfile = "/usr2/control/location.ctl"
