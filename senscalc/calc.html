@@ -77,8 +77,8 @@ function updateOutput() {
         if (band=='K') {
             form.elements['de'].disabled= true;
             form.elements['lo'].disabled= true;
-            form.elements['de'].checked= false;
-            form.elements['lo'].checked= false;
+            //form.elements['de'].checked= false;
+            //form.elements['lo'].checked= false;
         } else {
             form.elements['de'].disabled= false;
             form.elements['lo'].disabled= false;
@@ -95,7 +95,9 @@ function updateOutput() {
         var antennas = ['lo','mk2','cm','pi','da','kn','de'];
         var sefddata = {'L': [40,300,175,350,450,400,350], 
                         'C': [70,300,175,325,325,325,1000],
-                        'K': [1e9,1000,1000,1000,1000,1000,1e9],
+                        // Lo and De have no Kband receivers
+                        // so set very high SEFD to effectively disable
+                        'K': [1e9,2000,2000,2000,2000,2000,1e9],
 };
         var sefds = [];
         for (var k = 0; k < antennas.length; k++) {
