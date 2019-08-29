@@ -88,9 +88,11 @@ function get_RA($obj, $t) {
 function get_Dec($obj, $t) {
   if (!empty($obj->$t->status->demanded_lonlat)) {
     $val = $obj->$t->status->demanded_lonlat[1]*180.0/M_PI;
-    $deg = floor($val);
-    $amin= floor(($val-$deg)*60);
-    $asec= round(($val-$deg-$amin/60)*3600,2);
+    $sign = $val <=> 0;
+    $aval = abs($val);
+    $deg = floor($aval);
+    $amin= floor(($aval-$deg)*60);
+    $asec= round(($aval-$deg-$amin/60)*3600,2);
     return  str_pad($deg, 2, "0", STR_PAD_LEFT) . '&deg' .str_pad($amin, 2, "0", STR_PAD_LEFT) .  "'" . str_pad($asec, 2, "0", STR_PAD_LEFT) . "''";
   }
   else {
