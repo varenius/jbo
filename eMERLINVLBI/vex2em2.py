@@ -8,7 +8,7 @@ jbobuff1= {'dataip' : '192.168.81.71', 'datamac' : '00:1b:21:bb:db:9e', 'comip':
 # Select which flexbuffs to use. Normally 3,2 for eMERLIN recording as fb1 is used for DBBC/FILA.
 # We prioritise fb3 over fb2 as fb3 has more space. So in order of use:
 fbs = [jbobuff3, jbobuff2]
-nstreams = 4
+nstreams = 6
 # First nstreams data streams will be stored on fbs[0], rest on fbs[1]
 
 class vexfile:
@@ -200,15 +200,15 @@ def makeOJD(vex, slewMinutes):
     for sour in sorted(vex.sources):
         ra = vex.sources[sour][0]
         dec = vex.sources[sour][1]
-        of.write("src['"+sour + "'] = TargetSource('"+ra+ "','"+dec+"')\n")
+        of.write("src['"+sour + "'] = TargetSource('"+sour+"','"+ra+ "','"+dec+"')\n")
 
     of.write("\n")
     of.write("#correlator config\n")
     conf ="sac = SubArrayConfig.find('VLBI_{0}conf')\n".format(vex.exp)
     conf +="gac = GlobalConfig.DEFAULT\n"
     conf +="exp = Experiment(1, '{0}')\n".format(vex.exp)
-    conf +="# Removing geometry and troposphere, i.e. \n"
-    conf +="# .applyGeometricDelay(False).doTroposphericCorrection(False)\n"
+    conf +="# Removing geometry, troposphere and link delay jumps, i.e. \n"
+    conf +="# .applyGeometricDelay(False).doTroposphericCorrection(False).doLinkPathDelayCorrection(False)\n"
     conf +="# below currently only works when using the old delay model\n"
     conf +="# which is selected by .delayModel(1)\n"
     conf +="par =  OJDParameters().globalConfig(gac).subArrayConfig(sac).experiment(exp).stopIntegratingOffPosition(False).applyGeometricDelay(False).doTroposphericCorrection(False).doLinkPathDelayCorrection(False).delayModel(1)\n"
