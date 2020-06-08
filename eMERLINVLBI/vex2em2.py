@@ -353,8 +353,8 @@ def makeFBUF(vex, tels, doubleSB = False):
                     fb = fbs[0]
                 else:
                     fb = fbs[1]
-                    startstring = startstemp.format(stel+'1',vex.exp.lower(),scan['id'].lower(),str(port2))
-                    stopstring = stopstemp.format(stel+'1')
+                startstring = startstemp.format(stel+'1',vex.exp.lower(),scan['id'].lower(),str(port2))
+                stopstring = stopstemp.format(stel+'1')
                 of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "'), 15, flexbuffcmd,('{0}','{1}',{2}".format(fb['comip'], fb['comport'], startstring)+",),)\n")
                 of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + ", 10, flexbuffcmd,('{0}','{1}',{2}".format(fb['comip'], fb['comport'], stopstring)+",),)\n")
                 if 'ftp' in scan.keys():
