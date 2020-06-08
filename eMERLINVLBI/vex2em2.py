@@ -318,6 +318,8 @@ def makeFBUF(vex, tels, doubleSB = False):
     ftpstemp = "'runtime = {0} ; scan_set={1}_{0}_{2}:{3}:{4} ; disk2file={1}_{0}_{2}.vdif ;'" # 0;tel, 1:exp, 2:scanid (no0001) 3:starttime, 4:start+2
     evlbitemp = "'runtime = {0} ; evlbi? ;'" # 0;tel
     for scan in vex.scans:
+        # Store number of telescopes; needed for doubleSB port calculation
+        ntels = len(tels)
         for port,tel in enumerate(tels):
             #  Store first streams on one machine, rest on another
             if port<nstreams:
@@ -348,7 +350,9 @@ def makeFBUF(vex, tels, doubleSB = False):
                 # Wait 5 seconds for record to finish, then run disk2file
                 of.write("s.enterabs(vlbitime2unix('"+scan['start'] + "') + " + scan['dur'] + " + 5, 15, flexbuffcmd,('{0}','{1}',{2}".format(fb['comip'], fb['comport'], ftpstring)+",),)\n")
             if doubleSB:
-                port2 = port+4
+                # Assume all SB0 streams come first from all tels, then all SB1 streams.
+                # Therefore, offset the SB1 streams with number of tels.
+                port2 = port+ntels
                 if port2<nstreams:
                     fb = fbs[0]
                 else:
