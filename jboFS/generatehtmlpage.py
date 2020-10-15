@@ -170,9 +170,9 @@ for line in lines:
         ls = line.replace('[',' [').replace(']','] ').replace('(',' (').replace(')',') ').split()
         print ls
         exp = ls[0]
-        day = ls[29]
+        day = ls[30]
         jbtel = jb.group(0)
-        antennas = ''.join(ls[1:25]).replace('-', '')
+        antennas = ''.join(ls[1:26]).replace('-', '')
         dt = res.group(0)
         mi = int(dt[8:10])
         ms = md[mi]

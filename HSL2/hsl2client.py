@@ -20,8 +20,8 @@ def print_teldata(td):
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 try:
-    #s.connect(('localhost', 50000))
-    s.connect(('130.88.9.212', 50000))
+    s.connect(('localhost', 50000))
+    #s.connect(('130.88.9.212', 50000))
 except socket.error as serr:
     if serr.errno != errno.ECONNREFUSED:
         # Not the error we are looking for, re-raise
