@@ -372,7 +372,7 @@ def makeFBUF(vex, tels, doubleSB = False):
 
 def telnames(tels):
     # Allow both Ca and Cm to be used for Cambridge abbreviation when selecting eMERLIN antennas
-    teldict = {'da':'Darnhall', 'pi':'Pickmere', 'mk':'Mk2', 'kn':'Knockin', 'de':'Defford', 'ca':'Cambridge', 'Lo':'Lovell','cm':'Cambridge'}
+    teldict = {'da':'Darnhall', 'pi':'Pickmere', 'mk':'Mk2', 'kn':'Knockin', 'de':'Defford', 'ca':'Cambridge', 'lo':'Lovell', 'cm':'Cambridge'}
     emtels = []
     for t in tels:
         tc = t.lower()[0:2]
