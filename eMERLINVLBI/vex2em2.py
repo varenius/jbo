@@ -11,6 +11,8 @@ fbs = [jbobuff3, jbobuff2]
 nstreams = 6
 # First nstreams data streams will be stored on fbs[0], rest on fbs[1]
 
+Lovell_cadence = 8*60 # seconds; minimum target/phasecal cycle period for the Lovell, if included
+
 class vexfile:
     def __init__(self,infile,keytel):
         # Run a sequence of functions to parse and structure information in the vexfile
@@ -171,7 +173,7 @@ def makeConfig(vex, tels, doubleSB=False):
     of.close()
 
 
-def makeOJD(vex, slewMinutes):
+def makeOJD(vex, slewMinutes, useLovell):
     of = open(vex.exp+'_OJD.py','w')
     header = "#generated from {0}\n".format(vex.infile)
     header += "from uk.ac.man.jb.emerlin.ojd import *\n"
@@ -212,18 +214,57 @@ def makeOJD(vex, slewMinutes):
     conf +="# below currently only works when using the old delay model\n"
     conf +="# which is selected by .delayModel(1)\n"
     conf +="par =  OJDParameters().globalConfig(gac).subArrayConfig(sac).experiment(exp).stopIntegratingOffPosition(False).applyGeometricDelay(False).doTroposphericCorrection(False).doLinkPathDelayCorrection(False).delayModel(1)\n"
-    #conf +="exTel = ExcludedTelescope(Telescope.Lovell) # Does this do anything?\n" 
+    if useLovell:
+        conf +="# We may need to exclude the Lovell from rapid slews.\n"
+        conf +="exTel = ExcludedTelescope(Telescope.Lovell)\n" 
     of.write(conf)
+
+    # Make our own local copy of scan start times and durations, to fiddle with.
+    starts = [scan['start'] for scan in vex.scans] # VLBI-format strings
+    starts = [datetime.datetime.strptime(start, "%Yy%jd%Hh%Mm%Ss") for start in starts] # datetime objects
+    ends = starts[1:] # assume each scan ends when the next begins
+    ends.append( ends[-1] + datetime.timedelta(seconds = int(vex.scans[-1]['dur'])) ) # use specified duration for final scan only
+    durs = [end-start for end,start in zip(ends,starts)] # timedelta objects; *not* the same as specified durations, which have gaps between scans
+    durs = [dur.total_seconds() for dur in durs] # seconds
 
     of.write("\n")
     of.write("#observations\n")
+
+    if slewMinutes > 0:
+        print("...adding a scan on first VEX source "+str(slewMinutes)+ " min before actual VEX start for slewing...")
+        slewstart = starts[0] - datetime.timedelta(minutes=slewMinutes)
+        of.write("ojd.toStart(JulianDate.parse('%s'))\n" % slewstart.strftime("%d-%m-%Y %H:%M:%S"))
+        of.write("ojd.add(Observation('Slewing', src['%s'],par).duration('%d min'))  # ->%s\n" % (vex.scans[0]['source'], slewMinutes, starts[0].strftime("%H:%M:%S")))
+    else:
+        of.write("ojd.toStart(JulianDate.parse('%s'))\n" % starts[0].strftime("%d-%m-%Y %H:%M:%S"))
+
+    Lovell_skipped = True # pretend that the Lovell telescope has already skipped a scan, to make sure it doesn't actually skip the first one
+
     for i,scan in enumerate(vex.scans):
-        if i==0 and slewMinutes>0:
-            print("...adding a scan on first VEX source "+str(slewMinutes)+ " min before actual VEX start for slewing...")
-            of.write("ojd.add(Observation('Slewing', src['"+scan['source'] + "'],par).start(JulianDate(addMinutesToJavaUtilDate(vf.parse('" + scan['start'] + "'),-"+str(slewMinutes)+"))).duration('" + str(slewMinutes) + " min'))\n")
-        of.write("ojd.add(Observation('" + scan['id'] + "', src['"+scan['source'] + "'],par).start(JulianDate(vf.parse('" + scan['start'] + "'))).duration('" + scan['dur'] + " sec'))\n")
+        # If the Lovell is cycling too fast, exclude the next short scan (presumably the phasecal).
+        extel = (useLovell and i >= 2 and sum(durs[i-2:i]) < Lovell_cadence and durs[i] < durs[i-1])
+
+        if extel and Lovell_skipped:
+            # We already skipped a recent scan with the Lovell ...
+            extel = False
+            Lovell_skipped = False
+            # ... so we record that we're not skipping this one.
+        elif extel:
+            # Record that we're skipping this scan with the Lovell.
+            Lovell_skipped = True
+
+        # The way this works: if the programme cycles between target and phasecal in less time than Lovell_cadence,
+        # every second phasecal scan will (hopefully) be skipped.  Note that the Lovell may still cycle faster
+        # than Lovell_cadence if the programme cycle time is less than half this value.
+
+        extel = '.exclude(exTel)' if extel else ''
+
+        codeline = "ojd.add(Observation('%s', src['%s'], par).duration('%d sec')%s)" % (scan['id'], scan['source'], durs[i], extel)
+        comment  = "# ->%s" % ends[i].strftime("%H:%M:%S")
+        of.write("%-92s %s\n" % (codeline, comment)) # write in two separate parts so comments are nicely aligned
+
     of.write("ojd.schedule()\n")
-    of.write("ojd.fillGaps()\n")
+    of.write("ojd.fillGaps()\n") # probably not necessary, with durations amended as above
     of.write("ojd.save()\n")
     of.write("print '\\n'.join([str(x) for x in ojd.scheduleDetail])\n")
     of.close()
@@ -371,8 +412,8 @@ def makeFBUF(vex, tels, doubleSB = False):
     of.close()
 
 def telnames(tels):
-    # Allow both Ca and Cm to be used for Cambridge abbreviation when selecting eMERLIN antennas
-    teldict = {'da':'Darnhall', 'pi':'Pickmere', 'mk':'Mk2', 'kn':'Knockin', 'de':'Defford', 'ca':'Cambridge', 'lo':'Lovell', 'cm':'Cambridge'}
+    # When selecting e-MERLIN antennas, allow Cambridge abbreviation to be Ca or Cm, and Lovell abbreviation to be Lo or Lv.
+    teldict = {'da':'Darnhall', 'pi':'Pickmere', 'mk':'Mk2', 'kn':'Knockin', 'de':'Defford', 'ca':'Cambridge', 'cm':'Cambridge', 'lo':'Lovell', 'lv':'Lovell'}
     emtels = []
     for t in tels:
         tc = t.lower()[0:2]
@@ -402,7 +443,7 @@ if __name__ == "__main__":
     if 'CONF' in args.output:
         makeConfig(vex,tels,args.doubleSB) # Needed for all experiments
     if 'OJD' in args.output:
-        makeOJD(vex, args.slewMinutes[0]) # Needed for all experiments
+        makeOJD(vex, args.slewMinutes[0], useLovell=('Lovell' in tels)) # Needed for all experiments
     if 'FBUF' in args.output:
         makeFBUF(vex,tels, args.doubleSB) # Needed for recorded VLBI, not needed for eVLBI
     if 'FTP' in args.output:
