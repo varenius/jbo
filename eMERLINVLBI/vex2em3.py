@@ -223,7 +223,7 @@ def makeOJD(vex, slewMinutes, useLovell):
     starts = [scan['start'] for scan in vex.scans] # VLBI-format strings
     starts = [datetime.datetime.strptime(start, "%Yy%jd%Hh%Mm%Ss") for start in starts] # datetime objects
     ends = starts[1:] # assume each scan ends when the next begins
-    ends.append( ends[-1] + datetime.timedelta(seconds = int(vex.scans[-1]['dur'])) ) # use specified duration for final scan only
+    ends.append( starts[-1] + datetime.timedelta(seconds = float(vex.scans[-1]['dur'])) ) # use specified duration for final scan only
     durs = [end-start for end,start in zip(ends,starts)] # timedelta objects; *not* the same as specified durations, which have gaps between scans
     durs = [dur.total_seconds() for dur in durs] # seconds
 
