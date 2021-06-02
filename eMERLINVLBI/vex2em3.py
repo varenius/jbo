@@ -98,6 +98,8 @@ class vexfile:
             if ('endscan' in line):
                 if addscan:
                     self.scans.append(tmpscan)
+                else:
+                    print 'WARNING: scan does not contain designated key telescope.  OJD script output may be mangled.  You should (i) switch to a different key telescope, (ii) fix the OJD script manually, or (iii) rewrite this script to fix the problem.'
     
     def sourceInScans(self,source):
         ans = False
