@@ -282,9 +282,29 @@ def vlbitimeplusdt(vlbistring,dt):
     newstring = (time+dt).strftime("%Yy%jd%Hh%Mm%Ss")
     return newstring
 
+# Master list of codes used to refer to specific telescopes.
+# When there are multiple options, the first one is the default.
+telcodes = {
+    'Darnhall'  : ['Da'],
+    'Pickmere'  : ['Pi'],
+    'Mk2'       : ['Jm','Mk'],
+    'Knockin'   : ['Kn'],
+    'Defford'   : ['De'],
+    'Cambridge' : ['Cm', 'Ca'],
+    'Lovell'    : ['Jl', 'Lo', 'Lv']
+}
+
 def twoletter(telescope):
-    tels = {'Darnhall':'Da', 'Pickmere':'Pi' , 'Mk2': 'Jm', 'Knockin' : 'Kn', 'Defford': 'De', 'Cambridge' : 'Cm', 'Lovell': 'Jl'}
-    return tels[telescope]
+    return telcodes[telescope][0]
+
+def telnames(tels):
+    emtels = []
+    for t in tels:
+        tc = t.lower()[0:2] # we'll do a case-insensitive match
+        for dictname,dictcodes in telcodes.items():
+            if tc in [dictcode.lower() for dictcode in dictcodes]:
+                emtels.append(dictname)
+    return emtels 
 
 def makeFTP(vex, tels, doubleSB = False):
     of = open(vex.exp+'_FTP.py','w')
@@ -418,16 +438,6 @@ def makeFBUF(vex, tels, doubleSB = False):
     of.write("s.run()\n")
     of.close()
 
-def telnames(tels):
-    # When selecting e-MERLIN antennas, allow Cambridge abbreviation to be Ca or Cm, and Lovell abbreviation to be Lo or Lv.
-    teldict = {'da':'Darnhall', 'pi':'Pickmere', 'mk':'Mk2', 'kn':'Knockin', 'de':'Defford', 'ca':'Cambridge', 'cm':'Cambridge', 'lo':'Lovell', 'lv':'Lovell'}
-    emtels = []
-    for t in tels:
-        tc = t.lower()[0:2]
-        if tc in teldict.keys():
-            emtels.append(teldict[tc])
-    return emtels 
-
 parser = argparse.ArgumentParser()
 parser.add_argument('-v','--vexfile', nargs=1, help='VEX file to parse, e.g. ep111b.vex.', required=True, type=str)
 parser.add_argument('-k','--keytel', nargs=1, help='Two letter VEX telescope code, e.g. Cm or Jb. Copy scan times for this telescope to OJD. ', required=True, type=str)
@@ -444,7 +454,6 @@ if __name__ == "__main__":
     vex = vexfile(args.vexfile[0], args.keytel[0])
     #print(vex.scans)
     # Select telescopes to include in eMERLIN config and schedule
-    #tels = ['Darnhall', 'Pickmere', 'Mk2', 'Knockin', 'Defford', 'Cambridge','Lovell']
     tels = telnames(args.telescopes)
     # Select which files to create
     if 'CONF' in args.output:
