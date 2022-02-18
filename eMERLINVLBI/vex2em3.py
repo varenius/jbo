@@ -142,9 +142,14 @@ def makeConfig(vex, tels, doubleSB=False):
     obs += "# DEFINE SUBBANDS MANUALLY: Set or add. Pairs must be offset 4, e.g. 0,4 or 1,5.\n"
     obs += "# obs.setSubBand(index, center freq relative to LO in Hz, bandwidth in Hz, usually 64e6)\n"
     obs += "obs.setSubBand(4,32.e6,64e6)"
-    obs += "\n"
+    obs += "\n\n"
     of.write(obs)
-    
+
+    for fb in fbs:
+      of.write("%s_ip = '%s'\n" % (fb['name'], fb['dataip']))
+      of.write("%s_mac = '%s'\n" % (fb['name'], fb['datamac']))
+    of.write("\n")
+
     sb0 = 0 # First subband to be extracted as VDIF, next will be sb0+4.
     for port,tel in enumerate(tels):
         #  Store first streams on one machine, rest on another
@@ -155,7 +160,7 @@ def makeConfig(vex, tels, doubleSB=False):
         if tel=='Mk2':
             # Mk2 is called MK2 when selected with the addVLBI function
             tel='MK2'
-        of.write("obs.addVLBI(Telescope."+tel + ", "+str(sb0+4*(port//4))+ ", '" + fb['dataip'] + "', '" + fb['datamac'] + "') # " + fb['name']+ "\n")
+        of.write("obs.addVLBI(Telescope.%s, %d, %s_ip, %s_mac)\n" % (tel, sb0+4*(port//4), fb['name'], fb['name']))
     if doubleSB:
         for port,tel in enumerate(tels):
             port2 = port+4
@@ -167,7 +172,7 @@ def makeConfig(vex, tels, doubleSB=False):
             if tel=='Mk2':
                 # Mk2 is called MK2 when selected with the addVLBI function
                 tel='MK2'
-            of.write("obs.addVLBI(Telescope."+tel + ", "+str(sb0+4*(port2//4))+ ", '" + fb['dataip'] + "', '" + fb['datamac'] + "') # " + fb['name']+ "\n")
+        of.write("obs.addVLBI(Telescope.%s, %d, %s_ip, %s_mac)\n" % (tel, sb0+4*(port2//4), fb['name'], fb['name']))
 
     of.write("\n")
     of.write("conf = SubArrayConfig.save('VLBI_"+vex.exp+"conf', obs)")
